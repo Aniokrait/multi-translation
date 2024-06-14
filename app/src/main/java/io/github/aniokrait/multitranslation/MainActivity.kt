@@ -4,13 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import io.github.aniokrait.multitranslation.ui.TopBar
+import io.github.aniokrait.multitranslation.ui.screen.TranslationScreen
 import io.github.aniokrait.multitranslation.ui.theme.MultiTranslationTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,30 +19,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MultiTranslationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            Box(Modifier.safeDrawingPadding()) {
+                MultiTranslationTheme {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        topBar = { TopBar() },
+                    ) { innerPadding ->
+                        TranslationScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            translateResults = mapOf(),
+                            onTranslateClick = {},
+                        )
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MultiTranslationTheme {
-        Greeting("Android")
     }
 }
