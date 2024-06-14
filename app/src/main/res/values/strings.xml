@@ -3,4 +3,5 @@
     <string name="lbl_translation_source">翻訳元</string>
     <string name="btn_translation_button">翻訳</string>
     <string name="lbl_translation_result">翻訳結果</string>
+    <string name="lbl_description_for_download_models">翻訳したい言語を選んでください</string>
 </resources>

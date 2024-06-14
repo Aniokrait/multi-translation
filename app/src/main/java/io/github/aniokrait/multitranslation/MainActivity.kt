@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import io.github.aniokrait.multitranslation.ui.TopBar
-import io.github.aniokrait.multitranslation.ui.screen.TranslationScreen
+import io.github.aniokrait.multitranslation.ui.screen.translate.TranslationScreen
 import io.github.aniokrait.multitranslation.ui.theme.MultiTranslationTheme
 
 class MainActivity : ComponentActivity() {

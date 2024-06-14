@@ -1,4 +1,4 @@
-package io.github.aniokrait.multitranslation.ui.screen
+package io.github.aniokrait.multitranslation.ui.screen.translate
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
