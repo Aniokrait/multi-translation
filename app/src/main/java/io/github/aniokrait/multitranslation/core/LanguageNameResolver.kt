@@ -5,17 +5,19 @@ import java.util.Locale
 
 class LanguageNameResolver {
     companion object {
-        fun getAllLanguagesLabel(): List<String> {
+        fun getAllLanguagesLabel(): List<Locale> {
             return TranslateLanguage.getAllLanguages().map {
                 val locale = Locale.forLanguageTag(it)
-                locale.getDisplayLanguage(Locale.JAPANESE)
-            }.sorted()
+                locale
+//                locale.getDisplayLanguage(Locale.JAPANESE)
+            }.sortedBy { it.getDisplayLanguage(Locale.JAPANESE) } // TODO: Apply current system locale
+
         }
 
-        fun getAllLanguagesLocale(): List<Locale> {
-            return TranslateLanguage.getAllLanguages().map {
-                Locale.forLanguageTag(it)
-            }
-        }
+//        fun getAllLanguagesLocale(): List<Locale> {
+//            return TranslateLanguage.getAllLanguages().map {
+//                Locale.forLanguageTag(it)
+//            }
+//        }
     }
 }

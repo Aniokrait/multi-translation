@@ -69,10 +69,14 @@ dependencies {
 
     // MLKit Translate
     implementation(libs.mlkit.translate)
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-play-services
+    // kotlinx-coroutines-play-services
     implementation(libs.kotlinx.coroutines.play.services)
 
     // mockk
     androidTestImplementation(libs.io.mockk)
+
+    // kotlinx-coroutines-test
+    testImplementation(libs.kotlinx.coroutines.test)
+
 
 }

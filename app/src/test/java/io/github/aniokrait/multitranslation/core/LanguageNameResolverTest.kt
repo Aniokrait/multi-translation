@@ -1,7 +1,6 @@
 package io.github.aniokrait.multitranslation.core
 
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import java.util.Locale
 
@@ -10,17 +9,17 @@ class LanguageNameResolverTest {
     fun testGetAllLanguagesName() {
         val result = LanguageNameResolver.getAllLanguagesLabel()
 
-        assertEquals("アイスランド語", result[0])
-        assertEquals("アイルランド語", result[1])
-        assertEquals("日本語", result[56])
+        assertEquals("アイスランド語", result[0].getDisplayLanguage(Locale.JAPANESE))
+        assertEquals("アイルランド語", result[1].getDisplayLanguage(Locale.JAPANESE))
+        assertEquals("日本語", result[56].getDisplayLanguage(Locale.JAPANESE))
     }
 
-    @Test
-    fun testGetAllLanguagesLocale() {
-        val result = LanguageNameResolver.getAllLanguagesLocale()
-
-
-        assertTrue(result.contains(Locale.ENGLISH))
-        assertTrue(result.contains(Locale.JAPANESE))
-    }
+//    @Test
+//    fun testGetAllLanguagesLocale() {
+//        val result = LanguageNameResolver.getAllLanguagesLocale()
+//
+//
+//        assertTrue(result.contains(Locale.ENGLISH))
+//        assertTrue(result.contains(Locale.JAPANESE))
+//    }
 }
