@@ -7,9 +7,10 @@ import io.github.aniokrait.multitranslation.ui.stateholder.LanguageDownloadState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import java.util.Locale
 
 class InitialDownloadViewModel(
-    repository: LanguageModelRepository,
+    private val repository: LanguageModelRepository,
 ) : ViewModel() {
 
     val downloadState: StateFlow<List<LanguageDownloadState.EachLanguageState>> =
@@ -19,4 +20,19 @@ class InitialDownloadViewModel(
                 started = SharingStarted.WhileSubscribed(),
                 initialValue = listOf()
             )
+
+    fun onCheckClicked(locale: Locale) {
+        repository.checkLanguage(locale)
+    }
+
+    val simpleState: StateFlow<Int> = repository.getSimpleState()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = 0
+        )
+
+    fun updateSimpleState() {
+        repository.updateSimpleState()
+    }
 }
