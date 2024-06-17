@@ -21,13 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
-import io.github.aniokrait.multitranslation.ui.stateholder.LanguageDownloadState
+import io.github.aniokrait.multitranslation.ui.stateholder.InitialDownloadScreenState
 import io.github.aniokrait.multitranslation.viewmodel.InitialDownloadViewModel
 import java.util.Locale
 
 @Composable
 fun InitialDownloadScreen(
-    vm: InitialDownloadViewModel
+    vm: InitialDownloadViewModel,
 ) {
     val state = vm.downloadState.collectAsState()
     InitialDownloadScreen(state = state.value)
@@ -37,7 +37,7 @@ fun InitialDownloadScreen(
 @Composable
 private fun InitialDownloadScreen(
     modifier: Modifier = Modifier,
-    state: List<LanguageDownloadState.EachLanguageState>,
+    state: List<InitialDownloadScreenState.EachLanguageState>,
 ) {
     Column(
         modifier = modifier
@@ -48,7 +48,7 @@ private fun InitialDownloadScreen(
         Text(
             text = stringResource(id = R.string.lbl_description_for_download_models),
             style = MaterialTheme.typography.headlineSmall,
-            )
+        )
         Spacer(modifier = Modifier.height(12.dp))
 
         val allLocales = LanguageNameResolver.getAllLanguagesLabel()
@@ -62,13 +62,19 @@ private fun InitialDownloadScreen(
             Column {
                 for (locale in oddLocales) {
                     val a = state.find { it.locale == locale }
-                    LanguageSelection(locale = locale, checked = a?.checked?.value ?: false, onCheckedChange = {})
+                    LanguageSelection(
+                        locale = locale,
+                        checked = a?.checked?.value ?: false,
+                        onCheckedChange = {})
                 }
             }
             Column {
                 for (locale in evenLocales) {
                     val a = state.find { it.locale == locale }
-                    LanguageSelection(locale = locale, checked = a?.checked?.value ?: false, onCheckedChange = {})
+                    LanguageSelection(
+                        locale = locale,
+                        checked = a?.checked?.value ?: false,
+                        onCheckedChange = {})
                 }
             }
         }
@@ -86,7 +92,7 @@ private fun LanguageSelection(
         Text(
             text = locale.getDisplayLanguage(Locale.JAPANESE),
             style = MaterialTheme.typography.titleMedium,
-            ) // TODO: Apply current system locale
+        ) // TODO: Apply current system locale
     }
 }
 
