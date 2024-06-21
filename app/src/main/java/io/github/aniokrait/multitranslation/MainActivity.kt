@@ -15,6 +15,7 @@ import io.github.aniokrait.multitranslation.ui.TopBar
 import io.github.aniokrait.multitranslation.ui.screen.initialsetting.InitialDownloadScreen
 import io.github.aniokrait.multitranslation.ui.theme.MultiTranslationTheme
 import io.github.aniokrait.multitranslation.viewmodel.InitialDownloadViewModel
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
 //                            onTranslateClick = {},
 //                        )
                         val repository = LanguageModelDatasource(context = LocalContext.current)
-                        val vm = InitialDownloadViewModel(repository = repository)
+                        val vm: InitialDownloadViewModel = koinViewModel()
                         InitialDownloadScreen(vm = vm)
                     }
                 }
