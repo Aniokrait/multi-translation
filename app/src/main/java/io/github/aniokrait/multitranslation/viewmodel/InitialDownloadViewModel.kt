@@ -18,7 +18,7 @@ class InitialDownloadViewModel(
     private val repository: LanguageModelRepository,
 ) : ViewModel() {
 
-    val checkState: StateFlow<Map<Locale, MutableState<Boolean>>> = initCheckState()
+    private val checkState: StateFlow<Map<Locale, MutableState<Boolean>>> = initCheckState()
 
     val downloadState: StateFlow<List<InitialDownloadScreenState.EachLanguageState>> =
         repository.getDownloadedInfo().combine(checkState) { downloadedInfo, checkState ->
@@ -43,15 +43,8 @@ class InitialDownloadViewModel(
             )
 
     fun onCheckClicked(locale: Locale) {
-        checkState.value[locale]?.value = !(checkState.value[locale]?.value)!!
+        checkState.value[locale]?.value = checkState.value[locale]?.value != true
     }
-
-    val simpleState: StateFlow<Int> = repository.getSimpleState()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = 0
-        )
 
     fun updateSimpleState() {
         repository.updateSimpleState()

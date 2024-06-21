@@ -45,6 +45,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            merges += "META-INF/LICENSE.md"
+            merges += "META-INF/LICENSE-notice.md"
         }
     }
 }
@@ -78,5 +80,7 @@ dependencies {
     // kotlinx-coroutines-test
     testImplementation(libs.kotlinx.coroutines.test)
 
+    // Data store
+    implementation(libs.androidx.datastore.preferences)
 
 }

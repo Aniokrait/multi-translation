@@ -6,13 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import io.github.aniokrait.multitranslation.datasource.LanguageModelDatasource
 import io.github.aniokrait.multitranslation.ui.TopBar
-import io.github.aniokrait.multitranslation.ui.screen.translate.TranslationScreen
+import io.github.aniokrait.multitranslation.ui.screen.initialsetting.InitialDownloadScreen
 import io.github.aniokrait.multitranslation.ui.theme.MultiTranslationTheme
+import io.github.aniokrait.multitranslation.viewmodel.InitialDownloadViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,11 +27,14 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         topBar = { TopBar() },
                     ) { innerPadding ->
-                        TranslationScreen(
-                            modifier = Modifier.padding(innerPadding),
-                            translateResults = mapOf(),
-                            onTranslateClick = {},
-                        )
+//                        TranslationScreen(
+//                            modifier = Modifier.padding(innerPadding),
+//                            translateResults = mapOf(),
+//                            onTranslateClick = {},
+//                        )
+                        val repository = LanguageModelDatasource(context = LocalContext.current)
+                        val vm = InitialDownloadViewModel(repository = repository)
+                        InitialDownloadScreen(vm = vm)
                     }
                 }
             }
