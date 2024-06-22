@@ -46,6 +46,10 @@ class InitialDownloadViewModel(
         checkState.value[locale]?.value = checkState.value[locale]?.value != true
     }
 
+    fun onDownloadClicked() {
+
+    }
+
     fun updateSimpleState() {
         repository.updateSimpleState()
     }

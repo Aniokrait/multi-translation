@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +33,9 @@ fun InitialDownloadScreen(
     val state = vm.downloadState.collectAsState()
     InitialDownloadScreen(
         modifier = modifier,
-        state = state.value
+        state = state.value,
+        vm::onCheckClicked,
+        vm::onDownloadClicked,
     )
 }
 
@@ -40,6 +44,8 @@ fun InitialDownloadScreen(
 private fun InitialDownloadScreen(
     modifier: Modifier = Modifier,
     state: List<InitialDownloadScreenState.EachLanguageState>,
+    onCheckClicked: (Locale) -> Unit,
+    onDownloadClicked: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -49,10 +55,15 @@ private fun InitialDownloadScreen(
             text = stringResource(id = R.string.lbl_description_for_download_models),
             style = MaterialTheme.typography.headlineSmall,
         )
+        Text(
+            text = stringResource(id = R.string.lbl_hosoku),
+            style = MaterialTheme.typography.bodyMedium
+        )
         Spacer(modifier = Modifier.height(12.dp))
 
         val allLocales = LanguageNameResolver.getAllLanguagesLabel()
         LazyVerticalGrid(
+            modifier = Modifier.weight(1f),
             columns = GridCells.Fixed(2)
         ) {
             items(allLocales) { locale ->
@@ -60,9 +71,16 @@ private fun InitialDownloadScreen(
                 LanguageSelection(
                     locale = locale,
                     checked = checked,
-                    onCheckedChange = {}
+                    onCheckedChange = { onCheckClicked(locale) }
                 )
             }
+        }
+
+        Button(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            onClick = onDownloadClicked,
+        ) {
+            Text(text = stringResource(id = R.string.btn_download_translation_model))
         }
     }
 
@@ -74,7 +92,9 @@ private fun LanguageSelection(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
-    Row {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Checkbox(checked = checked, onCheckedChange = onCheckedChange)
         Text(
             text = locale.getDisplayLanguage(Locale.JAPANESE),
@@ -87,6 +107,8 @@ private fun LanguageSelection(
 @Composable
 private fun InitialDownloadScreenPreview() {
     InitialDownloadScreen(
-        state = listOf()
+        state = listOf(),
+        onCheckClicked = {},
+        onDownloadClicked = {},
     )
 }
