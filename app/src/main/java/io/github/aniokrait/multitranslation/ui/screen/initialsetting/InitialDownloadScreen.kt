@@ -1,5 +1,6 @@
 package io.github.aniokrait.multitranslation.ui.screen.initialsetting
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,7 +47,7 @@ private fun InitialDownloadScreen(
     modifier: Modifier = Modifier,
     state: List<InitialDownloadScreenState.EachLanguageState>,
     onCheckClicked: (Locale) -> Unit,
-    onDownloadClicked: () -> Unit,
+    onDownloadClicked: (Context) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -76,9 +78,10 @@ private fun InitialDownloadScreen(
             }
         }
 
+        val context = LocalContext.current
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = onDownloadClicked,
+            onClick = { onDownloadClicked(context) },
         ) {
             Text(text = stringResource(id = R.string.btn_download_translation_model))
         }

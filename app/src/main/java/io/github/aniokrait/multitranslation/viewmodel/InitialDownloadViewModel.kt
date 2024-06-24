@@ -1,5 +1,6 @@
 package io.github.aniokrait.multitranslation.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class InitialDownloadViewModel(
@@ -46,7 +48,21 @@ class InitialDownloadViewModel(
         checkState.value[locale]?.value = checkState.value[locale]?.value != true
     }
 
-    fun onDownloadClicked() {
+    /**
+     * Download models.
+     */
+    fun onDownloadClicked(context: Context) {
+        val checkedLanguages = checkState.value
+            // filter map.value(MutableState).value
+            .filter { it.value.value }
+            // convert set to list
+            .keys.map { it }
+        viewModelScope.launch {
+            repository.downloadModel(
+                targetLanguages = checkedLanguages,
+                context = context,
+            )
+        }
 
     }
 
