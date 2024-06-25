@@ -3,12 +3,15 @@ package io.github.aniokrait.multitranslation.ui.screen.translate
 import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -88,6 +91,7 @@ private fun ColumnScope.TranslateSourceArea(
         }
     ) {
         Text(text = stringResource(id = R.string.btn_translation_button))
+        Spacer(modifier = Modifier.height(4.dp))
     }
 }
 
@@ -99,8 +103,11 @@ private fun ResultArea(
 ) {
     Text(
         text = stringResource(id = R.string.lbl_translation_result),
+        style = MaterialTheme.typography.titleMedium,
         modifier = Modifier.padding(bottom = 4.dp)
     )
+
+    Spacer(modifier = Modifier.height(4.dp))
 
     for ((language, result) in translateResults) {
         TranslateResultCard(
@@ -112,11 +119,11 @@ private fun ResultArea(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun TranslationScreenPreview() {
     TranslationScreen(
-        translateResults = mapOf("ja" to "こんにちは", "en" to "Hello"),
+        translateResults = mapOf("日本語" to "こんにちは", "英語" to "Hello"),
         onTranslateClick = { _, _ -> },
     )
 }

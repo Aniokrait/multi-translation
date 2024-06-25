@@ -46,7 +46,7 @@ class TranslationViewModel : ViewModel() {
 
                 val result = japaneseToOtherTranslator.translate(input).await()
 
-                translationResults[targetLocale.language] = result
+                translationResults[targetLocale.getDisplayName(Locale.getDefault())] = result
             }
 
             _translationResultFlow.value = translationResults
