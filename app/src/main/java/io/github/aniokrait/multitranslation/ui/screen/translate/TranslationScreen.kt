@@ -1,5 +1,6 @@
 package io.github.aniokrait.multitranslation.ui.screen.translate
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,13 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.viewmodel.TranslationViewModel
 import kotlinx.serialization.Serializable
@@ -35,7 +37,7 @@ fun TranslationScreen(
 ) {
     TranslationScreen(
         modifier = modifier,
-        translateResults = vm.translationResult,
+        translateResults = vm.translationResultFlow.collectAsStateWithLifecycle().value,
         onTranslateClick = vm::onTranslateClick,
     )
 }
@@ -45,7 +47,7 @@ private fun TranslationScreen(
     modifier: Modifier = Modifier,
     translateResults: Map<String, String>,
     textBlockHeight: Dp = 100.dp,
-    onTranslateClick: (String) -> Unit,
+    onTranslateClick: (String, Context) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -60,10 +62,9 @@ private fun TranslationScreen(
 }
 
 // Translation source area.
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun ColumnScope.TranslateSourceArea(
-    onTranslateClick: (String) -> Unit,
+    onTranslateClick: (String, Context) -> Unit,
 ) {
     val input = remember { mutableStateOf("") }
     // TODO: Fix height and show scrollbar
@@ -75,6 +76,7 @@ private fun ColumnScope.TranslateSourceArea(
     )
 
     val keyboardController = LocalSoftwareKeyboardController.current
+    val context = LocalContext.current
     Button(
         modifier = Modifier
             .width(140.dp)
@@ -82,7 +84,7 @@ private fun ColumnScope.TranslateSourceArea(
             .align(Alignment.CenterHorizontally),
         onClick = {
             keyboardController?.hide()
-            onTranslateClick(input.value)
+            onTranslateClick(input.value, context)
         }
     ) {
         Text(text = stringResource(id = R.string.btn_translation_button))
@@ -115,6 +117,6 @@ private fun ResultArea(
 fun TranslationScreenPreview() {
     TranslationScreen(
         translateResults = mapOf("ja" to "こんにちは", "en" to "Hello"),
-        onTranslateClick = {},
+        onTranslateClick = { _, _ -> },
     )
 }

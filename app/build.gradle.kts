@@ -72,6 +72,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // collectAsStateWithLifecycle
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
     // navigation-compose
     implementation(libs.androidx.navigation.compose)
 

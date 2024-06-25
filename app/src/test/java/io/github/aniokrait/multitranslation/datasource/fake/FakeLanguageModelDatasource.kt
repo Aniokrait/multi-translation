@@ -1,5 +1,6 @@
 package io.github.aniokrait.multitranslation.datasource.fake
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.ui.stateholder.DownloadedState
@@ -33,6 +34,10 @@ class FakeLanguageModelDatasource : LanguageModelRepository {
 
     override fun updateSimpleState() {
         count++
+    }
+
+    override suspend fun downloadModel(targetLanguages: List<Locale>, context: Context) {
+        TODO("Not yet implemented")
     }
 
 }

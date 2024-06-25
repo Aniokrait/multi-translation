@@ -11,7 +11,7 @@ koin-bom = "3.5.6"
 kotlin = "2.0.0"
 kotlinxCoroutines = "1.8.1"
 kotlinxSerializationJson = "1.6.3"
-lifecycleRuntimeKtx = "2.8.1"
+lifecycleRuntime = "2.8.2"
 mlkit = "17.0.2"
 mockk = "1.13.11"
 navigationCompose = "2.8.0-beta03"
@@ -20,7 +20,8 @@ navigationCompose = "2.8.0-beta03"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntime" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntime" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
