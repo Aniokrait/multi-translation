@@ -1,5 +1,6 @@
 package io.github.aniokrait.multitranslation.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,11 +16,34 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.Locale
 
-class TranslationViewModel : ViewModel() {
-    private val _translationResultFlow: MutableStateFlow<Map<String, String>> = MutableStateFlow(
-        mutableMapOf()
-    )
+/**
+ * ViewModel for initial download screen.
+ * Context is injected by Koin as Application context, so we are suppressing the warning.
+ */
+@SuppressLint("StaticFieldLeak")
+class TranslationViewModel(
+    private val context: Context,
+) : ViewModel() {
+    private val _translationResultFlow: MutableStateFlow<Map<String, String>> =
+        getDownloadedLanguages()
+
     val translationResultFlow: StateFlow<Map<String, String>> = _translationResultFlow
+
+    private fun getDownloadedLanguages(): MutableStateFlow<Map<String, String>> {
+        val downloadedLanguagesDataStoreFlow =
+            context.dataStore.data.map { preferences ->
+                preferences.asMap().map {
+                    Locale.forLanguageTag(it.key.name).displayName
+                }.associateWith { "" }
+            }
+
+        val stateFlow: MutableStateFlow<Map<String, String>> = MutableStateFlow(mapOf())
+        viewModelScope.launch {
+            stateFlow.value = downloadedLanguagesDataStoreFlow.first()
+        }
+
+        return stateFlow
+    }
 
     fun onTranslateClick(
         input: String,
@@ -52,4 +76,5 @@ class TranslationViewModel : ViewModel() {
             _translationResultFlow.value = translationResults
         }
     }
+
 }
