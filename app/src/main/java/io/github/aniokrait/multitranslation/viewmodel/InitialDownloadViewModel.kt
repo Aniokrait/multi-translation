@@ -50,8 +50,12 @@ class InitialDownloadViewModel(
 
     /**
      * Download models.
+     * Proceed to Translation screen, when all downloads completed
      */
-    fun onDownloadClicked(context: Context) {
+    fun onDownloadClicked(
+        context: Context,
+        navigateToTranslation: () -> Unit,
+    ) {
         val checkedLanguages = checkState.value
             // filter map.value(MutableState).value
             .filter { it.value.value }
@@ -62,12 +66,10 @@ class InitialDownloadViewModel(
                 targetLanguages = checkedLanguages,
                 context = context,
             )
+
+            navigateToTranslation()
         }
 
-    }
-
-    fun updateSimpleState() {
-        repository.updateSimpleState()
     }
 
     private fun initCheckState(): StateFlow<Map<Locale, MutableState<Boolean>>> {

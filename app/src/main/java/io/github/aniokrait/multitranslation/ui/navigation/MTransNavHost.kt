@@ -21,7 +21,7 @@ fun MTransNavHost(
         startDestination = InitialDownload
     ) {
         composable<InitialDownload> {
-            InitialDownloadScreen()
+            InitialDownloadScreen(navigateToTranslation = { navController.navigate(Translation) })
         }
         composable<Translation> {
             TranslationScreen()

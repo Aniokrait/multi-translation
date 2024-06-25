@@ -17,9 +17,9 @@ import java.util.Locale
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class InitialDownloadViewModelTest {
-    lateinit var initialDownloadViewModel: InitialDownloadViewModel
-    lateinit var fakeRepository: FakeLanguageModelDatasource
-    lateinit var dispatcher: CoroutineDispatcher
+    private lateinit var initialDownloadViewModel: InitialDownloadViewModel
+    private lateinit var fakeRepository: FakeLanguageModelDatasource
+    private lateinit var dispatcher: CoroutineDispatcher
 
     @Before
     fun setUp() {
@@ -41,22 +41,9 @@ class InitialDownloadViewModelTest {
     @Test
     fun testUpdateChecked() = runTest(dispatcher) {
         initialDownloadViewModel.onCheckClicked(Locale.JAPANESE)
-        
+
         val result = initialDownloadViewModel.downloadState.first()
         assertEquals(1, result.size)
         assertTrue(result.first().checked.value)
-    }
-
-    @Test
-    fun testInitialSimpleState() = runTest(dispatcher) {
-        val result = initialDownloadViewModel.simpleState.first()
-        assertEquals(1, result)
-    }
-
-    @Test
-    fun testUpdateSimpleState() = runTest(dispatcher) {
-        initialDownloadViewModel.updateSimpleState()
-        val result = initialDownloadViewModel.simpleState.first()
-        assertEquals(2, result)
     }
 }

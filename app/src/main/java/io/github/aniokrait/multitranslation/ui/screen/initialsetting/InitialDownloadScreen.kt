@@ -36,13 +36,15 @@ object InitialDownload
 fun InitialDownloadScreen(
     modifier: Modifier = Modifier,
     vm: InitialDownloadViewModel = koinViewModel(),
+    navigateToTranslation: () -> Unit,
 ) {
     val state = vm.downloadState.collectAsState()
     InitialDownloadScreen(
         modifier = modifier,
         state = state.value,
-        vm::onCheckClicked,
-        vm::onDownloadClicked,
+        onCheckClicked = vm::onCheckClicked,
+        onDownloadClicked = vm::onDownloadClicked,
+        navigateToTranslation = navigateToTranslation,
     )
 }
 
@@ -52,7 +54,8 @@ private fun InitialDownloadScreen(
     modifier: Modifier = Modifier,
     state: List<InitialDownloadScreenState.EachLanguageState>,
     onCheckClicked: (Locale) -> Unit,
-    onDownloadClicked: (Context) -> Unit,
+    onDownloadClicked: (Context, () -> Unit) -> Unit,
+    navigateToTranslation: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -86,7 +89,7 @@ private fun InitialDownloadScreen(
         val context = LocalContext.current
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = { onDownloadClicked(context) },
+            onClick = { onDownloadClicked(context, navigateToTranslation) },
         ) {
             Text(text = stringResource(id = R.string.btn_download_translation_model))
         }
@@ -117,6 +120,7 @@ private fun InitialDownloadScreenPreview() {
     InitialDownloadScreen(
         state = listOf(),
         onCheckClicked = {},
-        onDownloadClicked = {},
+        onDownloadClicked = { _, _ -> },
+        navigateToTranslation = {},
     )
 }
