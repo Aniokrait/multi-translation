@@ -25,12 +25,17 @@ import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.ui.stateholder.InitialDownloadScreenState
 import io.github.aniokrait.multitranslation.viewmodel.InitialDownloadViewModel
+import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
+
+@Serializable
+object InitialDownload
 
 @Composable
 fun InitialDownloadScreen(
     modifier: Modifier = Modifier,
-    vm: InitialDownloadViewModel,
+    vm: InitialDownloadViewModel = koinViewModel(),
 ) {
     val state = vm.downloadState.collectAsState()
     InitialDownloadScreen(

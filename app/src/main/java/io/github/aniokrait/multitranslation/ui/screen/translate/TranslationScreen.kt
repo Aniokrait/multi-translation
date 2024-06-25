@@ -23,9 +23,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.viewmodel.TranslationViewModel
+import kotlinx.serialization.Serializable
+
+@Serializable
+object Translation
 
 @Composable
-private fun TranslationScreen(
+fun TranslationScreen(
     modifier: Modifier = Modifier,
     vm: TranslationViewModel = TranslationViewModel(),
 ) {
@@ -37,7 +41,7 @@ private fun TranslationScreen(
 }
 
 @Composable
-fun TranslationScreen(
+private fun TranslationScreen(
     modifier: Modifier = Modifier,
     translateResults: Map<String, String>,
     textBlockHeight: Dp = 100.dp,
@@ -49,7 +53,7 @@ fun TranslationScreen(
             .fillMaxSize()
     ) {
 
-        TranslateSourceArea(onTranslateClick = onTranslateClick,)
+        TranslateSourceArea(onTranslateClick = onTranslateClick)
 
         ResultArea(textBlockHeight = textBlockHeight, translateResults = translateResults)
     }
@@ -65,7 +69,7 @@ private fun ColumnScope.TranslateSourceArea(
     // TODO: Fix height and show scrollbar
     TextField(
         modifier = Modifier.fillMaxWidth(),
-        label = { Text(text = stringResource(id = R.string.lbl_translation_source))},
+        label = { Text(text = stringResource(id = R.string.lbl_translation_source)) },
         value = input.value,
         onValueChange = { input.value = it },
     )
@@ -75,8 +79,7 @@ private fun ColumnScope.TranslateSourceArea(
         modifier = Modifier
             .width(140.dp)
             .padding(top = 16.dp)
-            .align(Alignment.CenterHorizontally)
-        ,
+            .align(Alignment.CenterHorizontally),
         onClick = {
             keyboardController?.hide()
             onTranslateClick(input.value)
