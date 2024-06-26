@@ -2,17 +2,15 @@ package io.github.aniokrait.multitranslation.datasource
 
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.preferencesDataStore
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
+import io.github.aniokrait.multitranslation.extension.dataStore
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.ui.stateholder.DownloadedState
 import kotlinx.coroutines.CoroutineScope
@@ -26,8 +24,6 @@ import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.Locale
-
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class LanguageModelDatasource(
     private val context: Context,

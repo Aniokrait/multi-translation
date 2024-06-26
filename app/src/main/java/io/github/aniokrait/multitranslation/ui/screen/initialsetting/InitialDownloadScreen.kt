@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
+import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
 import io.github.aniokrait.multitranslation.ui.stateholder.InitialDownloadScreenState
 import io.github.aniokrait.multitranslation.viewmodel.InitialDownloadViewModel
 import kotlinx.serialization.Serializable
@@ -30,7 +31,7 @@ import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 
 @Serializable
-object InitialDownload
+object InitialDownload : StartDestination
 
 @Composable
 fun InitialDownloadScreen(

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
-import io.github.aniokrait.multitranslation.datasource.dataStore
+import io.github.aniokrait.multitranslation.extension.dataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -50,11 +50,12 @@ class TranslationViewModel(
         context: Context,
     ) {
         viewModelScope.launch {
-            val downloadedLanguages: List<String> = context.dataStore.data.map { preferences ->
-                preferences.asMap().map {
-                    it.key.name
-                }
-            }.first()
+            val downloadedLanguages: List<String> =
+                context.dataStore.data.map { preferences ->
+                    preferences.asMap().map {
+                        it.key.name
+                    }
+                }.first()
 
             val translationResults = mutableMapOf<String, String>()
             downloadedLanguages.forEach {
