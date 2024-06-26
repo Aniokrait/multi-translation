@@ -98,4 +98,7 @@ dependencies {
     // Koin
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.androidx.compose)
+
+    // Lottie
+    implementation(libs.lottie.compose)
 }

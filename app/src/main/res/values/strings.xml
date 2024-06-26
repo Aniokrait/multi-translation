@@ -8,4 +8,5 @@
     <string name="lbl_description_for_download_models">翻訳したい言語を選んでください</string>
     <string name="lbl_hosoku">(いち言語あたり約30MBの容量が必要です)</string>
     <string name="btn_download_translation_model">次へ</string>
+    <string name="lbl_download_progress">翻訳モデルをダウンロードしています。\nそのままお待ち下さい</string>
 </resources>
