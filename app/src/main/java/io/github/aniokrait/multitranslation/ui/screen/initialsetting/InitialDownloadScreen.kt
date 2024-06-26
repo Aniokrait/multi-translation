@@ -1,6 +1,7 @@
 package io.github.aniokrait.multitranslation.ui.screen.initialsetting
 
 import android.content.Context
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,13 +15,14 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
@@ -39,10 +41,11 @@ fun InitialDownloadScreen(
     vm: InitialDownloadViewModel = koinViewModel(),
     navigateToTranslation: () -> Unit,
 ) {
-    val state = vm.downloadState.collectAsState()
+    val state = vm.downloadState.collectAsStateWithLifecycle().value
     InitialDownloadScreen(
         modifier = modifier,
-        state = state.value.languagesState,
+        state = state.languagesState,
+        isDownloading = state.isDownloading,
         onCheckClicked = vm::onCheckClicked,
         onDownloadClicked = vm::onDownloadClicked,
         navigateToTranslation = navigateToTranslation,
@@ -54,47 +57,61 @@ fun InitialDownloadScreen(
 private fun InitialDownloadScreen(
     modifier: Modifier = Modifier,
     state: List<InitialDownloadViewModelState.EachLanguageState>,
+    isDownloading: Boolean,
     onCheckClicked: (Locale) -> Unit,
     onDownloadClicked: (Context, () -> Unit) -> Unit,
     navigateToTranslation: () -> Unit,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text(
-            text = stringResource(id = R.string.lbl_description_for_download_models),
-            style = MaterialTheme.typography.headlineSmall,
-        )
-        Text(
-            text = stringResource(id = R.string.lbl_hosoku),
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-
-        val allLocales = LanguageNameResolver.getAllLanguagesLabel()
-        LazyVerticalGrid(
-            modifier = Modifier.weight(1f),
-            columns = GridCells.Fixed(2)
+        Column(
+            modifier = modifier
+                .fillMaxSize()
         ) {
-            items(allLocales) { locale ->
-                val checked: Boolean = state.find { it.locale == locale }?.checked?.value ?: false
-                LanguageSelection(
-                    locale = locale,
-                    checked = checked,
-                    onCheckedChange = { onCheckClicked(locale) }
-                )
+            Text(
+                text = stringResource(id = R.string.lbl_description_for_download_models),
+                style = MaterialTheme.typography.headlineSmall,
+            )
+            Text(
+                text = stringResource(id = R.string.lbl_hosoku),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+
+            val allLocales = LanguageNameResolver.getAllLanguagesLabel()
+            LazyVerticalGrid(
+                modifier = Modifier.weight(1f),
+                columns = GridCells.Fixed(2)
+            ) {
+                items(allLocales) { locale ->
+                    val checked: Boolean =
+                        state.find { it.locale == locale }?.checked?.value ?: false
+                    LanguageSelection(
+                        locale = locale,
+                        checked = checked,
+                        onCheckedChange = { onCheckClicked(locale) }
+                    )
+                }
+            }
+
+            val context = LocalContext.current
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = { onDownloadClicked(context, navigateToTranslation) },
+            ) {
+                Text(text = stringResource(id = R.string.btn_download_translation_model))
             }
         }
 
-        val context = LocalContext.current
-        Button(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = { onDownloadClicked(context, navigateToTranslation) },
-        ) {
-            Text(text = stringResource(id = R.string.btn_download_translation_model))
+        if (isDownloading) {
+            // TODO: find more appropriate composable.
+            Dialog(onDismissRequest = {}) {
+                Text("downloading")
+            }
         }
     }
+
 
 }
 
@@ -120,6 +137,7 @@ private fun LanguageSelection(
 private fun InitialDownloadScreenPreview() {
     InitialDownloadScreen(
         state = listOf(),
+        isDownloading = false,
         onCheckClicked = {},
         onDownloadClicked = { _, _ -> },
         navigateToTranslation = {},
