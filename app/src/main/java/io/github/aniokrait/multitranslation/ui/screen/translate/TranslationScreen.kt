@@ -61,7 +61,10 @@ private fun TranslationScreen(
 
         TranslateSourceArea(onTranslateClick = onTranslateClick)
 
-        ResultArea(textBlockHeight = textBlockHeight, translateResults = translateResults)
+        ResultArea(
+            textBlockHeight = textBlockHeight,
+            translateResults = translateResults,
+        )
     }
 }
 

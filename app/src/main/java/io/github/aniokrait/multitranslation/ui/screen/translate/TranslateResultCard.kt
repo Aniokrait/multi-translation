@@ -1,16 +1,24 @@
 package io.github.aniokrait.multitranslation.ui.screen.translate
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -20,6 +28,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.github.aniokrait.multitranslation.R
 
 /**
  * The card shows the translation result.
@@ -33,19 +42,35 @@ fun TranslateResultCard(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth()
-        ,
-    ){
+            .fillMaxWidth(),
+    ) {
         Column(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
-            Text(
-                modifier = Modifier
-                    .align(Alignment.Start)
-                ,
-                text = language,
-                fontWeight = FontWeight.Bold,
-            )
+            Row {
+                Text(
+                    modifier = Modifier,
+                    text = language,
+                    fontWeight = FontWeight.Bold,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+
+                Box {
+                    val clipboardManager = LocalClipboardManager.current
+                    IconButton(
+                        modifier = Modifier
+                            .offset(x = 8.dp, y = (-8).dp),
+                        onClick = {
+                            clipboardManager.setText(AnnotatedString(content))
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.content_copy_24px),
+                            contentDescription = "copy"
+                        )
+                    }
+                }
+            }
 
             val scrollState = rememberScrollState()
 //        Box {
@@ -59,8 +84,7 @@ fun TranslateResultCard(
             Text(
                 modifier = Modifier
                     .height(textBlockHeight)
-                    .verticalScroll(scrollState)
-                ,
+                    .verticalScroll(scrollState),
                 text = indentedText,
             )
 
@@ -78,7 +102,7 @@ fun TranslateResultCard(
 @Preview
 @Composable
 fun TranslateResultCardPreview(
-    @PreviewParameter(UserPreviewParameterProvider::class) content: Pair<String, String>
+    @PreviewParameter(UserPreviewParameterProvider::class) content: Pair<String, String>,
 ) {
     TranslateResultCard(
         textBlockHeight = 200.dp,
@@ -91,7 +115,10 @@ private class UserPreviewParameterProvider : PreviewParameterProvider<Pair<Strin
     override val values = sequenceOf(
         Pair("Japanese", "こんにちは"),
         Pair("English", "Hello2"),
-        Pair("Japanese", "こんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちは"),
+        Pair(
+            "Japanese",
+            "こんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちは"
+        ),
         Pair("hoge", "fuga")
     )
 }
