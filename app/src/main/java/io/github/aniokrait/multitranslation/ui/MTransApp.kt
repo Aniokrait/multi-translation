@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import io.github.aniokrait.multitranslation.ui.navigation.MTransNavHost
+import io.github.aniokrait.multitranslation.ui.screen.initialsetting.InitialDownload
 import io.github.aniokrait.multitranslation.ui.theme.MultiTranslationTheme
 
 @Composable
@@ -19,7 +20,9 @@ fun MTransApp() {
         MultiTranslationTheme {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                topBar = { TopBar() },
+                topBar = { TopBar(
+                    onSettingsClick = { navController.navigate(InitialDownload) }
+                ) },
             ) { innerPadding ->
                 MTransNavHost(
                     modifier = Modifier.padding(innerPadding),
