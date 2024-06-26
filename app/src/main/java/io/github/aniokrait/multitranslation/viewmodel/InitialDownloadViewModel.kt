@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
-import io.github.aniokrait.multitranslation.ui.stateholder.InitialDownloadScreenState
+import io.github.aniokrait.multitranslation.viewmodel.state.InitialDownloadViewModelState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,12 +22,12 @@ class InitialDownloadViewModel(
 
     private val checkState: StateFlow<Map<Locale, MutableState<Boolean>>> = initCheckState()
 
-    val downloadState: StateFlow<List<InitialDownloadScreenState.EachLanguageState>> =
+    val downloadState: StateFlow<InitialDownloadViewModelState> =
         repository.getDownloadedInfo().combine(checkState) { downloadedInfo, checkState ->
-            val list = mutableListOf<InitialDownloadScreenState.EachLanguageState>()
+            val list = mutableListOf<InitialDownloadViewModelState.EachLanguageState>()
             for (info in downloadedInfo) {
                 val locale = info.locale
-                val eachState = InitialDownloadScreenState.EachLanguageState(
+                val eachState = InitialDownloadViewModelState.EachLanguageState(
                     locale = locale,
                     downloaded = info.downloaded,
                     checked = checkState[locale] ?: mutableStateOf(false)
@@ -36,12 +36,12 @@ class InitialDownloadViewModel(
                 list.add(eachState)
             }
 
-            list
+            InitialDownloadViewModelState(languagesState = list)
         }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),
-                initialValue = listOf()
+                initialValue = InitialDownloadViewModelState()
             )
 
     fun onCheckClicked(locale: Locale) {

@@ -1,10 +1,10 @@
-package io.github.aniokrait.multitranslation.ui.stateholder
+package io.github.aniokrait.multitranslation.viewmodel.state
 
 import androidx.compose.runtime.MutableState
 import java.util.Locale
 
-data class InitialDownloadScreenState(
-    val languagesState: List<EachLanguageState>,
+data class InitialDownloadViewModelState(
+    val languagesState: List<EachLanguageState> = listOf(),
 ) {
     data class EachLanguageState(
         val locale: Locale,

@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
-import io.github.aniokrait.multitranslation.ui.stateholder.InitialDownloadScreenState
 import io.github.aniokrait.multitranslation.viewmodel.InitialDownloadViewModel
+import io.github.aniokrait.multitranslation.viewmodel.state.InitialDownloadViewModelState
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
@@ -42,7 +42,7 @@ fun InitialDownloadScreen(
     val state = vm.downloadState.collectAsState()
     InitialDownloadScreen(
         modifier = modifier,
-        state = state.value,
+        state = state.value.languagesState,
         onCheckClicked = vm::onCheckClicked,
         onDownloadClicked = vm::onDownloadClicked,
         navigateToTranslation = navigateToTranslation,
@@ -53,7 +53,7 @@ fun InitialDownloadScreen(
 @Composable
 private fun InitialDownloadScreen(
     modifier: Modifier = Modifier,
-    state: List<InitialDownloadScreenState.EachLanguageState>,
+    state: List<InitialDownloadViewModelState.EachLanguageState>,
     onCheckClicked: (Locale) -> Unit,
     onDownloadClicked: (Context, () -> Unit) -> Unit,
     navigateToTranslation: () -> Unit,
