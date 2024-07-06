@@ -36,6 +36,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
+import io.github.aniokrait.multitranslation.core.NetworkChecker
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
 import io.github.aniokrait.multitranslation.viewmodel.InitialDownloadViewModel
 import io.github.aniokrait.multitranslation.viewmodel.state.InitialDownloadViewModelState
@@ -125,18 +126,38 @@ private fun InitialDownloadScreen(
             val context = LocalContext.current
             val errorMessageTemplate =
                 stringResource(id = R.string.msg_download_failed_for_these_languages)
+            val showConfirmDownloadDialog = remember {
+                mutableStateOf(false)
+            }
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
-                    onDownloadClicked(
-                        context,
-                        navigateToTranslation,
-                        errorMessageTemplate,
-                        snackBarMessage
-                    )
+                    val isWifiConnected = NetworkChecker.isWifiConnected(context = context)
+                    if (isWifiConnected) {
+                        onDownloadClicked(
+                            context,
+                            navigateToTranslation,
+                            errorMessageTemplate,
+                            snackBarMessage
+                        )
+                    } else {
+                        showConfirmDownloadDialog.value = true
+                    }
+
                 },
             ) {
                 Text(text = stringResource(id = R.string.btn_download_translation_model))
+            }
+
+            if (showConfirmDownloadDialog.value) {
+                DownloadConfirmDialog(
+                    showConfirmDownloadDialog = showConfirmDownloadDialog,
+                    context = context,
+                    navigateToTranslation = navigateToTranslation,
+                    onProceedClicked = onDownloadClicked,
+                    errorMessageTemplate = errorMessageTemplate,
+                    snackBarMessage = snackBarMessage,
+                )
             }
         }
 
