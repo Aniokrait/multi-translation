@@ -87,7 +87,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.play.services)
 
     // mockk
-    androidTestImplementation(libs.io.mockk)
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk)
 
     // kotlinx-coroutines-test
     testImplementation(libs.kotlinx.coroutines.test)
