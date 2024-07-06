@@ -1,6 +1,8 @@
 package io.github.aniokrait.multitranslation.ui.screen.modeldownload
 
 import android.content.Context
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -169,8 +171,23 @@ private fun LanguageSelection(
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(checked = checked, onCheckedChange = onCheckedChange)
+
+        // Interact checkbox ripple effect when text is clicked.
+        val interactionSource = remember { MutableInteractionSource() }
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            interactionSource = interactionSource
+        )
+
         Text(
+            modifier = Modifier
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) {
+                    onCheckedChange.invoke(checked)
+                },
             text = locale.getDisplayLanguage(Locale.JAPANESE),
             style = MaterialTheme.typography.titleMedium,
         ) // TODO: Apply current system locale
