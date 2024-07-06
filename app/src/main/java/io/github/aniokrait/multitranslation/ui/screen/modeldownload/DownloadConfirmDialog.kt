@@ -1,4 +1,4 @@
-package io.github.aniokrait.multitranslation.ui.screen.initialsetting
+package io.github.aniokrait.multitranslation.ui.screen.modeldownload
 
 import android.content.Context
 import androidx.compose.material3.AlertDialog

@@ -1,4 +1,4 @@
-package io.github.aniokrait.multitranslation.ui.screen.initialsetting
+package io.github.aniokrait.multitranslation.ui.screen.modeldownload
 
 import android.content.Context
 import androidx.compose.foundation.layout.Box
@@ -30,24 +30,24 @@ import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.core.NetworkChecker
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
-import io.github.aniokrait.multitranslation.viewmodel.InitialDownloadViewModel
-import io.github.aniokrait.multitranslation.viewmodel.state.InitialDownloadViewModelState
+import io.github.aniokrait.multitranslation.viewmodel.TranslationModelDownloadViewModel
+import io.github.aniokrait.multitranslation.viewmodel.state.TranslationModelDownloadViewModelState
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 
 @Serializable
-object InitialDownload : StartDestination
+object TranslationModelDownload : StartDestination
 
 @Composable
-fun InitialDownloadScreen(
+fun TranslationModelDownloadScreen(
     modifier: Modifier = Modifier,
-    vm: InitialDownloadViewModel = koinViewModel(),
+    vm: TranslationModelDownloadViewModel = koinViewModel(),
     snackBarMessage: MutableState<String>,
     navigateToTranslation: () -> Unit,
 ) {
     val state = vm.downloadState.collectAsStateWithLifecycle().value
-    InitialDownloadScreen(
+    TranslationModelDownloadScreen(
         modifier = modifier,
         state = state.languagesState,
         isDownloading = state.isDownloading,
@@ -73,9 +73,9 @@ fun InitialDownloadScreen(
 
 
 @Composable
-private fun InitialDownloadScreen(
+private fun TranslationModelDownloadScreen(
     modifier: Modifier = Modifier,
-    state: List<InitialDownloadViewModelState.EachLanguageState>,
+    state: List<TranslationModelDownloadViewModelState.EachLanguageState>,
     isDownloading: Boolean,
     snackBarMessage: MutableState<String>,
     onCheckClicked: (Locale) -> Unit,
@@ -179,8 +179,8 @@ private fun LanguageSelection(
 
 @Preview(showBackground = true)
 @Composable
-private fun InitialDownloadScreenPreview() {
-    InitialDownloadScreen(
+private fun TranslationModelDownloadScreenPreview() {
+    TranslationModelDownloadScreen(
         state = listOf(),
         isDownloading = false,
         snackBarMessage = remember { mutableStateOf("") },

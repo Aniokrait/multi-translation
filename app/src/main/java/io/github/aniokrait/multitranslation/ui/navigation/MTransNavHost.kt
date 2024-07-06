@@ -14,8 +14,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import io.github.aniokrait.multitranslation.extension.dataStore
-import io.github.aniokrait.multitranslation.ui.screen.initialsetting.InitialDownload
-import io.github.aniokrait.multitranslation.ui.screen.initialsetting.InitialDownloadScreen
+import io.github.aniokrait.multitranslation.ui.screen.modeldownload.TranslationModelDownload
+import io.github.aniokrait.multitranslation.ui.screen.modeldownload.TranslationModelDownloadScreen
 import io.github.aniokrait.multitranslation.ui.screen.translate.Translation
 import io.github.aniokrait.multitranslation.ui.screen.translate.TranslationScreen
 import kotlinx.coroutines.CoroutineScope
@@ -47,8 +47,8 @@ fun MTransNavHost(
         composable<Loading> {
 
         }
-        composable<InitialDownload> {
-            InitialDownloadScreen(
+        composable<TranslationModelDownload> {
+            TranslationModelDownloadScreen(
                 navigateToTranslation = { navController.navigate(Translation) },
                 snackBarMessage = snackBarMessage,
             )
@@ -60,7 +60,7 @@ fun MTransNavHost(
 
 }
 
-// If first launch, start destination is InitialDownload, else Transaction.
+// If first launch, start destination is TranslationModelDownload, else Transaction.
 private fun startDestination(
     context: Context,
     scope: CoroutineScope,
@@ -72,7 +72,7 @@ private fun startDestination(
         }.first()
 
         val startDestination = if (isFirstLaunch) {
-            InitialDownload
+            TranslationModelDownload
         } else {
             Translation
         }

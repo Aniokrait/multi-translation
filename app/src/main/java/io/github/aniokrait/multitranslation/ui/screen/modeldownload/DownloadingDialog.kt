@@ -1,4 +1,4 @@
-package io.github.aniokrait.multitranslation.ui.screen.initialsetting
+package io.github.aniokrait.multitranslation.ui.screen.modeldownload
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

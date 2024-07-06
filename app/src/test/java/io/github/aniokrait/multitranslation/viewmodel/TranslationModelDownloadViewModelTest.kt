@@ -16,8 +16,8 @@ import org.junit.Test
 import java.util.Locale
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class InitialDownloadViewModelTest {
-    private lateinit var initialDownloadViewModel: InitialDownloadViewModel
+class TranslationModelDownloadViewModelTest {
+    private lateinit var translationModelDownloadViewModel: TranslationModelDownloadViewModel
     private lateinit var fakeRepository: FakeLanguageModelDatasource
     private lateinit var dispatcher: CoroutineDispatcher
 
@@ -26,13 +26,13 @@ class InitialDownloadViewModelTest {
         dispatcher = UnconfinedTestDispatcher()
         Dispatchers.setMain(dispatcher)
         fakeRepository = FakeLanguageModelDatasource()
-        initialDownloadViewModel =
-            InitialDownloadViewModel(repository = fakeRepository)
+        translationModelDownloadViewModel =
+            TranslationModelDownloadViewModel(repository = fakeRepository)
     }
 
     @Test
     fun testGetStateFlow() = runTest(dispatcher) {
-        val result = initialDownloadViewModel.downloadState.first()
+        val result = translationModelDownloadViewModel.downloadState.first()
         advanceUntilIdle()
         assertEquals(1, result.languagesState.size)
         assertEquals(Locale.JAPANESE, result.languagesState.first().locale)
@@ -40,9 +40,9 @@ class InitialDownloadViewModelTest {
 
     @Test
     fun testUpdateChecked() = runTest(dispatcher) {
-        initialDownloadViewModel.onCheckClicked(Locale.JAPANESE)
+        translationModelDownloadViewModel.onCheckClicked(Locale.JAPANESE)
 
-        val result = initialDownloadViewModel.downloadState.first()
+        val result = translationModelDownloadViewModel.downloadState.first()
         assertEquals(1, result.languagesState.size)
         assertTrue(result.languagesState.first().checked.value)
     }

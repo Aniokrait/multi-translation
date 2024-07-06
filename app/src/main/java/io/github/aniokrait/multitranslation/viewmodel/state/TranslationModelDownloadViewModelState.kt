@@ -3,7 +3,7 @@ package io.github.aniokrait.multitranslation.viewmodel.state
 import androidx.compose.runtime.MutableState
 import java.util.Locale
 
-data class InitialDownloadViewModelState(
+data class TranslationModelDownloadViewModelState(
     val languagesState: List<EachLanguageState> = listOf(),
     val isDownloading: Boolean = false,
     val allDownloadFailed: Boolean = false,
