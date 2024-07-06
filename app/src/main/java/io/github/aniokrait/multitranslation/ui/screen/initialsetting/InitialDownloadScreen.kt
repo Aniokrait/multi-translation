@@ -11,12 +11,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -46,6 +50,7 @@ object InitialDownload : StartDestination
 fun InitialDownloadScreen(
     modifier: Modifier = Modifier,
     vm: InitialDownloadViewModel = koinViewModel(),
+    snackBarMessage: MutableState<String>,
     navigateToTranslation: () -> Unit,
 ) {
     val state = vm.downloadState.collectAsStateWithLifecycle().value
@@ -53,10 +58,24 @@ fun InitialDownloadScreen(
         modifier = modifier,
         state = state.languagesState,
         isDownloading = state.isDownloading,
+        snackBarMessage = snackBarMessage,
         onCheckClicked = vm::onCheckClicked,
         onDownloadClicked = vm::onDownloadClicked,
         navigateToTranslation = navigateToTranslation,
     )
+    if (state.allDownloadFailed) {
+        AlertDialog(
+            text = {
+                Text(text = stringResource(id = R.string.lbl_all_download_failed))
+            },
+            onDismissRequest = vm::onDownloadFailedDialogOkClicked,
+            confirmButton = {
+                Button(onClick = vm::onDownloadFailedDialogOkClicked) {
+                    Text(text = "OK")
+                }
+            }
+        )
+    }
 }
 
 
@@ -65,8 +84,9 @@ private fun InitialDownloadScreen(
     modifier: Modifier = Modifier,
     state: List<InitialDownloadViewModelState.EachLanguageState>,
     isDownloading: Boolean,
+    snackBarMessage: MutableState<String>,
     onCheckClicked: (Locale) -> Unit,
-    onDownloadClicked: (Context, () -> Unit) -> Unit,
+    onDownloadClicked: (Context, () -> Unit, String, MutableState<String>) -> Unit,
     navigateToTranslation: () -> Unit,
 ) {
     Box(
@@ -103,9 +123,18 @@ private fun InitialDownloadScreen(
             }
 
             val context = LocalContext.current
+            val errorMessageTemplate =
+                stringResource(id = R.string.msg_download_failed_for_these_languages)
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = { onDownloadClicked(context, navigateToTranslation) },
+                onClick = {
+                    onDownloadClicked(
+                        context,
+                        navigateToTranslation,
+                        errorMessageTemplate,
+                        snackBarMessage
+                    )
+                },
             ) {
                 Text(text = stringResource(id = R.string.btn_download_translation_model))
             }
@@ -157,8 +186,9 @@ private fun InitialDownloadScreenPreview() {
     InitialDownloadScreen(
         state = listOf(),
         isDownloading = false,
+        snackBarMessage = remember { mutableStateOf("") },
         onCheckClicked = {},
-        onDownloadClicked = { _, _ -> },
+        onDownloadClicked = { _, _, _, _ -> },
         navigateToTranslation = {},
     )
 }

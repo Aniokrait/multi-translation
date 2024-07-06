@@ -22,13 +22,15 @@ class InitialDownloadViewModel(
 
     private val checkState: StateFlow<Map<Locale, MutableState<Boolean>>> = initCheckState()
     private val isDownloading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private val allDownloadFailed: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     val downloadState: StateFlow<InitialDownloadViewModelState> =
         combine(
             repository.getDownloadedInfo(),
             checkState,
-            isDownloading
-        ) { downloadedInfo, checkState, isDownloading ->
+            isDownloading,
+            allDownloadFailed,
+        ) { downloadedInfo, checkState, isDownloading, allDownloadFailed ->
             val list = mutableListOf<InitialDownloadViewModelState.EachLanguageState>()
             for (info in downloadedInfo) {
                 val locale = info.locale
@@ -44,6 +46,7 @@ class InitialDownloadViewModel(
             InitialDownloadViewModelState(
                 languagesState = list,
                 isDownloading = isDownloading,
+                allDownloadFailed = allDownloadFailed,
             )
         }
             .stateIn(
@@ -64,24 +67,46 @@ class InitialDownloadViewModel(
     fun onDownloadClicked(
         context: Context,
         navigateToTranslation: () -> Unit,
+        errorMessageTemplate: String,
+        snackBarMessageState: MutableState<String>,
     ) {
         isDownloading.value = true
 
-        val checkedLanguages = checkState.value
+        val checkedLanguages: List<Locale> = checkState.value
             // filter map.value(MutableState).value
             .filter { it.value.value }
             // convert set to list
             .keys.map { it }
         viewModelScope.launch {
-            repository.downloadModel(
+            val failedModels: List<Locale> = repository.downloadModel(
                 targetLanguages = checkedLanguages,
                 context = context,
             )
-
             isDownloading.value = false
+
+            if (checkedLanguages.size == failedModels.size) {
+                allDownloadFailed.value = true
+                return@launch
+            }
+
+            if (failedModels.isNotEmpty()) {
+                // Set value like this.
+                /* 以下の言語のダウンロードに失敗しました。
+                   ・日本語
+                   ・英語
+                */
+                snackBarMessageState.value = failedModels
+                    .fold(errorMessageTemplate) { acc, locale -> "$acc\n・${locale.displayName}" }
+            }
             navigateToTranslation()
         }
+    }
 
+    /**
+     * Reset the all download failed flag.
+     */
+    fun onDownloadFailedDialogOkClicked() {
+        allDownloadFailed.value = false
     }
 
     private fun initCheckState(): StateFlow<Map<Locale, MutableState<Boolean>>> {

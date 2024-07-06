@@ -6,6 +6,7 @@ import java.util.Locale
 data class InitialDownloadViewModelState(
     val languagesState: List<EachLanguageState> = listOf(),
     val isDownloading: Boolean = false,
+    val allDownloadFailed: Boolean = false,
 ) {
     data class EachLanguageState(
         val locale: Locale,

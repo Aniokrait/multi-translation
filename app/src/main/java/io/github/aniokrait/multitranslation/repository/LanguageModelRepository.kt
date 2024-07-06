@@ -20,5 +20,5 @@ interface LanguageModelRepository {
     suspend fun downloadModel(
         targetLanguages: List<Locale>,
         context: Context,
-    )
+    ): List<Locale>
 }

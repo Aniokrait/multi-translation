@@ -36,7 +36,10 @@ class FakeLanguageModelDatasource : LanguageModelRepository {
         count++
     }
 
-    override suspend fun downloadModel(targetLanguages: List<Locale>, context: Context) {
+    override suspend fun downloadModel(
+        targetLanguages: List<Locale>,
+        context: Context,
+    ): List<Locale> {
         TODO("Not yet implemented")
     }
 

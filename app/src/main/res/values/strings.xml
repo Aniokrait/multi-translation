@@ -9,4 +9,6 @@
     <string name="lbl_hosoku">(いち言語あたり約30MBの容量が必要です)</string>
     <string name="btn_download_translation_model">次へ</string>
     <string name="lbl_download_progress">翻訳モデルをダウンロードしています。\nそのままお待ち下さい</string>
+    <string name="msg_download_failed_for_these_languages">以下の言語のダウンロードに失敗しました。\nインターネット接続状況を確認し、設定画面から再度ダウンロードしてください。</string>
+    <string name="lbl_all_download_failed">翻訳モデルのダウンロードに失敗しました。\nインターネット接続状況を確認してから、再度実行してください</string>
 </resources>

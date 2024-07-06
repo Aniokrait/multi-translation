@@ -28,6 +28,7 @@ import kotlinx.serialization.Serializable
 fun MTransNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    snackBarMessage: MutableState<String>,
 ) {
     val startDestinationState: MutableState<StartDestination> = remember {
         mutableStateOf(Loading)
@@ -47,12 +48,16 @@ fun MTransNavHost(
 
         }
         composable<InitialDownload> {
-            InitialDownloadScreen(navigateToTranslation = { navController.navigate(Translation) })
+            InitialDownloadScreen(
+                navigateToTranslation = { navController.navigate(Translation) },
+                snackBarMessage = snackBarMessage,
+            )
         }
         composable<Translation> {
             TranslationScreen()
         }
     }
+
 }
 
 // If first launch, start destination is InitialDownload, else Transaction.

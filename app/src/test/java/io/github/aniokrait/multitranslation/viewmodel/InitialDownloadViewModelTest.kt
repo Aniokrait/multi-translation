@@ -34,8 +34,8 @@ class InitialDownloadViewModelTest {
     fun testGetStateFlow() = runTest(dispatcher) {
         val result = initialDownloadViewModel.downloadState.first()
         advanceUntilIdle()
-        assertEquals(1, result.size)
-        assertEquals(Locale.JAPANESE, result.first().locale)
+        assertEquals(1, result.languagesState.size)
+        assertEquals(Locale.JAPANESE, result.languagesState.first().locale)
     }
 
     @Test
@@ -43,7 +43,14 @@ class InitialDownloadViewModelTest {
         initialDownloadViewModel.onCheckClicked(Locale.JAPANESE)
 
         val result = initialDownloadViewModel.downloadState.first()
-        assertEquals(1, result.size)
-        assertTrue(result.first().checked.value)
+        assertEquals(1, result.languagesState.size)
+        assertTrue(result.languagesState.first().checked.value)
+    }
+
+    @Test
+    fun testFold() {
+        val strList = listOf("Japanese", "English")
+        val result = strList.fold("Initial") { acc, s -> "$acc\n$s" }
+        assertEquals("Initial\nJapanese\nEnglish", result)
     }
 }

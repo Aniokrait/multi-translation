@@ -1,6 +1,7 @@
 package io.github.aniokrait.multitranslation.datasource
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -13,21 +14,25 @@ import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.extension.dataStore
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.ui.stateholder.DownloadedState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.util.Locale
+import java.util.concurrent.TimeoutException
 
 class LanguageModelDatasource(
     private val context: Context,
 ) : LanguageModelRepository {
+    companion object {
+        const val TAG = "LanguageModelDatasource"
+    }
+
     override fun getDownloadedInfo(): Flow<List<DownloadedState>> = flow {
         val isDatastoreEmpty: Boolean = context.dataStore.data
             .map { preferences ->
@@ -75,12 +80,12 @@ class LanguageModelDatasource(
     override suspend fun downloadModel(
         targetLanguages: List<Locale>,
         context: Context,
-    ) {
+    ): List<Locale> {
         val conditions = DownloadConditions.Builder()
             .requireWifi()
             .build()
 
-        val tasks: MutableList<Job> = mutableListOf()
+        val failedModels = mutableListOf<Locale>()
         targetLanguages.forEach { locale ->
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(TranslateLanguage.JAPANESE)
@@ -88,19 +93,26 @@ class LanguageModelDatasource(
                 .build()
             val translator: Translator = Translation.getClient(options)
 
-            tasks.add(CoroutineScope(Dispatchers.IO).launch {
-                try {
+            try {
+                withContext(Dispatchers.IO) {
+                    val timeoutJob = launch {
+                        // If download doesn't complete in 10 seconds, throw an exception.
+                        delay(10000)
+                        throw TimeoutException("Download timed out")
+                    }
                     translator.downloadModelIfNeeded(conditions).await()
+                    timeoutJob.cancel()
+
                     context.dataStore.edit {
                         it[booleanPreferencesKey(locale.language)] = true
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
-
-            })
+            } catch (e: TimeoutException) {
+                Log.w(TAG, "Download timed out for ${locale.language}.")
+                failedModels.add(locale)
+            }
         }
 
-        tasks.joinAll()
+        return failedModels.toList()
     }
 }
