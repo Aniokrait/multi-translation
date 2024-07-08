@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.aniokrait.multitranslation.R
+import io.github.aniokrait.multitranslation.ui.TopBar
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
 import io.github.aniokrait.multitranslation.viewmodel.TranslationViewModel
 import kotlinx.serialization.Serializable
@@ -41,10 +43,12 @@ object Translation : StartDestination
 fun TranslationScreen(
     modifier: Modifier = Modifier,
     vm: TranslationViewModel = koinViewModel(),
+    onSettingsClick: () -> Unit,
 ) {
     TranslationScreen(
         modifier = modifier,
         translateResults = vm.translationResultFlow.collectAsStateWithLifecycle().value,
+        onSettingsClick = onSettingsClick,
         onTranslateClick = vm::onTranslateClick,
     )
 }
@@ -54,22 +58,32 @@ private fun TranslationScreen(
     modifier: Modifier = Modifier,
     translateResults: Map<String, String>,
     textBlockHeight: Dp = 100.dp,
+    onSettingsClick: () -> Unit,
     onTranslateClick: (String, Context) -> Unit,
 ) {
-    Column(
-        modifier = modifier
-            .statusBarsPadding()
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+    Scaffold(
+        topBar = {
+            TopBar(
+                onSettingsClick = onSettingsClick,
+            )
+        }
     ) {
+        Column(
+            modifier = modifier
+                .statusBarsPadding()
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
 
-        TranslateSourceArea(onTranslateClick = onTranslateClick)
+            TranslateSourceArea(onTranslateClick = onTranslateClick)
 
-        ResultArea(
-            textBlockHeight = textBlockHeight,
-            translateResults = translateResults,
-        )
+            ResultArea(
+                textBlockHeight = textBlockHeight,
+                translateResults = translateResults,
+            )
+        }
     }
+
 }
 
 // Translation source area.
@@ -133,5 +147,6 @@ fun TranslationScreenPreview() {
     TranslationScreen(
         translateResults = mapOf("日本語" to "こんにちは", "英語" to "Hello"),
         onTranslateClick = { _, _ -> },
+        onSettingsClick = {},
     )
 }

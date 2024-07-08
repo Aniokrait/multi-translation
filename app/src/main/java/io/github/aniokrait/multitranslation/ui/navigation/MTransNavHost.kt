@@ -51,10 +51,13 @@ fun MTransNavHost(
             TranslationModelDownloadScreen(
                 navigateToTranslation = { navController.navigate(Translation) },
                 snackBarMessage = snackBarMessage,
+                onBackClicked = if (navController.previousBackStackEntry != null) { -> navController.navigateUp() } else null,
             )
         }
         composable<Translation> {
-            TranslationScreen()
+            TranslationScreen(
+                onSettingsClick = { navController.navigate(TranslationModelDownload) }
+            )
         }
     }
 

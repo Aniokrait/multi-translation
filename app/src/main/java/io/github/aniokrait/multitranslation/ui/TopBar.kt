@@ -1,6 +1,7 @@
 package io.github.aniokrait.multitranslation.ui
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -15,20 +16,34 @@ import io.github.aniokrait.multitranslation.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    onSettingsClick: () -> Unit,
+    // TODO: Think about the ways to handle the increasing args
+    onSettingsClick: (() -> Unit)? = null,
+    onBackClicked: (() -> Unit)? = null,
 ) {
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.app_name))},
+        title = { Text(text = stringResource(id = R.string.app_name)) },
         actions = {
-            IconButton(onClick = onSettingsClick) {
-                Icon(Icons.Filled.Settings, contentDescription = "settings")
+            if (onSettingsClick != null) {
+                IconButton(onClick = onSettingsClick) {
+                    Icon(Icons.Filled.Settings, contentDescription = "settings")
+                }
             }
-        }
+        },
+        navigationIcon = {
+            if (onBackClicked != null) {
+                IconButton(onClick = onBackClicked) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "back")
+                }
+            }
+        },
     )
 }
 
 @Composable
 @Preview
 private fun TopBarPreview() {
-    TopBar(onSettingsClick = {},)
+    TopBar(
+        onSettingsClick = {},
+        onBackClicked = {},
+    )
 }

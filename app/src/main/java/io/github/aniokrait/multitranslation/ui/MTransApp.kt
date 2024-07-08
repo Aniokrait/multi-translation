@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import io.github.aniokrait.multitranslation.ui.navigation.MTransNavHost
-import io.github.aniokrait.multitranslation.ui.screen.modeldownload.TranslationModelDownload
 import io.github.aniokrait.multitranslation.ui.theme.MultiTranslationTheme
 
 @Composable
@@ -27,11 +26,6 @@ fun MTransApp() {
             val snackBarMessage = remember { mutableStateOf("") }
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    TopBar(
-                        onSettingsClick = { navController.navigate(TranslationModelDownload) }
-                    )
-                },
                 snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
             ) { innerPadding ->
                 MTransNavHost(

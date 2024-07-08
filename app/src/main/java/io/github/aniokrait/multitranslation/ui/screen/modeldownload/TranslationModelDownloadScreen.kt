@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -37,6 +38,7 @@ import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.core.NetworkChecker
 import io.github.aniokrait.multitranslation.extension.ui.conditional
+import io.github.aniokrait.multitranslation.ui.TopBar
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
 import io.github.aniokrait.multitranslation.viewmodel.TranslationModelDownloadViewModel
 import io.github.aniokrait.multitranslation.viewmodel.state.TranslationModelDownloadViewModelState
@@ -53,6 +55,7 @@ fun TranslationModelDownloadScreen(
     vm: TranslationModelDownloadViewModel = koinViewModel(),
     snackBarMessage: MutableState<String>,
     navigateToTranslation: () -> Unit,
+    onBackClicked: (() -> Unit)?,
 ) {
     val state = vm.downloadState.collectAsStateWithLifecycle().value
     TranslationModelDownloadScreen(
@@ -63,6 +66,7 @@ fun TranslationModelDownloadScreen(
         onCheckClicked = vm::onCheckClicked,
         onDownloadClicked = vm::onDownloadClicked,
         navigateToTranslation = navigateToTranslation,
+        onBackClicked = onBackClicked,
     )
     if (state.allDownloadFailed) {
         AlertDialog(
@@ -89,85 +93,95 @@ private fun TranslationModelDownloadScreen(
     onCheckClicked: (Locale) -> Unit,
     onDownloadClicked: (Context, () -> Unit, String, MutableState<String>) -> Unit,
     navigateToTranslation: () -> Unit,
+    onBackClicked: (() -> Unit)?,
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize()
+    Scaffold(
+        topBar = {
+            TopBar(
+                onBackClicked = onBackClicked,
+            )
+        },
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Text(
-                text = stringResource(id = R.string.lbl_description_for_download_models),
-                style = MaterialTheme.typography.headlineSmall,
-            )
-            Text(
-                text = stringResource(id = R.string.lbl_hosoku),
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            val allLocales = LanguageNameResolver.getAllLanguagesLabel()
-            LazyVerticalGrid(
-                modifier = Modifier.weight(1f),
-                columns = GridCells.Fixed(2)
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
             ) {
-                items(allLocales) { locale ->
-                    val eachLocaleState = state.find { it.locale == locale }
-                    val checked: Boolean = eachLocaleState?.checked?.value ?: false
-                    val downloaded: Boolean = eachLocaleState?.downloaded?.value ?: false
+                Text(
+                    text = stringResource(id = R.string.lbl_description_for_download_models),
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+                Text(
+                    text = stringResource(id = R.string.lbl_hosoku),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(modifier = Modifier.height(12.dp))
 
-                    LanguageSelection(
-                        locale = locale,
-                        checked = checked,
-                        downloaded = downloaded,
-                        onCheckedChange = { onCheckClicked(locale) }
+                val allLocales = LanguageNameResolver.getAllLanguagesLabel()
+                LazyVerticalGrid(
+                    modifier = Modifier.weight(1f),
+                    columns = GridCells.Fixed(2)
+                ) {
+                    items(allLocales) { locale ->
+                        val eachLocaleState = state.find { it.locale == locale }
+                        val checked: Boolean = eachLocaleState?.checked?.value ?: false
+                        val downloaded: Boolean = eachLocaleState?.downloaded?.value ?: false
+
+                        LanguageSelection(
+                            locale = locale,
+                            checked = checked,
+                            downloaded = downloaded,
+                            onCheckedChange = { onCheckClicked(locale) }
+                        )
+                    }
+                }
+
+                val context = LocalContext.current
+                val errorMessageTemplate =
+                    stringResource(id = R.string.msg_download_failed_for_these_languages)
+                val showConfirmDownloadDialog = remember {
+                    mutableStateOf(false)
+                }
+                Button(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onClick = {
+                        val isWifiConnected = NetworkChecker.isWifiConnected(context = context)
+                        if (isWifiConnected) {
+                            onDownloadClicked(
+                                context,
+                                navigateToTranslation,
+                                errorMessageTemplate,
+                                snackBarMessage
+                            )
+                        } else {
+                            showConfirmDownloadDialog.value = true
+                        }
+
+                    },
+                ) {
+                    Text(text = stringResource(id = R.string.btn_download_translation_model))
+                }
+
+                if (showConfirmDownloadDialog.value) {
+                    DownloadConfirmDialog(
+                        showConfirmDownloadDialog = showConfirmDownloadDialog,
+                        context = context,
+                        navigateToTranslation = navigateToTranslation,
+                        onProceedClicked = onDownloadClicked,
+                        errorMessageTemplate = errorMessageTemplate,
+                        snackBarMessage = snackBarMessage,
                     )
                 }
             }
 
-            val context = LocalContext.current
-            val errorMessageTemplate =
-                stringResource(id = R.string.msg_download_failed_for_these_languages)
-            val showConfirmDownloadDialog = remember {
-                mutableStateOf(false)
+            if (isDownloading) {
+                DownloadingDialog()
             }
-            Button(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = {
-                    val isWifiConnected = NetworkChecker.isWifiConnected(context = context)
-                    if (isWifiConnected) {
-                        onDownloadClicked(
-                            context,
-                            navigateToTranslation,
-                            errorMessageTemplate,
-                            snackBarMessage
-                        )
-                    } else {
-                        showConfirmDownloadDialog.value = true
-                    }
-
-                },
-            ) {
-                Text(text = stringResource(id = R.string.btn_download_translation_model))
-            }
-
-            if (showConfirmDownloadDialog.value) {
-                DownloadConfirmDialog(
-                    showConfirmDownloadDialog = showConfirmDownloadDialog,
-                    context = context,
-                    navigateToTranslation = navigateToTranslation,
-                    onProceedClicked = onDownloadClicked,
-                    errorMessageTemplate = errorMessageTemplate,
-                    snackBarMessage = snackBarMessage,
-                )
-            }
-        }
-
-        if (isDownloading) {
-            DownloadingDialog()
         }
     }
+
 
 }
 
@@ -238,5 +252,6 @@ private fun TranslationModelDownloadScreenPreview() {
         onCheckClicked = {},
         onDownloadClicked = { _, _, _, _ -> },
         navigateToTranslation = {},
+        onBackClicked = {},
     )
 }
