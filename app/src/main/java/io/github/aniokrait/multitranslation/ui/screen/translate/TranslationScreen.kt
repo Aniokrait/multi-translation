@@ -65,10 +65,11 @@ private fun TranslationScreen(
                 onSettingsClick = onSettingsClick,
             )
         }
-    ) {
+    ) { innerPadding ->
         Column(
             modifier = modifier
                 .statusBarsPadding()
+                .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
