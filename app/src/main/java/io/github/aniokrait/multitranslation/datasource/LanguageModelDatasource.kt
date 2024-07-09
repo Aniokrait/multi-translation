@@ -76,21 +76,26 @@ class LanguageModelDatasource : LanguageModelRepository {
                     .build()
                 val translator: Translator = Translation.getClient(options)
 
-            try {
-                withContext(Dispatchers.IO) {
-                    val timeoutJob = launch {
-                        // If download doesn't complete in 10 seconds, throw an exception.
-                        delay(10000)
-                        throw TimeoutException("Download timed out")
+                try {
+                    withContext(Dispatchers.IO) {
+                        val deferred = translator.downloadModelIfNeeded().asDeferred()
+
+                        val timeoutJob = launch {
+                            // If download doesn't complete in 10 seconds, throw an exception.
+                            delay(10000)
+                            // FIXME: Even if cancels here, download will happen as soon as device is connected to the internet.
+                            deferred.cancel()
+                            throw TimeoutException("Download timed out for ${locale.language}.")
+                        }
+
+                        deferred.await()
+                        timeoutJob.cancel()
                     }
-                    translator.downloadModelIfNeeded(conditions).await()
-                    timeoutJob.cancel()
+                } catch (e: TimeoutException) {
+                    Log.w(TAG, "${e.message}")
+                    failedModels.add(locale)
                 }
-            } catch (e: TimeoutException) {
-                Log.w(TAG, "Download timed out for ${locale.language}.")
-                failedModels.add(locale)
             }
-        }
 
         return failedModels.toList()
     }
