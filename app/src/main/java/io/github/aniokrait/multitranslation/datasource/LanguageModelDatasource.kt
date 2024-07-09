@@ -17,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.asDeferred
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -65,12 +66,15 @@ class LanguageModelDatasource : LanguageModelRepository {
             .build()
 
         val failedModels = mutableListOf<Locale>()
-        targetLanguages.forEach { locale ->
-            val options = TranslatorOptions.Builder()
-                .setSourceLanguage(TranslateLanguage.JAPANESE)
-                .setTargetLanguage(locale.language)
-                .build()
-            val translator: Translator = Translation.getClient(options)
+        targetLanguages
+            // FIXME: Hide Japanese till implementing changing source language.
+            .filter { it != Locale.JAPANESE }
+            .forEach { locale ->
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.JAPANESE)
+                    .setTargetLanguage(locale.language)
+                    .build()
+                val translator: Translator = Translation.getClient(options)
 
             try {
                 withContext(Dispatchers.IO) {

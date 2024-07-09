@@ -131,6 +131,11 @@ private fun ResultArea(
     Spacer(modifier = Modifier.height(4.dp))
 
     for ((language, result) in translateResults) {
+        // FIXME: Hide Japanese till implementing changing source language.
+        if (language == Locale.JAPANESE) {
+            continue
+        }
+
         TranslateResultCard(
             modifier = Modifier.padding(bottom = 8.dp),
             textBlockHeight = textBlockHeight,
