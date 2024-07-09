@@ -3,6 +3,7 @@ package io.github.aniokrait.multitranslation.ui.navigation
 import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -10,6 +11,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -53,6 +56,14 @@ fun MTransNavHost(
                 snackBarMessage = snackBarMessage,
                 onBackClicked = if (navController.previousBackStackEntry != null) { -> navController.navigateUp() } else null,
             )
+
+            val context = LocalContext.current
+            LaunchedEffect(Unit) {
+                context.dataStore.edit { settings ->
+                    settings[booleanPreferencesKey(IS_FIRST_LAUNCH)] = true
+                }
+            }
+
         }
         composable<Translation> {
             TranslationScreen(
@@ -88,3 +99,5 @@ interface StartDestination
 
 @Serializable
 private object Loading : StartDestination
+
+const val IS_FIRST_LAUNCH = "is_first_launch"

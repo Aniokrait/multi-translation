@@ -80,7 +80,6 @@ class TranslationModelDownloadViewModel(
         viewModelScope.launch {
             val failedModels: List<Locale> = repository.downloadModel(
                 targetLanguages = checkedLanguages,
-                context = context,
             )
             isDownloading.value = false
 

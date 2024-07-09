@@ -1,6 +1,5 @@
 package io.github.aniokrait.multitranslation.ui.screen.translate
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +21,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,7 +57,7 @@ private fun TranslationScreen(
     translateResults: Map<String, String>,
     textBlockHeight: Dp = 100.dp,
     onSettingsClick: () -> Unit,
-    onTranslateClick: (String, Context) -> Unit,
+    onTranslateClick: (String) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -89,7 +87,7 @@ private fun TranslationScreen(
 // Translation source area.
 @Composable
 private fun ColumnScope.TranslateSourceArea(
-    onTranslateClick: (String, Context) -> Unit,
+    onTranslateClick: (String) -> Unit,
 ) {
     val input = remember { mutableStateOf("") }
     // TODO: Fix height and show scrollbar
@@ -101,7 +99,6 @@ private fun ColumnScope.TranslateSourceArea(
     )
 
     val keyboardController = LocalSoftwareKeyboardController.current
-    val context = LocalContext.current
     Button(
         modifier = Modifier
             .width(140.dp)
@@ -109,7 +106,7 @@ private fun ColumnScope.TranslateSourceArea(
             .align(Alignment.CenterHorizontally),
         onClick = {
             keyboardController?.hide()
-            onTranslateClick(input.value, context)
+            onTranslateClick(input.value)
         }
     ) {
         Text(text = stringResource(id = R.string.btn_translation_button))
@@ -146,7 +143,7 @@ private fun ResultArea(
 fun TranslationScreenPreview() {
     TranslationScreen(
         translateResults = mapOf("日本語" to "こんにちは", "英語" to "Hello"),
-        onTranslateClick = { _, _ -> },
+        onTranslateClick = { _ -> },
         onSettingsClick = {},
     )
 }
