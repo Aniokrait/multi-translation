@@ -33,6 +33,7 @@ import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
 import io.github.aniokrait.multitranslation.viewmodel.TranslationViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
+import java.util.Locale
 
 @Serializable
 object Translation : StartDestination
@@ -54,7 +55,7 @@ fun TranslationScreen(
 @Composable
 private fun TranslationScreen(
     modifier: Modifier = Modifier,
-    translateResults: Map<String, String>,
+    translateResults: Map<Locale, String>,
     textBlockHeight: Dp = 100.dp,
     onSettingsClick: () -> Unit,
     onTranslateClick: (String) -> Unit,
@@ -119,7 +120,7 @@ private fun ColumnScope.TranslateSourceArea(
 @Composable
 private fun ResultArea(
     textBlockHeight: Dp,
-    translateResults: Map<String, String>,
+    translateResults: Map<Locale, String>,
 ) {
     Text(
         text = stringResource(id = R.string.lbl_translation_result),
@@ -133,7 +134,7 @@ private fun ResultArea(
         TranslateResultCard(
             modifier = Modifier.padding(bottom = 8.dp),
             textBlockHeight = textBlockHeight,
-            language = language,
+            language = language.getDisplayName(Locale.getDefault()),
             content = result,
         )
     }
@@ -143,7 +144,7 @@ private fun ResultArea(
 @Composable
 fun TranslationScreenPreview() {
     TranslationScreen(
-        translateResults = mapOf("日本語" to "こんにちは", "英語" to "Hello"),
+        translateResults = mapOf(Locale.JAPANESE to "こんにちは", Locale.ENGLISH to "Hello"),
         onTranslateClick = { _ -> },
         onSettingsClick = {},
     )

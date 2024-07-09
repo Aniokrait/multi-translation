@@ -1,5 +1,6 @@
 package io.github.aniokrait.multitranslation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.common.model.RemoteModelManager
@@ -18,12 +19,16 @@ import java.util.Locale
  * Context is injected by Koin as Application context, so we are suppressing the warning.
  */
 class TranslationViewModel : ViewModel() {
-    private val _translationResultFlow: MutableStateFlow<Map<String, String>> =
+    companion object {
+        val TAG: String = TranslationViewModel::class.java.simpleName
+    }
+
+    private val _translationResultFlow: MutableStateFlow<Map<Locale, String>> =
         getDownloadedLanguages()
 
-    val translationResultFlow: StateFlow<Map<String, String>> = _translationResultFlow
+    val translationResultFlow: StateFlow<Map<Locale, String>> = _translationResultFlow
 
-    private fun getDownloadedLanguages(): MutableStateFlow<Map<String, String>> {
+    private fun getDownloadedLanguages(): MutableStateFlow<Map<Locale, String>> {
         viewModelScope.launch {
             val downloadedModelsTask =
                 RemoteModelManager.getInstance()
@@ -33,7 +38,7 @@ class TranslationViewModel : ViewModel() {
             viewModelScope.launch {
                 _translationResultFlow.emit(
                     downloadedModels.associate {
-                        Locale.forLanguageTag(it.language).displayName to ""
+                        Locale.forLanguageTag(it.language) to ""
                     }
                 )
             }
@@ -46,23 +51,23 @@ class TranslationViewModel : ViewModel() {
         input: String,
     ) {
         viewModelScope.launch {
-            val downloadedLanguages = getDownloadedLanguages().value.keys.toList()
+            val downloadedLanguages = translationResultFlow.value.keys.toList()
 
-            val translationResults = mutableMapOf<String, String>()
-            downloadedLanguages.forEach {
-                val targetLocale = Locale.forLanguageTag(it)
+            val translationResults = mutableMapOf<Locale, String>()
+            downloadedLanguages.forEach { targetLocale ->
+                Log.d(TAG, "targetLocale: $targetLocale")
 
                 // TODO: Download if model needed to guard not exist model unexpectedly.
 
                 val options = TranslatorOptions.Builder()
                     .setSourceLanguage(TranslateLanguage.JAPANESE)
-                    .setTargetLanguage(targetLocale.toLanguageTag())
+                    .setTargetLanguage(targetLocale.language)
                     .build()
                 val japaneseToOtherTranslator = Translation.getClient(options)
 
                 val result = japaneseToOtherTranslator.translate(input).await()
 
-                translationResults[targetLocale.getDisplayName(Locale.getDefault())] = result
+                translationResults[targetLocale] = result
             }
 
             _translationResultFlow.value = translationResults
