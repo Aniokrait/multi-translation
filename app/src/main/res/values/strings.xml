@@ -14,4 +14,7 @@
     <string name="dialog_btn_cancel">あとでWi-Fiを使う</string>
     <string name="dialog_btn_proceed">続行</string>
     <string name="dialog_content">Wi-Fiに接続されていません。\nモバイル通信を使うと、通信料金が発生する可能性がありますが、続行しますか？</string>
+
+    <!-- 設定系 -->
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
 </resources>

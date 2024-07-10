@@ -1,5 +1,6 @@
 package io.github.aniokrait.multitranslation.ui.screen.translate
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -16,10 +17,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -68,26 +74,45 @@ private fun TranslationScreen(
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = modifier
-                .statusBarsPadding()
-                .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
+        Box {
+            var bannerHeight by remember {
+                mutableIntStateOf(0)
+            }
 
-            TranslateSourceArea(
-                isTranslating = isTranslating,
-                onTranslateClick = onTranslateClick
-            )
+            Column(
+                modifier = modifier
+                    .statusBarsPadding()
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
 
-            ResultArea(
-                textBlockHeight = textBlockHeight,
-                translateResults = translateResults,
+                TranslateSourceArea(
+                    isTranslating = isTranslating,
+                    onTranslateClick = onTranslateClick
+                )
+
+                ResultArea(
+                    textBlockHeight = textBlockHeight,
+                    translateResults = translateResults,
+                )
+
+                val density = LocalDensity.current
+                with(density) {
+                    // add height so that the bottom card comes above the banner.
+                    Spacer(modifier = Modifier.height(bannerHeight.toDp()))
+                }
+            }
+
+            BannerAd(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .onGloballyPositioned {
+                        bannerHeight = it.size.height
+                    }
             )
         }
     }
-
 }
 
 // Translation source area.

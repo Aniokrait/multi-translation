@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.androidx.navigation.safeargs)
+    alias(libs.plugins.gms.google.services)
 }
 
 android {
@@ -102,4 +103,11 @@ dependencies {
 
     // Lottie
     implementation(libs.lottie.compose)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    // Analytics
+    implementation(libs.firebase.analytics)
+    // Admob
+    implementation(libs.play.services.ads)
 }
