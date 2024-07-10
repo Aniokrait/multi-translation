@@ -45,15 +45,6 @@ class LanguageModelDatasource : LanguageModelRepository {
         })
     }
 
-
-    override fun getSimpleState(): Flow<Int> {
-        TODO("Not yet implemented")
-    }
-
-    override fun updateSimpleState() {
-        TODO("Not yet implemented")
-    }
-
     /**
      * Download language translation models.
      * @param targetLanguages Checked languages on selection screen.

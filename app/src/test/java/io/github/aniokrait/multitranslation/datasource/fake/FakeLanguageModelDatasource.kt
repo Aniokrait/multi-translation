@@ -21,20 +21,6 @@ class FakeLanguageModelDatasource : LanguageModelRepository {
 
     }
 
-//    override fun checkLanguage(locale: Locale) {
-//        // todo: replace to change datastore value in the real object
-//        list.find { it.locale == locale }?.checked?.value = true
-//    }
-
-    var count = 1
-    override fun getSimpleState(): Flow<Int> = flow {
-        emit(count)
-    }
-
-    override fun updateSimpleState() {
-        count++
-    }
-
     override suspend fun downloadModel(
         targetLanguages: List<Locale>,
     ): List<Locale> {

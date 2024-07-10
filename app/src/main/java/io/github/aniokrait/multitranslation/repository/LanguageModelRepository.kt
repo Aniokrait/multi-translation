@@ -6,10 +6,6 @@ import java.util.Locale
 
 interface LanguageModelRepository {
     fun getDownloadedInfo(): Flow<List<DownloadedState>>
-//    fun checkLanguage(locale: Locale)
-
-    fun getSimpleState(): Flow<Int>
-    fun updateSimpleState()
 
     /**
      * Download language translation models.
