@@ -12,6 +12,7 @@ import com.google.mlkit.nl.translate.TranslatorOptions
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.ui.stateholder.DownloadedState
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +24,9 @@ import kotlinx.coroutines.withContext
 import java.util.Locale
 import java.util.concurrent.TimeoutException
 
-class LanguageModelDatasource : LanguageModelRepository {
+class LanguageModelDatasource(
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : LanguageModelRepository {
     companion object {
         const val TAG = "LanguageModelDatasource"
     }
@@ -32,9 +35,7 @@ class LanguageModelDatasource : LanguageModelRepository {
      * Get downloaded models info and emit state.
      */
     override fun getDownloadedInfo(): Flow<List<DownloadedState>> = flow {
-        val downloadedModelsTask =
-            RemoteModelManager.getInstance().getDownloadedModels(TranslateRemoteModel::class.java)
-        val downloadedModels = downloadedModelsTask.await()
+        val downloadedModels = getDownloadedModels()
 
         emit(LanguageNameResolver.getAllLanguagesLabel().map { locale ->
             val isDownloaded = downloadedModels.any { it.language == locale.language }
@@ -43,6 +44,18 @@ class LanguageModelDatasource : LanguageModelRepository {
                 downloaded = mutableStateOf(isDownloaded)
             )
         })
+    }
+
+    /**
+     * Get downloaded models.
+     */
+    override suspend fun getDownloadedModels(): Set<TranslateRemoteModel> {
+        return withContext(ioDispatcher) {
+            val downloadedModelsTask =
+                RemoteModelManager.getInstance()
+                    .getDownloadedModels(TranslateRemoteModel::class.java)
+            return@withContext downloadedModelsTask.await()
+        }
     }
 
     /**

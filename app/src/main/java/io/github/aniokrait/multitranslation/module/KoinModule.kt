@@ -10,5 +10,5 @@ import org.koin.dsl.module
 val appModule = module {
     single<LanguageModelRepository> { LanguageModelDatasource() }
     viewModel { TranslationModelDownloadViewModel(repository = get()) }
-    viewModel { TranslationViewModel() }
+    viewModel { TranslationViewModel(repository = get()) }
 }
