@@ -27,6 +27,7 @@ import java.util.Locale
 class TranslationViewModel(
     private val repository: LanguageModelRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel() {
     companion object {
         val TAG: String = TranslationViewModel::class.java.simpleName
@@ -65,7 +66,8 @@ class TranslationViewModel(
     fun onTranslateClick(
         input: String,
     ) {
-        viewModelScope.launch {
+        isTranslating.value = true
+        viewModelScope.launch(ioDispatcher) {
             val downloadedLanguages = uiState.value.translationResult.keys.toList()
 
             val translationResults = mutableMapOf<Locale, String>()
@@ -87,7 +89,11 @@ class TranslationViewModel(
                 translationResults[targetLocale] = result
             }
 
-            translationResultFlow.value = translationResults
+            withContext(mainDispatcher) {
+                translationResultFlow.value = translationResults
+                isTranslating.value = false
+            }
+
         }
     }
 
