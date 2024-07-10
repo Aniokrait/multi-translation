@@ -78,7 +78,7 @@ class LanguageModelDatasource : LanguageModelRepository {
 
                 try {
                     withContext(Dispatchers.IO) {
-                        val deferred = translator.downloadModelIfNeeded().asDeferred()
+                        val deferred = translator.downloadModelIfNeeded(conditions).asDeferred()
 
                         val timeoutJob = launch {
                             // If download doesn't complete in 10 seconds, throw an exception.
