@@ -41,7 +41,7 @@ import io.github.aniokrait.multitranslation.extension.ui.conditional
 import io.github.aniokrait.multitranslation.ui.TopBar
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
 import io.github.aniokrait.multitranslation.viewmodel.TranslationModelDownloadViewModel
-import io.github.aniokrait.multitranslation.viewmodel.state.TranslationModelDownloadViewModelState
+import io.github.aniokrait.multitranslation.viewmodel.state.TranslationModelDownloadUiState
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
@@ -87,7 +87,7 @@ fun TranslationModelDownloadScreen(
 @Composable
 private fun TranslationModelDownloadScreen(
     modifier: Modifier = Modifier,
-    state: List<TranslationModelDownloadViewModelState.EachLanguageState>,
+    state: List<TranslationModelDownloadUiState.EachLanguageState>,
     isDownloading: Boolean,
     snackBarMessage: MutableState<String>,
     onCheckClicked: (Locale) -> Unit,
@@ -234,12 +234,12 @@ private fun LanguageSelection(
 @Preview(showBackground = true)
 @Composable
 private fun TranslationModelDownloadScreenPreview() {
-    val iceLandState = TranslationModelDownloadViewModelState.EachLanguageState(
+    val iceLandState = TranslationModelDownloadUiState.EachLanguageState(
         locale = Locale.forLanguageTag("is"),
         checked = remember { mutableStateOf(true) },
         downloaded = remember { mutableStateOf(false) },
     )
-    val arabicState = TranslationModelDownloadViewModelState.EachLanguageState(
+    val arabicState = TranslationModelDownloadUiState.EachLanguageState(
         locale = Locale.forLanguageTag("ar"),
         checked = remember { mutableStateOf(false) },
         downloaded = remember { mutableStateOf(true) },

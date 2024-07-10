@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
-import io.github.aniokrait.multitranslation.viewmodel.state.TranslationModelDownloadViewModelState
+import io.github.aniokrait.multitranslation.viewmodel.state.TranslationModelDownloadUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,17 +24,17 @@ class TranslationModelDownloadViewModel(
     private val isDownloading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val allDownloadFailed: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    val downloadState: StateFlow<TranslationModelDownloadViewModelState> =
+    val downloadState: StateFlow<TranslationModelDownloadUiState> =
         combine(
             repository.getDownloadedInfo(),
             checkState,
             isDownloading,
             allDownloadFailed,
         ) { downloadedInfo, checkState, isDownloading, allDownloadFailed ->
-            val list = mutableListOf<TranslationModelDownloadViewModelState.EachLanguageState>()
+            val list = mutableListOf<TranslationModelDownloadUiState.EachLanguageState>()
             for (info in downloadedInfo) {
                 val locale = info.locale
-                val eachState = TranslationModelDownloadViewModelState.EachLanguageState(
+                val eachState = TranslationModelDownloadUiState.EachLanguageState(
                     locale = locale,
                     downloaded = info.downloaded,
                     checked = checkState[locale] ?: mutableStateOf(false)
@@ -43,7 +43,7 @@ class TranslationModelDownloadViewModel(
                 list.add(eachState)
             }
 
-            TranslationModelDownloadViewModelState(
+            TranslationModelDownloadUiState(
                 languagesState = list,
                 isDownloading = isDownloading,
                 allDownloadFailed = allDownloadFailed,
@@ -52,7 +52,7 @@ class TranslationModelDownloadViewModel(
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),
-                initialValue = TranslationModelDownloadViewModelState()
+                initialValue = TranslationModelDownloadUiState()
             )
 
 
