@@ -7,6 +7,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import io.github.aniokrait.multitranslation.R
 
 /**
  * AdMob banner.
@@ -20,8 +21,7 @@ fun BannerAd(
         factory = { context ->
             AdView(context).apply {
                 setAdSize(AdSize.BANNER)
-//                adUnitId = context.getString(R.string.admob_app_id)
-                adUnitId = "ca-app-pub-3940256099942544/9214589741"
+                adUnitId = context.getString(R.string.admob_ad_unit_id)
                 loadAd(AdRequest.Builder().build())
             }
         }
