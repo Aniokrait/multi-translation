@@ -7,10 +7,14 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
+import io.github.aniokrait.multitranslation.viewmodel.state.TranslationUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -28,16 +32,27 @@ class TranslationViewModel(
         val TAG: String = TranslationViewModel::class.java.simpleName
     }
 
-    private val _translationResultFlow: MutableStateFlow<Map<Locale, String>> =
+    private val translationResultFlow: MutableStateFlow<Map<Locale, String>> =
         getDownloadedLanguages()
+    private val isTranslating: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    val translationResultFlow: StateFlow<Map<Locale, String>> = _translationResultFlow
+    val uiState: StateFlow<TranslationUiState> =
+        combine(translationResultFlow, isTranslating) { translationResult, isTranslating ->
+            TranslationUiState(
+                translationResult = translationResult,
+                isTranslating = isTranslating,
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = TranslationUiState()
+        )
 
     private fun getDownloadedLanguages(): MutableStateFlow<Map<Locale, String>> {
         viewModelScope.launch {
             val downloadedModels = repository.getDownloadedModels()
 
-            _translationResultFlow.emit(
+            translationResultFlow.emit(
                 downloadedModels.associate {
                     Locale.forLanguageTag(it.language) to ""
                 }
@@ -51,7 +66,7 @@ class TranslationViewModel(
         input: String,
     ) {
         viewModelScope.launch {
-            val downloadedLanguages = translationResultFlow.value.keys.toList()
+            val downloadedLanguages = uiState.value.translationResult.keys.toList()
 
             val translationResults = mutableMapOf<Locale, String>()
             downloadedLanguages.forEach { targetLocale ->
@@ -72,7 +87,7 @@ class TranslationViewModel(
                 translationResults[targetLocale] = result
             }
 
-            _translationResultFlow.value = translationResults
+            translationResultFlow.value = translationResults
         }
     }
 

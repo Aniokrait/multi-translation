@@ -44,9 +44,10 @@ fun TranslationScreen(
     vm: TranslationViewModel = koinViewModel(),
     onSettingsClick: () -> Unit,
 ) {
+    val uiState = vm.uiState.collectAsStateWithLifecycle().value
     TranslationScreen(
         modifier = modifier,
-        translateResults = vm.translationResultFlow.collectAsStateWithLifecycle().value,
+        translateResults = uiState.translationResult,
         onSettingsClick = onSettingsClick,
         onTranslateClick = vm::onTranslateClick,
     )
