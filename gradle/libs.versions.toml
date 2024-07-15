@@ -19,6 +19,7 @@ mlkit = "17.0.2"
 mockk = "1.13.11"
 navigationCompose = "2.8.0-beta03"
 playServicesAds = "23.2.0"
+timber = "5.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,6 +51,7 @@ lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "
 mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

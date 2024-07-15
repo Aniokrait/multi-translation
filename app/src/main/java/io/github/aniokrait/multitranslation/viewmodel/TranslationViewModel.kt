@@ -1,6 +1,5 @@
 package io.github.aniokrait.multitranslation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.nl.translate.TranslateLanguage
@@ -18,6 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.Locale
 
 /**
@@ -29,9 +29,6 @@ class TranslationViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel() {
-    companion object {
-        val TAG: String = TranslationViewModel::class.java.simpleName
-    }
 
     private val translationResultFlow: MutableStateFlow<Map<Locale, String>> =
         getDownloadedLanguages()
@@ -72,7 +69,7 @@ class TranslationViewModel(
 
             val translationResults = mutableMapOf<Locale, String>()
             downloadedLanguages.forEach { targetLocale ->
-                Log.d(TAG, "targetLocale: $targetLocale")
+                Timber.d("targetLocale: $targetLocale")
 
                 // TODO: Download if model needed to guard not exist model unexpectedly.
 

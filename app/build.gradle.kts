@@ -42,6 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -110,4 +111,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     // Admob
     implementation(libs.play.services.ads)
+
+    // Timber
+    implementation(libs.timber)
 }

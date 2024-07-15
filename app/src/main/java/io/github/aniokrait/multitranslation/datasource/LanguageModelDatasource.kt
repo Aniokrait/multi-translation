@@ -1,6 +1,5 @@
 package io.github.aniokrait.multitranslation.datasource
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
@@ -21,15 +20,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.asDeferred
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.Locale
 import java.util.concurrent.TimeoutException
 
 class LanguageModelDatasource(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : LanguageModelRepository {
-    companion object {
-        const val TAG = "LanguageModelDatasource"
-    }
 
     /**
      * Get downloaded models info and emit state.
@@ -96,7 +93,7 @@ class LanguageModelDatasource(
                         timeoutJob.cancel()
                     }
                 } catch (e: TimeoutException) {
-                    Log.w(TAG, "${e.message}")
+                    Timber.w(e.message)
                     failedModels.add(locale)
                 }
             }
