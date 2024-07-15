@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -27,14 +28,20 @@ import java.util.Locale
  * ViewModel for initial download screen.
  * Context is injected by Koin as Application context, so we are suppressing the warning.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class TranslationViewModel(
     private val repository: LanguageModelRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel() {
 
-    private val translationResultFlow: MutableStateFlow<MutableMap<Locale, String>> =
+    private val downloadedLangModels: StateFlow<MutableMap<Locale, String>> =
         initTranslationResults()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = mutableMapOf()
+            )
 
     private val eachTranslatedResult: MutableStateFlow<Pair<Locale, String>> = MutableStateFlow(
         Pair(
@@ -42,25 +49,23 @@ class TranslationViewModel(
         )
     )
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private val translationResultFlow2: Flow<Map<Locale, String>> =
-        eachTranslatedResult.flatMapMerge {
-            Timber.d("eachTranslatedResult: $it")
-
-            MutableStateFlow(mutableMapOf(it.first to it.second))
-        }
+    private val allTranslatedResults = combine(
+        downloadedLangModels,
+        eachTranslatedResult.flatMapMerge { MutableStateFlow(it) }
+    ) { translationResult, eachTranslatedResult ->
+        translationResult[eachTranslatedResult.first] = eachTranslatedResult.second
+        translationResult
+    }
 
     private val isTranslating: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     val uiState: StateFlow<TranslationUiState> =
         combine(
-            translationResultFlow,
             isTranslating,
-            translationResultFlow2
-        ) { translationResult, isTranslating, translationResultFlow2 ->
-            translationResult.putAll(translationResultFlow2)
+            allTranslatedResults,
+        ) { isTranslating, allTranslatedResults ->
             TranslationUiState(
-                translationResult = translationResult,
+                translationResult = allTranslatedResults.toMap(),
                 isTranslating = isTranslating,
             )
         }.stateIn(
@@ -69,18 +74,15 @@ class TranslationViewModel(
             initialValue = TranslationUiState()
         )
 
-    private fun initTranslationResults(): MutableStateFlow<MutableMap<Locale, String>> {
-        viewModelScope.launch {
-            val downloadedModels = repository.getDownloadedModels()
+    private fun initTranslationResults(): Flow<MutableMap<Locale, String>> = flow {
+        val downloadedModels = repository.getDownloadedModels()
 
-            translationResultFlow.emit(
-                downloadedModels.associate {
-                    Locale.forLanguageTag(it.language) to ""
-                }.toMutableMap()
-            )
-        }
+        emit(
+            downloadedModels.associate {
+                Locale.forLanguageTag(it.language) to ""
+            }.toMutableMap()
+        )
 
-        return MutableStateFlow(mutableMapOf())
     }
 
     fun onTranslateClick(
