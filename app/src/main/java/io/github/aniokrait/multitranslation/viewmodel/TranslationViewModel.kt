@@ -67,7 +67,10 @@ class TranslationViewModel(
         viewModelScope.launch(ioDispatcher) {
             val downloadedLanguages = uiState.value.translationResult.keys.toList()
 
-            val translationResults = mutableMapOf<Locale, String>()
+
+            val translationResults: MutableMap<Locale, String> =
+                translationResultFlow.value.toMutableMap()
+
             downloadedLanguages.forEach { targetLocale ->
                 Timber.d("targetLocale: $targetLocale")
 
@@ -86,10 +89,13 @@ class TranslationViewModel(
                 }
 
                 translationResults[targetLocale] = result
+
+                withContext(mainDispatcher) {
+                    translationResultFlow.value = translationResults
+                }
             }
 
             withContext(mainDispatcher) {
-                translationResultFlow.value = translationResults
                 isTranslating.value = false
             }
 
