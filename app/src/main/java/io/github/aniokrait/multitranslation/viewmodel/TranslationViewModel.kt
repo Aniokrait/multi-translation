@@ -71,8 +71,6 @@ class TranslationViewModel(
             downloadedLanguages.forEach { targetLocale ->
                 Timber.d("targetLocale: $targetLocale")
 
-                // TODO: Download if model needed to guard not exist model unexpectedly.
-
                 val result = withContext(ioDispatcher) {
                     val options = TranslatorOptions.Builder()
                         .setSourceLanguage(TranslateLanguage.JAPANESE)
@@ -80,6 +78,10 @@ class TranslationViewModel(
                         .build()
                     val japaneseToOtherTranslator = Translation.getClient(options)
 
+                    // Guard against not exist model.
+                    japaneseToOtherTranslator.downloadModelIfNeeded()
+
+                    // TODO: Run parallel
                     return@withContext japaneseToOtherTranslator.translate(input).await()
                 }
 
