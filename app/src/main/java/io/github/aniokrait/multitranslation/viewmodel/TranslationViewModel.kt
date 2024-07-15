@@ -9,10 +9,13 @@ import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.viewmodel.state.TranslationUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -30,12 +33,32 @@ class TranslationViewModel(
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel() {
 
-    private val translationResultFlow: MutableStateFlow<Map<Locale, String>> =
-        getDownloadedLanguages()
+    private val translationResultFlow: MutableStateFlow<MutableMap<Locale, String>> =
+        initTranslationResults()
+
+    private val eachTranslatedResult: MutableStateFlow<Pair<Locale, String>> = MutableStateFlow(
+        Pair(
+            Locale.getDefault(), ""
+        )
+    )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val translationResultFlow2: Flow<Map<Locale, String>> =
+        eachTranslatedResult.flatMapMerge {
+            Timber.d("eachTranslatedResult: $it")
+
+            MutableStateFlow(mutableMapOf(it.first to it.second))
+        }
+
     private val isTranslating: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     val uiState: StateFlow<TranslationUiState> =
-        combine(translationResultFlow, isTranslating) { translationResult, isTranslating ->
+        combine(
+            translationResultFlow,
+            isTranslating,
+            translationResultFlow2
+        ) { translationResult, isTranslating, translationResultFlow2 ->
+            translationResult.putAll(translationResultFlow2)
             TranslationUiState(
                 translationResult = translationResult,
                 isTranslating = isTranslating,
@@ -46,18 +69,18 @@ class TranslationViewModel(
             initialValue = TranslationUiState()
         )
 
-    private fun getDownloadedLanguages(): MutableStateFlow<Map<Locale, String>> {
+    private fun initTranslationResults(): MutableStateFlow<MutableMap<Locale, String>> {
         viewModelScope.launch {
             val downloadedModels = repository.getDownloadedModels()
 
             translationResultFlow.emit(
                 downloadedModels.associate {
                     Locale.forLanguageTag(it.language) to ""
-                }
+                }.toMutableMap()
             )
         }
 
-        return MutableStateFlow(mapOf())
+        return MutableStateFlow(mutableMapOf())
     }
 
     fun onTranslateClick(
@@ -67,14 +90,10 @@ class TranslationViewModel(
         viewModelScope.launch(ioDispatcher) {
             val downloadedLanguages = uiState.value.translationResult.keys.toList()
 
-
-            val translationResults: MutableMap<Locale, String> =
-                translationResultFlow.value.toMutableMap()
-
             downloadedLanguages.forEach { targetLocale ->
                 Timber.d("targetLocale: $targetLocale")
 
-                val result = withContext(ioDispatcher) {
+                withContext(ioDispatcher) {
                     val options = TranslatorOptions.Builder()
                         .setSourceLanguage(TranslateLanguage.JAPANESE)
                         .setTargetLanguage(targetLocale.language)
@@ -84,21 +103,17 @@ class TranslationViewModel(
                     // Guard against not exist model.
                     japaneseToOtherTranslator.downloadModelIfNeeded()
 
-                    // TODO: Run parallel
-                    return@withContext japaneseToOtherTranslator.translate(input).await()
-                }
-
-                translationResults[targetLocale] = result
-
-                withContext(mainDispatcher) {
-                    translationResultFlow.value = translationResults
+                    launch {
+                        eachTranslatedResult.emit(
+                            Pair(targetLocale, japaneseToOtherTranslator.translate(input).await())
+                        )
+                    }
                 }
             }
 
             withContext(mainDispatcher) {
                 isTranslating.value = false
             }
-
         }
     }
 
