@@ -35,7 +35,8 @@ class TranslationViewModel(
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel() {
 
-    private val downloadedLangModels: StateFlow<MutableMap<Locale, String>> =
+    // Store partial languages translated results.
+    private val partialTranslatedResults: StateFlow<MutableMap<Locale, String>> =
         initTranslationResults()
             .stateIn(
                 scope = viewModelScope,
@@ -43,14 +44,16 @@ class TranslationViewModel(
                 initialValue = mutableMapOf()
             )
 
+    // Store each language translated results.
     private val eachTranslatedResult: MutableStateFlow<Pair<Locale, String>> = MutableStateFlow(
         Pair(
             Locale.getDefault(), ""
         )
     )
 
+    // Store all languages translated results.
     private val allTranslatedResults = combine(
-        downloadedLangModels,
+        partialTranslatedResults,
         eachTranslatedResult.flatMapMerge { MutableStateFlow(it) }
     ) { translationResult, eachTranslatedResult ->
         translationResult[eachTranslatedResult.first] = eachTranslatedResult.second
@@ -80,11 +83,14 @@ class TranslationViewModel(
         emit(
             downloadedModels.associate {
                 Locale.forLanguageTag(it.language) to ""
-            }.toMutableMap()
+            }.toSortedMap(compareBy { it.displayLanguage })
+                .toMutableMap()
         )
-
     }
 
+    /**
+     * Translate from input text to other languages.
+     */
     fun onTranslateClick(
         input: String,
     ) {
@@ -105,10 +111,15 @@ class TranslationViewModel(
                     // Guard against not exist model.
                     japaneseToOtherTranslator.downloadModelIfNeeded()
 
+                    // To translate parallel, launch coroutine for each language.
                     launch {
-                        eachTranslatedResult.emit(
+                        val translateResult =
                             Pair(targetLocale, japaneseToOtherTranslator.translate(input).await())
-                        )
+                        withContext(mainDispatcher) {
+                            eachTranslatedResult.emit(
+                                translateResult
+                            )
+                        }
                     }
                 }
             }
