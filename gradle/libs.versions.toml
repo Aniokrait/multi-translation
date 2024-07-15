@@ -17,7 +17,7 @@ lifecycleRuntime = "2.8.2"
 lottieCompose = "6.4.1"
 mlkit = "17.0.2"
 mockk = "1.13.11"
-navigationCompose = "2.8.0-beta03"
+navigationCompose = "2.8.0-beta04"
 playServicesAds = "23.2.0"
 timber = "5.0.1"
 
