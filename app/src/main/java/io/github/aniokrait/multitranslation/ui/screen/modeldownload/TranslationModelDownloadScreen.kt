@@ -1,6 +1,5 @@
 package io.github.aniokrait.multitranslation.ui.screen.modeldownload
 
-import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -91,7 +90,7 @@ private fun TranslationModelDownloadScreen(
     isDownloading: Boolean,
     snackBarMessage: MutableState<String>,
     onCheckClicked: (Locale) -> Unit,
-    onDownloadClicked: (Context, () -> Unit, String, MutableState<String>) -> Unit,
+    onDownloadClicked: (() -> Unit, String, MutableState<String>) -> Unit,
     navigateToTranslation: () -> Unit,
     onBackClicked: (() -> Unit)?,
 ) {
@@ -101,9 +100,11 @@ private fun TranslationModelDownloadScreen(
                 onBackClicked = onBackClicked,
             )
         },
-    ) {
+    ) { innerPadding ->
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
         ) {
             Column(
                 modifier = modifier
@@ -150,7 +151,6 @@ private fun TranslationModelDownloadScreen(
                         val isWifiConnected = NetworkChecker.isWifiConnected(context = context)
                         if (isWifiConnected) {
                             onDownloadClicked(
-                                context,
                                 navigateToTranslation,
                                 errorMessageTemplate,
                                 snackBarMessage
@@ -167,7 +167,6 @@ private fun TranslationModelDownloadScreen(
                 if (showConfirmDownloadDialog.value) {
                     DownloadConfirmDialog(
                         showConfirmDownloadDialog = showConfirmDownloadDialog,
-                        context = context,
                         navigateToTranslation = navigateToTranslation,
                         onProceedClicked = onDownloadClicked,
                         errorMessageTemplate = errorMessageTemplate,
@@ -250,7 +249,7 @@ private fun TranslationModelDownloadScreenPreview() {
         isDownloading = false,
         snackBarMessage = remember { mutableStateOf("") },
         onCheckClicked = {},
-        onDownloadClicked = { _, _, _, _ -> },
+        onDownloadClicked = { _, _, _ -> },
         navigateToTranslation = {},
         onBackClicked = {},
     )

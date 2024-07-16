@@ -1,6 +1,5 @@
 package io.github.aniokrait.multitranslation.viewmodel
 
-import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -65,7 +64,6 @@ class TranslationModelDownloadViewModel(
      * Proceed to Translation screen, when all downloads completed
      */
     fun onDownloadClicked(
-        context: Context,
         navigateToTranslation: () -> Unit,
         errorMessageTemplate: String,
         snackBarMessageState: MutableState<String>,
