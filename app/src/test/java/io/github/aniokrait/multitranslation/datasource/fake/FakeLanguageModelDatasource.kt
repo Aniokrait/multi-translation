@@ -30,10 +30,15 @@ class FakeLanguageModelDatasource : LanguageModelRepository {
         return setOf(japaneseRemoteModel, englishRemoteModel)
     }
 
+    var failDownloadModel = false
     override suspend fun downloadModel(
         targetLanguages: List<Locale>,
     ): List<Locale> {
-        TODO("Not yet implemented")
+        return if (failDownloadModel) {
+            listOf(Locale.JAPANESE, Locale.GERMAN)
+        } else {
+            emptyList()
+        }
     }
 
 }
