@@ -30,4 +30,28 @@ class LanguageModelDatasourceTest {
         assertEquals(true, isEnglishDownloaded)
         assertEquals(true, isGermanDownloaded)
     }
+
+    @Test
+    fun testDeleteLanguageModel() = runTest {
+        val datasource = LanguageModelDatasource()
+
+        // Assert that there is no model before testing.
+        val modelsBeforeTesting = datasource.getDownloadedModels().omitExtraModel()
+        assertEquals(0, modelsBeforeTesting.size)
+
+        // Assert models count is incremented after downloading.
+        datasource.downloadModel(listOf(Locale.GERMAN))
+        val modelsAfterDownloading = datasource.getDownloadedModels().omitExtraModel()
+        assertEquals(1, modelsAfterDownloading.size)
+
+        datasource.deleteModel(listOf(Locale.GERMAN))
+
+        val modelsAfterDeleting = datasource.getDownloadedModels().omitExtraModel()
+        assertEquals(0, modelsAfterDeleting.size)
+    }
+
+    private fun Set<TranslateRemoteModel>.omitExtraModel(): Set<TranslateRemoteModel> {
+        return this.filter { it.language != Locale.ENGLISH.language && it.language != Locale.JAPANESE.language }
+            .toSet()
+    }
 }

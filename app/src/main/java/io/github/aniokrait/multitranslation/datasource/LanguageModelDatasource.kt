@@ -100,4 +100,22 @@ class LanguageModelDatasource(
 
         return failedModels.toList()
     }
+
+    /**
+     * Delete language translation models.
+     * Delete runs in parallel.
+     * @param targetLanguages which to delete from the user device.
+     */
+    override suspend fun deleteModel(targetLanguages: List<Locale>) {
+        val modelManager = RemoteModelManager.getInstance()
+
+        targetLanguages.forEach { locale ->
+            val model = TranslateRemoteModel.Builder(locale.language).build()
+            withContext(ioDispatcher) {
+                launch {
+                    modelManager.deleteDownloadedModel(model).await()
+                }
+            }
+        }
+    }
 }

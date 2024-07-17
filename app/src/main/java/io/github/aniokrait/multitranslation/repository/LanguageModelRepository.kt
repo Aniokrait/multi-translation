@@ -23,4 +23,10 @@ interface LanguageModelRepository {
     suspend fun downloadModel(
         targetLanguages: List<Locale>,
     ): List<Locale>
+
+    /**
+     * Delete language translation models.
+     * @param targetLanguages which to delete from the user device.
+     */
+    suspend fun deleteModel(targetLanguages: List<Locale>)
 }
