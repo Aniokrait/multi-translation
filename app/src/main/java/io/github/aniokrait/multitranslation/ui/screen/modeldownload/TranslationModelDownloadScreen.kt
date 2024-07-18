@@ -35,8 +35,9 @@ import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.core.NetworkChecker
 import io.github.aniokrait.multitranslation.extension.ui.conditional
 import io.github.aniokrait.multitranslation.ui.TopBar
-import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
+import io.github.aniokrait.multitranslation.ui.composable.ConfirmDialog
 import io.github.aniokrait.multitranslation.ui.composable.LanguageList
+import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
 import io.github.aniokrait.multitranslation.ui.stateholder.EachLanguageState
 import io.github.aniokrait.multitranslation.viewmodel.TranslationModelDownloadViewModel
 import kotlinx.serialization.Serializable
@@ -129,7 +130,7 @@ private fun TranslationModelDownloadScreen(
                 val context = LocalContext.current
                 val errorMessageTemplate =
                     stringResource(id = R.string.msg_download_failed_for_these_languages)
-                val showConfirmDownloadDialog = remember {
+                val showConfirmDialog = remember {
                     mutableStateOf(false)
                 }
                 Button(
@@ -143,7 +144,7 @@ private fun TranslationModelDownloadScreen(
                                 snackBarMessage
                             )
                         } else {
-                            showConfirmDownloadDialog.value = true
+                            showConfirmDialog.value = true
                         }
 
                     },
@@ -151,13 +152,19 @@ private fun TranslationModelDownloadScreen(
                     Text(text = stringResource(id = R.string.btn_download_translation_model))
                 }
 
-                if (showConfirmDownloadDialog.value) {
-                    DownloadConfirmDialog(
-                        showConfirmDownloadDialog = showConfirmDownloadDialog,
-                        navigateToTranslation = navigateToTranslation,
-                        onProceedClicked = onDownloadClicked,
-                        errorMessageTemplate = errorMessageTemplate,
-                        snackBarMessage = snackBarMessage,
+                if (showConfirmDialog.value) {
+                    ConfirmDialog(
+                        showConfirmDialog = showConfirmDialog,
+                        dialogText = R.string.dialog_content,
+                        confirmButtonText = R.string.dialog_btn_proceed,
+                        dismissButtonText = R.string.dialog_btn_cancel,
+                        onConfirmClicked = {
+                            onDownloadClicked(
+                                navigateToTranslation,
+                                errorMessageTemplate,
+                                snackBarMessage
+                            )
+                        }
                     )
                 }
             }

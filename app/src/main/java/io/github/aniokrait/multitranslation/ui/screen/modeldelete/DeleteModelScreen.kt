@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.ui.TopBar
+import io.github.aniokrait.multitranslation.ui.composable.ConfirmDialog
 import io.github.aniokrait.multitranslation.ui.composable.DangerActionButton
 import io.github.aniokrait.multitranslation.ui.composable.LanguageList
 import io.github.aniokrait.multitranslation.ui.stateholder.EachLanguageState
@@ -78,9 +79,12 @@ private fun DeleteModelScreen(
             }
 
             if (showConfirmDialog.value) {
-                DeleteConfirmDialog(
+                ConfirmDialog(
                     showConfirmDialog = showConfirmDialog,
-                    onDeleteClicked = onDeleteClicked,
+                    dialogText = R.string.lbl_delete_model,
+                    confirmButtonText = R.string.btn_delete,
+                    dismissButtonText = R.string.delete_dialog_btn_cancel,
+                    onConfirmClicked = onDeleteClicked
                 )
             }
         }
