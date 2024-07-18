@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
-import io.github.aniokrait.multitranslation.viewmodel.state.TranslationModelDownloadUiState
+import io.github.aniokrait.multitranslation.ui.stateholder.uistate.TranslationModelDownloadUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

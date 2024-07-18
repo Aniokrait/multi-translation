@@ -1,4 +1,4 @@
-package io.github.aniokrait.multitranslation.viewmodel.state
+package io.github.aniokrait.multitranslation.ui.stateholder.uistate
 
 import java.util.Locale
 

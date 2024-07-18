@@ -6,7 +6,7 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
-import io.github.aniokrait.multitranslation.viewmodel.state.TranslationUiState
+import io.github.aniokrait.multitranslation.ui.stateholder.uistate.TranslationUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

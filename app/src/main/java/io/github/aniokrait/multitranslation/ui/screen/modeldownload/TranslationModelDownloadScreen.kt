@@ -39,8 +39,8 @@ import io.github.aniokrait.multitranslation.core.NetworkChecker
 import io.github.aniokrait.multitranslation.extension.ui.conditional
 import io.github.aniokrait.multitranslation.ui.TopBar
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
+import io.github.aniokrait.multitranslation.ui.stateholder.uistate.TranslationModelDownloadUiState
 import io.github.aniokrait.multitranslation.viewmodel.TranslationModelDownloadViewModel
-import io.github.aniokrait.multitranslation.viewmodel.state.TranslationModelDownloadUiState
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
