@@ -18,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.ui.TopBar
-import io.github.aniokrait.multitranslation.ui.screen.common.DangerActionButton
-import io.github.aniokrait.multitranslation.ui.screen.common.LanguageList
+import io.github.aniokrait.multitranslation.ui.composable.DangerActionButton
+import io.github.aniokrait.multitranslation.ui.composable.LanguageList
 import io.github.aniokrait.multitranslation.ui.stateholder.EachLanguageState
 import java.util.Locale
 

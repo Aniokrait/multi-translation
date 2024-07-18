@@ -36,7 +36,7 @@ import io.github.aniokrait.multitranslation.core.NetworkChecker
 import io.github.aniokrait.multitranslation.extension.ui.conditional
 import io.github.aniokrait.multitranslation.ui.TopBar
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
-import io.github.aniokrait.multitranslation.ui.screen.common.LanguageList
+import io.github.aniokrait.multitranslation.ui.composable.LanguageList
 import io.github.aniokrait.multitranslation.ui.stateholder.EachLanguageState
 import io.github.aniokrait.multitranslation.viewmodel.TranslationModelDownloadViewModel
 import kotlinx.serialization.Serializable

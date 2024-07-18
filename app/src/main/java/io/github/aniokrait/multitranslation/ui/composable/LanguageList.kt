@@ -1,4 +1,4 @@
-package io.github.aniokrait.multitranslation.ui.screen.common
+package io.github.aniokrait.multitranslation.ui.composable
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
