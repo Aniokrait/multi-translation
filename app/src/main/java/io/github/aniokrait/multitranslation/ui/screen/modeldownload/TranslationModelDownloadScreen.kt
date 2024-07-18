@@ -55,7 +55,7 @@ fun TranslationModelDownloadScreen(
     navigateToTranslation: () -> Unit,
     onBackClicked: (() -> Unit)?,
 ) {
-    val state = vm.downloadState.collectAsStateWithLifecycle().value
+    val state = vm.uiState.collectAsStateWithLifecycle().value
     TranslationModelDownloadScreen(
         modifier = modifier,
         state = state.languagesState,

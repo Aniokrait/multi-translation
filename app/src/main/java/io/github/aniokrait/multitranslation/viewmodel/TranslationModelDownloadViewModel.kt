@@ -24,7 +24,7 @@ class TranslationModelDownloadViewModel(
     private val isDownloading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val allDownloadFailed: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    val downloadState: StateFlow<TranslationModelDownloadUiState> =
+    val uiState: StateFlow<TranslationModelDownloadUiState> =
         combine(
             repository.getDownloadedInfo(),
             checkState,

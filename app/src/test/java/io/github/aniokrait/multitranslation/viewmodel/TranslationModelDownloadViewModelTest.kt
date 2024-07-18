@@ -38,7 +38,7 @@ class TranslationModelDownloadViewModelTest {
 
     @Test
     fun testGetStateFlow() = runTest(dispatcher) {
-        val result = translationModelDownloadViewModel.downloadState.first()
+        val result = translationModelDownloadViewModel.uiState.first()
         advanceUntilIdle()
         assertEquals(1, result.languagesState.size)
         assertEquals(Locale.JAPANESE, result.languagesState.first().locale)
@@ -47,7 +47,7 @@ class TranslationModelDownloadViewModelTest {
     @Test
     fun testUpdateChecked() = runTest(dispatcher) {
         val before = translationModelDownloadViewModel
-            .downloadState
+            .uiState
             .first()
             .languagesState
             .first { it.locale == Locale.JAPANESE }
@@ -57,7 +57,7 @@ class TranslationModelDownloadViewModelTest {
         translationModelDownloadViewModel.onCheckClicked(Locale.JAPANESE)
 
         val result = translationModelDownloadViewModel
-            .downloadState
+            .uiState
             .first()
             .languagesState
             .first { it.locale == Locale.JAPANESE }
