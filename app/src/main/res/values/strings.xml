@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">複数翻訳</string>
+
+    <!-- TODO: Rename string names. -->
+    <!-- 翻訳画面 -->
     <string name="lbl_translation_source">翻訳元</string>
     <string name="btn_translation_button">Googleで翻訳</string>
     <string name="lbl_translation_result">翻訳結果</string>
@@ -14,6 +17,13 @@
     <string name="dialog_btn_cancel">あとでWi-Fiを使う</string>
     <string name="dialog_btn_proceed">続行</string>
     <string name="dialog_content">Wi-Fiに接続されていません。\nモバイル通信を使うと、通信料金が発生する可能性がありますが、続行しますか？</string>
+
+    <!-- 削除画面 -->
+    <string name="lbl_description_for_delete_models">削除したい言語を選んでください</string>
+    <string name="lbl_delete_hosoku">(削除した場合、再度翻訳するには翻訳モデルを再ダウンロードする必要があります)</string>
+    <string name="btn_delete">削除</string>
+    <string name="lbl_delete_model">翻訳モデルを削除しますか？</string>
+    <string name="delete_dialog_btn_cancel">キャンセル</string>
 
     <!-- 設定系 -->
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>

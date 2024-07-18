@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
-import io.github.aniokrait.multitranslation.ui.theme.Red500
+import io.github.aniokrait.multitranslation.ui.theme.DeepOrange500
 
 /**
  * Button for dangerous action.
@@ -34,7 +34,7 @@ fun DangerActionButton(
     content: @Composable() (RowScope.() -> Unit),
 ) {
     val colors = ButtonColors(
-        containerColor = Red500,
+        containerColor = DeepOrange500,
         contentColor = Color.Black.copy(alpha = 0.87f),
         disabledContainerColor = ButtonDefaults.buttonColors().disabledContainerColor,
         disabledContentColor = ButtonDefaults.buttonColors().disabledContainerColor
