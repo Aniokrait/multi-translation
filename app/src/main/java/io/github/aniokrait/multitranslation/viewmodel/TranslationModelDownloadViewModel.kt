@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
+import io.github.aniokrait.multitranslation.ui.stateholder.EachLanguageState
 import io.github.aniokrait.multitranslation.ui.stateholder.uistate.TranslationModelDownloadUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,10 +31,10 @@ class TranslationModelDownloadViewModel(
             isDownloading,
             allDownloadFailed,
         ) { downloadedInfo, checkState, isDownloading, allDownloadFailed ->
-            val list = mutableListOf<TranslationModelDownloadUiState.EachLanguageState>()
+            val list = mutableListOf<EachLanguageState>()
             for (info in downloadedInfo) {
                 val locale = info.locale
-                val eachState = TranslationModelDownloadUiState.EachLanguageState(
+                val eachState = EachLanguageState(
                     locale = locale,
                     downloaded = info.downloaded,
                     checked = checkState[locale] ?: mutableStateOf(false)

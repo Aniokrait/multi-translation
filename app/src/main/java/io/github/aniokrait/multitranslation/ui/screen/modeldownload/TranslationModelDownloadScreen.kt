@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -39,7 +36,8 @@ import io.github.aniokrait.multitranslation.core.NetworkChecker
 import io.github.aniokrait.multitranslation.extension.ui.conditional
 import io.github.aniokrait.multitranslation.ui.TopBar
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
-import io.github.aniokrait.multitranslation.ui.stateholder.uistate.TranslationModelDownloadUiState
+import io.github.aniokrait.multitranslation.ui.screen.common.LanguageList
+import io.github.aniokrait.multitranslation.ui.stateholder.EachLanguageState
 import io.github.aniokrait.multitranslation.viewmodel.TranslationModelDownloadViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
@@ -86,7 +84,7 @@ fun TranslationModelDownloadScreen(
 @Composable
 private fun TranslationModelDownloadScreen(
     modifier: Modifier = Modifier,
-    state: List<TranslationModelDownloadUiState.EachLanguageState>,
+    state: List<EachLanguageState>,
     isDownloading: Boolean,
     snackBarMessage: MutableState<String>,
     onCheckClicked: (Locale) -> Unit,
@@ -121,23 +119,12 @@ private fun TranslationModelDownloadScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 val allLocales = LanguageNameResolver.getAllLanguagesLabel()
-                LazyVerticalGrid(
+                LanguageList(
                     modifier = Modifier.weight(1f),
-                    columns = GridCells.Fixed(2)
-                ) {
-                    items(allLocales) { locale ->
-                        val eachLocaleState = state.find { it.locale == locale }
-                        val checked: Boolean = eachLocaleState?.checked?.value ?: false
-                        val downloaded: Boolean = eachLocaleState?.downloaded?.value ?: false
-
-                        LanguageSelection(
-                            locale = locale,
-                            checked = checked,
-                            downloaded = downloaded,
-                            onCheckedChange = { onCheckClicked(locale) }
-                        )
-                    }
-                }
+                    locales = allLocales,
+                    state = state,
+                    onCheckClicked = onCheckClicked,
+                )
 
                 val context = LocalContext.current
                 val errorMessageTemplate =
@@ -233,12 +220,12 @@ private fun LanguageSelection(
 @Preview(showBackground = true)
 @Composable
 private fun TranslationModelDownloadScreenPreview() {
-    val iceLandState = TranslationModelDownloadUiState.EachLanguageState(
+    val iceLandState = EachLanguageState(
         locale = Locale.forLanguageTag("is"),
         checked = remember { mutableStateOf(true) },
         downloaded = remember { mutableStateOf(false) },
     )
-    val arabicState = TranslationModelDownloadUiState.EachLanguageState(
+    val arabicState = EachLanguageState(
         locale = Locale.forLanguageTag("ar"),
         checked = remember { mutableStateOf(false) },
         downloaded = remember { mutableStateOf(true) },
