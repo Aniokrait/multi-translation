@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class DeleteModelViewModel(
@@ -59,4 +60,16 @@ class DeleteModelViewModel(
         emit(downloadedModels)
     }
 
+    /**
+     * Delete language translation models.
+     *
+     * @param targetLanguages which to delete from the user device.
+     */
+    fun deleteModels(targetLanguages: List<Locale>) {
+        viewModelScope.launch {
+            isDeleting.value = true
+            repository.deleteModel(targetLanguages)
+            isDeleting.value = false
+        }
+    }
 }

@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.util.Locale
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DeleteViewModelUnitTest {
@@ -30,7 +31,14 @@ class DeleteViewModelUnitTest {
     }
 
     @Test
-    fun testInitUiState() = runTest {
+    fun deleteModels() = runTest {
+        // Assert initial state before deleting.
+        repository.downloadModel(listOf(Locale.GERMAN, Locale.CHINESE, Locale.ENGLISH))
+        val downloadedModelsBeforeDelete = deleteModelViewModel.uiState.first()
+        assertEquals(4, downloadedModelsBeforeDelete.languagesState.size)
+
+        deleteModelViewModel.deleteModels(listOf(Locale.GERMAN, Locale.CHINESE))
+
         val result = deleteModelViewModel.uiState.first()
         assertEquals(2, result.languagesState.size)
     }
