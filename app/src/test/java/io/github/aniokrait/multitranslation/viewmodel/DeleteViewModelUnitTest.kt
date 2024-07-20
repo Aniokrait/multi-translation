@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -48,20 +49,16 @@ class DeleteViewModelUnitTest {
     fun testUpdateChecked() = runTest(dispatcher) {
         val before = deleteModelViewModel.uiState
             .first()
-
-//        println(before)
             .languagesState
-//            .first { it.locale == Locale.JAPANESE }
-//            .checked.value
-//        assertFalse(before)
-//
-        deleteModelViewModel.onCheckClicked(Locale.JAPANESE)
-//
-        val result = deleteModelViewModel.uiState.first()
-//
-        val result2 = result.languagesState
             .first { it.locale == Locale.JAPANESE }
             .checked.value
-        assertTrue(result2)
+        assertFalse(before)
+
+        deleteModelViewModel.onCheckClicked(Locale.JAPANESE)
+        val result = deleteModelViewModel.uiState.first()
+            .languagesState
+            .first { it.locale == Locale.JAPANESE }
+            .checked.value
+        assertTrue(result)
     }
 }
