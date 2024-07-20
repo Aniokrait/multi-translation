@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.util.Locale
@@ -37,9 +38,30 @@ class DeleteViewModelUnitTest {
         val downloadedModelsBeforeDelete = deleteModelViewModel.uiState.first()
         assertEquals(4, downloadedModelsBeforeDelete.languagesState.size)
 
-        deleteModelViewModel.deleteModels(listOf(Locale.GERMAN, Locale.CHINESE))
+        deleteModelViewModel.onDeleteClicked(listOf(Locale.GERMAN, Locale.CHINESE))
 
         val result = deleteModelViewModel.uiState.first()
         assertEquals(2, result.languagesState.size)
+    }
+
+    @Test
+    fun testUpdateChecked() = runTest(dispatcher) {
+        val before = deleteModelViewModel.uiState
+            .first()
+
+//        println(before)
+            .languagesState
+//            .first { it.locale == Locale.JAPANESE }
+//            .checked.value
+//        assertFalse(before)
+//
+        deleteModelViewModel.onCheckClicked(Locale.JAPANESE)
+//
+        val result = deleteModelViewModel.uiState.first()
+//
+        val result2 = result.languagesState
+            .first { it.locale == Locale.JAPANESE }
+            .checked.value
+        assertTrue(result2)
     }
 }

@@ -20,13 +20,14 @@ import java.util.Locale
 class DeleteModelViewModel(
     private val repository: LanguageModelRepository,
 ) : ViewModel() {
-    val checkState: StateFlow<Map<Locale, MutableState<Boolean>>> =
+    private val checkState: StateFlow<Map<Locale, MutableState<Boolean>>> =
         initCheckState()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),
                 initialValue = mapOf()
             )
+
 
     private val isDeleting: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
@@ -65,11 +66,20 @@ class DeleteModelViewModel(
      *
      * @param targetLanguages which to delete from the user device.
      */
-    fun deleteModels(targetLanguages: List<Locale>) {
+    fun onDeleteClicked(targetLanguages: List<Locale>) {
         viewModelScope.launch {
             isDeleting.value = true
             repository.deleteModel(targetLanguages)
             isDeleting.value = false
         }
+    }
+
+    /**
+     * Update checked state.
+     *
+     * @param locale which to update checked state.
+     */
+    fun onCheckClicked(locale: Locale) {
+        checkState.value[locale]?.value = checkState.value[locale]?.value != true
     }
 }

@@ -22,13 +22,22 @@ import io.github.aniokrait.multitranslation.ui.composable.ConfirmDialog
 import io.github.aniokrait.multitranslation.ui.composable.DangerActionButton
 import io.github.aniokrait.multitranslation.ui.composable.LanguageList
 import io.github.aniokrait.multitranslation.ui.stateholder.EachLanguageState
+import io.github.aniokrait.multitranslation.viewmodel.DeleteModelViewModel
 import java.util.Locale
 
 @Composable
 fun DeleteModelScreen(
-//    vm: DeleteModelViewModel
+    modifier: Modifier = Modifier,
+    vm: DeleteModelViewModel,
+    onBackClicked: (() -> Unit)?,
 ) {
-    DeleteModelScreen()
+    DeleteModelScreen(
+        modifier = modifier,
+        state = vm.uiState.value.languagesState,
+        onCheckClicked = vm::onCheckClicked,
+        onDeleteClicked = vm::onDeleteClicked,
+        onBackClicked = onBackClicked,
+    )
 }
 
 @Composable
@@ -36,8 +45,8 @@ private fun DeleteModelScreen(
     modifier: Modifier = Modifier,
     state: List<EachLanguageState>,
     onCheckClicked: (Locale) -> Unit,
-    onDeleteClicked: () -> Unit,
-    onBackClicked: (() -> Unit),
+    onDeleteClicked: (List<Locale>) -> Unit,
+    onBackClicked: (() -> Unit)?,
 ) {
     Scaffold(
         topBar = {
@@ -84,7 +93,11 @@ private fun DeleteModelScreen(
                     dialogText = R.string.lbl_delete_model,
                     confirmButtonText = R.string.btn_delete,
                     dismissButtonText = R.string.delete_dialog_btn_cancel,
-                    onConfirmClicked = onDeleteClicked
+                    onConfirmClicked = {
+                        onDeleteClicked(
+                            state.filter { it.checked.value }.map { it.locale }
+                        )
+                    }
                 )
             }
         }

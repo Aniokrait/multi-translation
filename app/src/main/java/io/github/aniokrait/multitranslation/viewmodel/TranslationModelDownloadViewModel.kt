@@ -55,7 +55,11 @@ class TranslationModelDownloadViewModel(
                 initialValue = TranslationModelDownloadUiState()
             )
 
-
+    /**
+     * Update checked state.
+     *
+     * @param locale which to update checked state.
+     */
     fun onCheckClicked(locale: Locale) {
         checkState.value[locale]?.value = checkState.value[locale]?.value != true
     }
