@@ -17,6 +17,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import io.github.aniokrait.multitranslation.extension.dataStore
+import io.github.aniokrait.multitranslation.ui.screen.modeldelete.DeleteModel
+import io.github.aniokrait.multitranslation.ui.screen.modeldelete.DeleteModelScreen
 import io.github.aniokrait.multitranslation.ui.screen.modeldownload.TranslationModelDownload
 import io.github.aniokrait.multitranslation.ui.screen.modeldownload.TranslationModelDownloadScreen
 import io.github.aniokrait.multitranslation.ui.screen.translate.Translation
@@ -54,7 +56,10 @@ fun MTransNavHost(
             TranslationModelDownloadScreen(
                 navigateToTranslation = { navController.navigate(Translation) },
                 snackBarMessage = snackBarMessage,
-                onBackClicked = if (navController.previousBackStackEntry != null) { -> navController.navigateUp() } else null,
+                onBackClicked = if (navController.previousBackStackEntry != null) {
+                    ->
+                    navController.navigateUp()
+                } else null,
             )
 
             val context = LocalContext.current
@@ -67,7 +72,13 @@ fun MTransNavHost(
         }
         composable<Translation> {
             TranslationScreen(
-                onSettingsClick = { navController.navigate(TranslationModelDownload) }
+                onAddModelClicked = { navController.navigate(TranslationModelDownload) },
+                onDeleteModelClicked = { navController.navigate(DeleteModel) },
+            )
+        }
+        composable<DeleteModel> {
+            DeleteModelScreen(
+                onBackClicked = navController::navigateUp,
             )
         }
     }
@@ -80,6 +91,7 @@ private fun startDestination(
     scope: CoroutineScope,
     startDestinationState: MutableState<StartDestination>,
 ) {
+    // FIXME : Use downloaded models count.
     scope.launch {
         val isFirstLaunch = context.dataStore.data.map {
             it.asMap().isEmpty()

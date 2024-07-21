@@ -46,14 +46,16 @@ object Translation : StartDestination
 fun TranslationScreen(
     modifier: Modifier = Modifier,
     vm: TranslationViewModel = koinViewModel(),
-    onSettingsClick: () -> Unit,
+    onAddModelClicked: () -> Unit,
+    onDeleteModelClicked: () -> Unit,
 ) {
     val uiState = vm.uiState.collectAsStateWithLifecycle().value
     TranslationScreen(
         modifier = modifier,
         translateResults = uiState.translationResult,
         isTranslating = uiState.isTranslating,
-        onSettingsClick = onSettingsClick,
+        onAddModelClicked = onAddModelClicked,
+        onDeleteModelClicked = onDeleteModelClicked,
         onTranslateClick = vm::onTranslateClick,
     )
 }
@@ -64,13 +66,16 @@ private fun TranslationScreen(
     translateResults: Map<Locale, String>,
     isTranslating: Boolean,
     textBlockHeight: Dp = 100.dp,
-    onSettingsClick: () -> Unit,
+    onAddModelClicked: () -> Unit,
+    onDeleteModelClicked: () -> Unit,
     onTranslateClick: (String) -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopBar(
-                onSettingsClick = onSettingsClick,
+                showTrailingIcon = true,
+                onDeleteModelClicked = onDeleteModelClicked,
+                onAddModelClicked = onAddModelClicked,
             )
         }
     ) { innerPadding ->
@@ -177,6 +182,7 @@ fun TranslationScreenPreview() {
         translateResults = mapOf(Locale.JAPANESE to "こんにちは", Locale.ENGLISH to "Hello"),
         isTranslating = false,
         onTranslateClick = { _ -> },
-        onSettingsClick = {},
+        onAddModelClicked = {},
+        onDeleteModelClicked = {},
     )
 }

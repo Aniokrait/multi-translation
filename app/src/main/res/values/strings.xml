@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">複数翻訳</string>
 
+    <!-- TopBar -->
+    <string name="topbar_lbl_add_model">翻訳モデルの追加</string>
+    <string name="topbar_lbl_delete_model">翻訳モデルの削除</string>"
+
     <!-- TODO: Rename string names. -->
     <!-- 翻訳画面 -->
     <string name="lbl_translation_source">翻訳元</string>

@@ -96,6 +96,9 @@ private fun TranslationModelDownloadScreen(
     Scaffold(
         topBar = {
             TopBar(
+                showTrailingIcon = false,
+                onAddModelClicked = {},
+                onDeleteModelClicked = {},
                 onBackClicked = onBackClicked,
             )
         },
