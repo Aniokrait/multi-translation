@@ -1,30 +1,28 @@
 [versions]
 activityCompose = "1.9.0"
-agp = "8.4.0"
-composeBom = "2023.08.00"
+agp = "8.5.1"
+composeBom = "2024.06.00"
 coreKtx = "1.13.1"
 datastore = "1.1.1"
-espressoCore = "3.5.1"
-firebaseBom = "33.1.1"
+firebaseBom = "33.1.2"
 googleServices = "4.4.2"
 junit = "4.13.2"
-junitVersion = "1.1.5"
+junitVersion = "1.2.1"
 koin-bom = "3.5.6"
 kotlin = "2.0.0"
 kotlinxCoroutines = "1.8.1"
 kotlinxSerializationJson = "1.6.3"
-lifecycleRuntime = "2.8.2"
+lifecycleRuntime = "2.8.3"
 lottieCompose = "6.4.1"
 mlkit = "17.0.2"
 mockk = "1.13.11"
-navigationCompose = "2.8.0-beta04"
+navigationCompose = "2.8.0-beta05"
 playServicesAds = "23.2.0"
 timber = "5.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntime" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntime" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
