@@ -37,6 +37,7 @@ import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
 import io.github.aniokrait.multitranslation.viewmodel.TranslationViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 import java.util.Locale
 
 @Serializable
@@ -162,7 +163,8 @@ private fun ResultArea(
 
     for ((language, result) in translateResults) {
         // FIXME: Hide Japanese till implementing changing source language.
-        if (language == Locale.JAPANESE) {
+        Timber.d("lang: $language")
+        if (language == Locale.JAPANESE || language == Locale.JAPAN) {
             continue
         }
 
