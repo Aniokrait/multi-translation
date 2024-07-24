@@ -13,7 +13,6 @@ import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.ui.stateholder.DownloadedState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -63,7 +62,7 @@ class LanguageModelDatasource(
         targetLanguages: List<Locale>,
     ): List<Locale> {
         val conditions = DownloadConditions.Builder()
-            .requireWifi()
+//            .requireWifi()
             .build()
 
         val failedModels = mutableListOf<Locale>()
@@ -81,16 +80,17 @@ class LanguageModelDatasource(
                     withContext(Dispatchers.IO) {
                         val deferred = translator.downloadModelIfNeeded(conditions).asDeferred()
 
-                        val timeoutJob = launch {
-                            // If download doesn't complete in 10 seconds, throw an exception.
-                            delay(10000)
-                            // FIXME: Even if cancels here, download will happen as soon as device is connected to the internet.
-                            deferred.cancel()
-                            throw TimeoutException("Download timed out for ${locale.language}.")
-                        }
+                        // TODO Fix show downloaded models in ui asynchronously.
+//                        val timeoutJob = launch {
+//                            // If download doesn't complete in 10 seconds, throw an exception.
+//                            delay(10000)
+//                            // FIXME: Even if cancels here, download will happen as soon as device is connected to the internet.
+//                            deferred.cancel()
+//                            throw TimeoutException("Download timed out for ${locale.language}.")
+//                        }
 
                         deferred.await()
-                        timeoutJob.cancel()
+//                        timeoutJob.cancel()
                     }
                 } catch (e: TimeoutException) {
                     Timber.w(e.message)

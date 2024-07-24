@@ -81,25 +81,25 @@ class TranslationModelDownloadViewModel(
             // convert set to list
             .keys.map { it }
         viewModelScope.launch {
-            val failedModels: List<Locale> = repository.downloadModel(
+            repository.downloadModel(
                 targetLanguages = checkedLanguages,
             )
             isDownloading.value = false
 
-            if (checkedLanguages.size == failedModels.size) {
-                allDownloadFailed.value = true
-                return@launch
-            }
-
-            if (failedModels.isNotEmpty()) {
-                // Set value like this.
-                /* 以下の言語のダウンロードに失敗しました。
-                   ・日本語
-                   ・英語
-                */
-                snackBarMessageState.value = failedModels
-                    .fold(errorMessageTemplate) { acc, locale -> "$acc\n・${locale.displayName}" }
-            }
+//            if (checkedLanguages.size == failedModels.size) {
+//                allDownloadFailed.value = true
+//                return@launch
+//            }
+//
+//            if (failedModels.isNotEmpty()) {
+//                // Set value like this.
+//                /* 以下の言語のダウンロードに失敗しました。
+//                   ・日本語
+//                   ・英語
+//                */
+//                snackBarMessageState.value = failedModels
+//                    .fold(errorMessageTemplate) { acc, locale -> "$acc\n・${locale.displayName}" }
+//            }
             navigateToTranslation()
         }
     }
