@@ -11,3 +11,5 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val DeepOrange500 = Color(0xFFFF5722)
+
+val OnPrimary = Color(0xFF202020)

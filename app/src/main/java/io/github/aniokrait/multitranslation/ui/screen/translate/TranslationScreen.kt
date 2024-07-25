@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -34,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.ui.TopBar
 import io.github.aniokrait.multitranslation.ui.navigation.StartDestination
+import io.github.aniokrait.multitranslation.ui.theme.OnPrimary
 import io.github.aniokrait.multitranslation.viewmodel.TranslationViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
@@ -134,6 +136,11 @@ private fun ColumnScope.TranslateSourceArea(
         label = { Text(text = stringResource(id = R.string.lbl_translation_source)) },
         value = input.value,
         onValueChange = { input.value = it },
+        colors = TextFieldDefaults.colors().copy(
+            focusedLabelColor = OnPrimary,
+            focusedIndicatorColor = OnPrimary,
+            cursorColor = OnPrimary
+        )
     )
 
     TranslateButton(
