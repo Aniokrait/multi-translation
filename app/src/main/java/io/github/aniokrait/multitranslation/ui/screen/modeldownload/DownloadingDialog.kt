@@ -1,19 +1,24 @@
 package io.github.aniokrait.multitranslation.ui.screen.modeldownload
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import io.github.aniokrait.multitranslation.R
 
 /**
@@ -22,19 +27,35 @@ import io.github.aniokrait.multitranslation.R
 @Composable
 fun DownloadingDialog() {
     // TODO: find more appropriate composable.
-    Dialog(onDismissRequest = {}) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+    Dialog(
+        onDismissRequest = {}
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(16.dp)
         ) {
-            val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.downloadinglottie))
-            val progress by animateLottieCompositionAsState(composition)
-            LottieAnimation(
-                composition = composition,
-                iterations = LottieConstants.IterateForever,
-            )
+            Column {
+                Text(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth()
+                        .wrapContentSize(Alignment.Center),
+                    text = stringResource(id = R.string.lbl_download_progress),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .width(32.dp)
+                        .align(Alignment.CenterHorizontally),
+                    strokeWidth = 4.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                )
+            }
 
-            Text(text = stringResource(id = R.string.lbl_download_progress))
         }
     }
 }
