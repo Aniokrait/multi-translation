@@ -67,8 +67,11 @@ class TranslationViewModel(
             isTranslating,
             allTranslatedResults,
         ) { isTranslating, allTranslatedResults ->
+
             TranslationUiState(
-                translationResult = allTranslatedResults.toMap(),
+                translationResult = allTranslatedResults
+                    .filter { it.key != Locale.JAPAN && it.key != Locale.JAPANESE }
+                    .toMap(),
                 isTranslating = isTranslating,
             )
         }.stateIn(
@@ -98,31 +101,37 @@ class TranslationViewModel(
         viewModelScope.launch(ioDispatcher) {
             val downloadedLanguages = uiState.value.translationResult.keys.toList()
 
-            downloadedLanguages.forEach { targetLocale ->
-                Timber.d("targetLocale: $targetLocale")
+            downloadedLanguages
+                .filter { it != Locale.JAPANESE && it != Locale.JAPAN }
+                .forEach { targetLocale ->
+                    Timber.d("targetLocale: $targetLocale")
 
-                withContext(ioDispatcher) {
-                    val options = TranslatorOptions.Builder()
-                        .setSourceLanguage(TranslateLanguage.JAPANESE)
-                        .setTargetLanguage(targetLocale.language)
-                        .build()
-                    val japaneseToOtherTranslator = Translation.getClient(options)
+                    withContext(ioDispatcher) {
+                        val options = TranslatorOptions.Builder()
+                            .setSourceLanguage(TranslateLanguage.JAPANESE)
+                            .setTargetLanguage(targetLocale.language)
+                            .build()
+                        val japaneseToOtherTranslator = Translation.getClient(options)
 
-                    // Guard against not exist model.
-                    japaneseToOtherTranslator.downloadModelIfNeeded()
+                        // Guard against not exist model.
+                        japaneseToOtherTranslator.downloadModelIfNeeded()
 
-                    // To translate parallel, launch coroutine for each language.
-                    launch {
-                        val translateResult =
-                            Pair(targetLocale, japaneseToOtherTranslator.translate(input).await())
-                        withContext(mainDispatcher) {
-                            eachTranslatedResult.emit(
-                                translateResult
-                            )
+                        // To translate parallel, launch coroutine for each language.
+                        launch {
+                            val translateResult =
+                                Pair(
+                                    targetLocale,
+                                    japaneseToOtherTranslator.translate(input).await()
+                                )
+                            japaneseToOtherTranslator.close()
+                            withContext(mainDispatcher) {
+                                eachTranslatedResult.emit(
+                                    translateResult
+                                )
+                            }
                         }
                     }
                 }
-            }
 
             withContext(mainDispatcher) {
                 isTranslating.value = false
