@@ -53,7 +53,7 @@ class DeleteModelViewModel(
                         downloaded = null,
                         checked = checkState[it.key] ?: mutableStateOf(false)
                     )
-                }
+                }.sortedBy { it.locale.displayLanguage }
 
             DeleteModelUiState(
                 languagesState = languageState
