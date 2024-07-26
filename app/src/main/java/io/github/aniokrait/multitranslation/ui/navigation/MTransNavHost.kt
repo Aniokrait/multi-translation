@@ -23,17 +23,18 @@ import io.github.aniokrait.multitranslation.ui.screen.modeldownload.TranslationM
 import io.github.aniokrait.multitranslation.ui.screen.modeldownload.TranslationModelDownloadScreen
 import io.github.aniokrait.multitranslation.ui.screen.translate.Translation
 import io.github.aniokrait.multitranslation.ui.screen.translate.TranslationScreen
+import io.github.aniokrait.multitranslation.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MTransNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     snackBarMessage: MutableState<String>,
+    mainViewModel: MainViewModel = koinViewModel(),
 ) {
     val startDestinationState: MutableState<StartDestination> = remember {
         mutableStateOf(Loading)
@@ -42,6 +43,7 @@ fun MTransNavHost(
         context = LocalContext.current,
         scope = rememberCoroutineScope(),
         startDestinationState = startDestinationState,
+        mainViewModel = mainViewModel,
     )
 
     NavHost(
@@ -90,12 +92,10 @@ private fun startDestination(
     context: Context,
     scope: CoroutineScope,
     startDestinationState: MutableState<StartDestination>,
+    mainViewModel: MainViewModel,
 ) {
-    // FIXME : Use downloaded models count.
     scope.launch {
-        val isFirstLaunch = context.dataStore.data.map {
-            it.asMap().isEmpty()
-        }.first()
+        val isFirstLaunch = mainViewModel.checkIfFirstLaunch()
 
         val startDestination = if (isFirstLaunch) {
             TranslationModelDownload
