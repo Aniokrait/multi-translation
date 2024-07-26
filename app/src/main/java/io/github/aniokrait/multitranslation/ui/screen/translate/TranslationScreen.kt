@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -92,7 +92,7 @@ private fun TranslationScreen(
                     .statusBarsPadding()
                     .padding(innerPadding)
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+//                    .verticalScroll(rememberScrollState())
             ) {
 
                 TranslateSourceArea(
@@ -103,13 +103,10 @@ private fun TranslationScreen(
                 ResultArea(
                     textBlockHeight = textBlockHeight,
                     translateResults = translateResults,
+                    bannerHeight = bannerHeight,
                 )
 
-                val density = LocalDensity.current
-                with(density) {
-                    // add height so that the bottom card comes above the banner.
-                    Spacer(modifier = Modifier.height(bannerHeight.toDp()))
-                }
+
             }
 
             BannerAd(
@@ -159,6 +156,7 @@ private fun ColumnScope.TranslateSourceArea(
 private fun ResultArea(
     textBlockHeight: Dp,
     translateResults: Map<Locale, String>,
+    bannerHeight: Int,
 ) {
     Text(
         text = stringResource(id = R.string.lbl_translation_result),
@@ -168,19 +166,28 @@ private fun ResultArea(
 
     Spacer(modifier = Modifier.height(4.dp))
 
-    for ((language, result) in translateResults) {
-        // FIXME: Hide Japanese till implementing changing source language.
-        Timber.d("lang: $language")
-        if (language == Locale.JAPANESE || language == Locale.JAPAN) {
-            continue
-        }
+    LazyColumn {
+        items(
+            items = translateResults.toList(),
+            key = { it.first }
+        ) { (key, value) ->
+            // FIXME: Hide Japanese till implementing changing source language.
+            Timber.d("lang: ${key.language}")
 
-        TranslateResultCard(
-            modifier = Modifier.padding(bottom = 8.dp),
-            textBlockHeight = textBlockHeight,
-            language = language.getDisplayName(Locale.getDefault()),
-            content = result,
-        )
+            TranslateResultCard(
+                modifier = Modifier.padding(bottom = 8.dp),
+                textBlockHeight = textBlockHeight,
+                language = key.getDisplayName(Locale.getDefault()),
+                content = value,
+            )
+        }
+        item {
+            val density = LocalDensity.current
+            with(density) {
+                // add height so that the bottom card comes above the banner.
+                Spacer(modifier = Modifier.height(bannerHeight.toDp()))
+            }
+        }
     }
 }
 

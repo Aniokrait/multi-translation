@@ -43,76 +43,74 @@ fun TranslateResultCard(
     language: String,
     content: String,
 ) {
-    Column {
-        Card(
-            modifier = modifier
-                .fillMaxWidth(),
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-            ) {
-                Row {
-                    Text(
-                        modifier = Modifier,
-                        text = language,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Box {
-                        val clipboardManager = LocalClipboardManager.current
-                        IconButton(
-                            modifier = Modifier
-                                .offset(x = 8.dp, y = (-8).dp),
-                            onClick = {
-                                clipboardManager.setText(AnnotatedString(content))
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.content_copy_24px),
-                                contentDescription = "copy"
-                            )
-                        }
-                    }
-                }
-
-                val scrollState = rememberScrollState()
-//        Box {
-                val indentedText = buildAnnotatedString {
-                    withStyle(style = SpanStyle()) {
-                        // indentation
-                        append("  ")
-                    }
-                    append(content)
-                }
+            Row {
                 Text(
-                    modifier = Modifier
-                        .height(textBlockHeight)
-                        .verticalScroll(scrollState),
-                    text = indentedText,
+                    modifier = Modifier,
+                    text = language,
+                    fontWeight = FontWeight.Bold,
                 )
+                Spacer(modifier = Modifier.weight(1f))
 
-                // TODO Fix to support Text label.
-                //  https://qiita.com/yasukotelin/items/fcf5b538fac922cb08a5
+                Box {
+                    val clipboardManager = LocalClipboardManager.current
+                    IconButton(
+                        modifier = Modifier
+                            .offset(x = 8.dp, y = (-8).dp),
+                        onClick = {
+                            clipboardManager.setText(AnnotatedString(content))
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.content_copy_24px),
+                            contentDescription = "copy"
+                        )
+                    }
+                }
+            }
+
+            val scrollState = rememberScrollState()
+//        Box {
+            val indentedText = buildAnnotatedString {
+                withStyle(style = SpanStyle()) {
+                    // indentation
+                    append("  ")
+                }
+                append(content)
+            }
+            Text(
+                modifier = Modifier
+                    .height(textBlockHeight)
+                    .verticalScroll(scrollState),
+                text = indentedText,
+            )
+
+            // TODO Fix to support Text label.
+            //  https://qiita.com/yasukotelin/items/fcf5b538fac922cb08a5
 //            ScrollBar(
 //                scrollState = scrollState,
 //                isAlwaysShowScrollBar = true,)
 //        }
 
-                if (content.isNotEmpty()) {
+            if (content.isNotEmpty()) {
+                Spacer(modifier = Modifier.weight(1f))
+                Row {
                     Spacer(modifier = Modifier.weight(1f))
-                    Row {
-                        Spacer(modifier = Modifier.weight(1f))
 
-                        val uriHandler = LocalUriHandler.current
-                        Image(
-                            modifier = Modifier.clickable {
-                                uriHandler.openUri("http://translate.google.com")
-                            },
-                            painter = painterResource(id = R.drawable.powered_by_google),
-                            contentDescription = null
-                        )
-                    }
+                    val uriHandler = LocalUriHandler.current
+                    Image(
+                        modifier = Modifier.clickable {
+                            uriHandler.openUri("http://translate.google.com")
+                        },
+                        painter = painterResource(id = R.drawable.powered_by_google),
+                        contentDescription = null
+                    )
                 }
             }
         }
