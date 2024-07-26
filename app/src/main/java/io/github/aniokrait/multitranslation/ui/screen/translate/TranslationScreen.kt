@@ -2,7 +2,6 @@ package io.github.aniokrait.multitranslation.ui.screen.translate
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -86,27 +86,22 @@ private fun TranslationScreen(
             var bannerHeight by remember {
                 mutableIntStateOf(0)
             }
-
-            Column(
+            LazyColumn(
                 modifier = modifier
                     .statusBarsPadding()
                     .padding(innerPadding)
                     .fillMaxSize()
-//                    .verticalScroll(rememberScrollState())
             ) {
-
                 TranslateSourceArea(
                     isTranslating = isTranslating,
                     onTranslateClick = onTranslateClick
                 )
-
+                
                 ResultArea(
                     textBlockHeight = textBlockHeight,
                     translateResults = translateResults,
                     bannerHeight = bannerHeight,
                 )
-
-
             }
 
             BannerAd(
@@ -121,72 +116,75 @@ private fun TranslationScreen(
 }
 
 // Translation source area.
-@Composable
-private fun ColumnScope.TranslateSourceArea(
+@Suppress("FunctionName")
+private fun LazyListScope.TranslateSourceArea(
     isTranslating: Boolean,
     onTranslateClick: (String) -> Unit,
 ) {
-    val input = remember { mutableStateOf("") }
-    // TODO: Fix height and show scrollbar
-    TextField(
-        modifier = Modifier.fillMaxWidth(),
-        label = { Text(text = stringResource(id = R.string.lbl_translation_source)) },
-        value = input.value,
-        onValueChange = { input.value = it },
-        colors = TextFieldDefaults.colors().copy(
-            focusedLabelColor = OnPrimary,
-            focusedIndicatorColor = OnPrimary,
-            cursorColor = OnPrimary
-        )
-    )
+    item {
+        Column {
+            val input = remember { mutableStateOf("") }
+            // TODO: Fix height and show scrollbar
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(text = stringResource(id = R.string.lbl_translation_source)) },
+                value = input.value,
+                onValueChange = { input.value = it },
+                colors = TextFieldDefaults.colors().copy(
+                    focusedLabelColor = OnPrimary,
+                    focusedIndicatorColor = OnPrimary,
+                    cursorColor = OnPrimary
+                )
+            )
 
-    TranslateButton(
-        modifier = Modifier
-            .width(140.dp)
-            .padding(top = 16.dp)
-            .align(Alignment.CenterHorizontally),
-        isTranslating = isTranslating,
-        translateSource = input.value,
-        onTranslateClick = onTranslateClick,
-    )
+            TranslateButton(
+                modifier = Modifier
+                    .width(140.dp)
+                    .padding(top = 16.dp)
+                    .align(Alignment.CenterHorizontally),
+                isTranslating = isTranslating,
+                translateSource = input.value,
+                onTranslateClick = onTranslateClick,
+            )
+        }
+    }
 }
 
 // Translation results.
-@Composable
-private fun ResultArea(
+@Suppress("FunctionName")
+private fun LazyListScope.ResultArea(
     textBlockHeight: Dp,
     translateResults: Map<Locale, String>,
     bannerHeight: Int,
 ) {
-    Text(
-        text = stringResource(id = R.string.lbl_translation_result),
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(bottom = 4.dp)
-    )
+    item {
+        Text(
+            text = stringResource(id = R.string.lbl_translation_result),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+    }
+    item {
+        Spacer(modifier = Modifier.height(4.dp))
+    }
+    items(
+        items = translateResults.toList(),
+        key = { it.first }
+    ) { (key, value) ->
+        Timber.d("lang: ${key.language}")
 
-    Spacer(modifier = Modifier.height(4.dp))
-
-    LazyColumn {
-        items(
-            items = translateResults.toList(),
-            key = { it.first }
-        ) { (key, value) ->
-            // FIXME: Hide Japanese till implementing changing source language.
-            Timber.d("lang: ${key.language}")
-
-            TranslateResultCard(
-                modifier = Modifier.padding(bottom = 8.dp),
-                textBlockHeight = textBlockHeight,
-                language = key.getDisplayName(Locale.getDefault()),
-                content = value,
-            )
-        }
-        item {
-            val density = LocalDensity.current
-            with(density) {
-                // add height so that the bottom card comes above the banner.
-                Spacer(modifier = Modifier.height(bannerHeight.toDp()))
-            }
+        TranslateResultCard(
+            modifier = Modifier.padding(bottom = 8.dp),
+            textBlockHeight = textBlockHeight,
+            language = key.getDisplayName(Locale.getDefault()),
+            content = value,
+        )
+    }
+    item {
+        val density = LocalDensity.current
+        with(density) {
+            // add height so that the bottom card comes above the banner.
+            Spacer(modifier = Modifier.height(bannerHeight.toDp()))
         }
     }
 }
