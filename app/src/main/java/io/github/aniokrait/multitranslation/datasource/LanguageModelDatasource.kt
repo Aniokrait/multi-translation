@@ -57,13 +57,17 @@ class LanguageModelDatasource(
     /**
      * Download language translation models.
      * @param targetLanguages Checked languages on selection screen.
+     * @param allowNoWifi Allow download even if the device is not connected to the internet.
      */
     override suspend fun downloadModel(
         targetLanguages: List<Locale>,
+        allowNoWifi: Boolean,
     ): List<Locale> {
-        val conditions = DownloadConditions.Builder()
-//            .requireWifi()
-            .build()
+        val conditionsBuilder = DownloadConditions.Builder()
+        if (!allowNoWifi) {
+            conditionsBuilder.requireWifi()
+        }
+        val conditions = conditionsBuilder.build()
 
         val failedModels = mutableListOf<Locale>()
         targetLanguages

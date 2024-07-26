@@ -89,7 +89,7 @@ private fun TranslationModelDownloadScreen(
     isDownloading: Boolean,
     snackBarMessage: MutableState<String>,
     onCheckClicked: (Locale) -> Unit,
-    onDownloadClicked: (() -> Unit, String, MutableState<String>) -> Unit,
+    onDownloadClicked: (() -> Unit, String, MutableState<String>, Boolean) -> Unit,
     navigateToTranslation: () -> Unit,
     onBackClicked: (() -> Unit)?,
 ) {
@@ -144,7 +144,8 @@ private fun TranslationModelDownloadScreen(
                             onDownloadClicked(
                                 navigateToTranslation,
                                 errorMessageTemplate,
-                                snackBarMessage
+                                snackBarMessage,
+                                false
                             )
                         } else {
                             showConfirmDialog.value = true
@@ -166,7 +167,8 @@ private fun TranslationModelDownloadScreen(
                             onDownloadClicked(
                                 navigateToTranslation,
                                 errorMessageTemplate,
-                                snackBarMessage
+                                snackBarMessage,
+                                true
                             )
                         }
                     )
@@ -247,7 +249,7 @@ private fun TranslationModelDownloadScreenPreview() {
         isDownloading = false,
         snackBarMessage = remember { mutableStateOf("") },
         onCheckClicked = {},
-        onDownloadClicked = { _, _, _ -> },
+        onDownloadClicked = { _, _, _, _ -> },
         navigateToTranslation = {},
         onBackClicked = {},
     )

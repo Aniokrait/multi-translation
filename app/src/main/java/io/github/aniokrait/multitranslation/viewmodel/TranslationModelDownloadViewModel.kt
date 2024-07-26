@@ -72,6 +72,7 @@ class TranslationModelDownloadViewModel(
         navigateToTranslation: () -> Unit,
         errorMessageTemplate: String,
         snackBarMessageState: MutableState<String>,
+        allowNoWifi: Boolean,
     ) {
         isDownloading.value = true
 
@@ -83,6 +84,7 @@ class TranslationModelDownloadViewModel(
         viewModelScope.launch {
             repository.downloadModel(
                 targetLanguages = checkedLanguages,
+                allowNoWifi = allowNoWifi,
             )
             isDownloading.value = false
 

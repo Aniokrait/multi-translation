@@ -19,9 +19,11 @@ interface LanguageModelRepository {
     /**
      * Download language translation models.
      * @param targetLanguages Checked languages on selection screen.
+     * @param allowNoWifi Whether to allow download without Wi-Fi.
      */
     suspend fun downloadModel(
         targetLanguages: List<Locale>,
+        allowNoWifi: Boolean,
     ): List<Locale>
 
     /**
