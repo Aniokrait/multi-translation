@@ -12,6 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.github.aniokrait.multitranslation.R
+import io.github.aniokrait.multitranslation.ui.theme.MultiTranslationTheme
+import io.github.aniokrait.multitranslation.ui.theme.OnPrimary
 
 /**
  * Dialog to confirm some action.
@@ -44,7 +46,10 @@ fun ConfirmDialog(
         },
         dismissButton = {
             OutlinedButton(onClick = { showConfirmDialog.value = false }) {
-                Text(text = stringResource(id = dismissButtonText))
+                Text(
+                    text = stringResource(id = dismissButtonText),
+                    color = OnPrimary
+                )
             }
         }
     )
@@ -53,11 +58,13 @@ fun ConfirmDialog(
 @Preview
 @Composable
 private fun ConfirmDialogPreview() {
-    ConfirmDialog(
-        showConfirmDialog = remember { mutableStateOf(false) },
-        dialogText = "翻訳モデルを削除しますか？",
-        confirmButtonText = R.string.btn_delete,
-        dismissButtonText = R.string.delete_dialog_btn_cancel,
-        onConfirmClicked = {}
-    )
+    MultiTranslationTheme {
+        ConfirmDialog(
+            showConfirmDialog = remember { mutableStateOf(false) },
+            dialogText = "翻訳モデルを削除しますか？",
+            confirmButtonText = R.string.btn_delete,
+            dismissButtonText = R.string.delete_dialog_btn_cancel,
+            onConfirmClicked = {}
+        )
+    }
 }
