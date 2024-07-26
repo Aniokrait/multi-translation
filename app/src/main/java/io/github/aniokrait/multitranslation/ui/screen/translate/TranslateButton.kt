@@ -59,7 +59,7 @@ fun TranslateButton(
                         .height(textButtonSize.height.toDp()) // fix button size.
                         .width(textButtonSize.width.toDp()), // fix button size.
                     strokeWidth = 4.dp,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.primary,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
             }
