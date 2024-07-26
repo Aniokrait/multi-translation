@@ -156,9 +156,10 @@ private fun TranslationModelDownloadScreen(
                 }
 
                 if (showConfirmDialog.value) {
+                    val trafficVolume = (state.filter { it.checked.value }.size * 30).toString()
                     ConfirmDialog(
                         showConfirmDialog = showConfirmDialog,
-                        dialogText = R.string.dialog_content,
+                        dialogText = stringResource(id = R.string.dialog_content, trafficVolume),
                         confirmButtonText = R.string.dialog_btn_proceed,
                         dismissButtonText = R.string.dialog_btn_cancel,
                         onConfirmClicked = {

@@ -100,7 +100,7 @@ private fun DeleteModelScreen(
             if (showConfirmDialog.value) {
                 ConfirmDialog(
                     showConfirmDialog = showConfirmDialog,
-                    dialogText = R.string.lbl_delete_model,
+                    dialogText = stringResource(id = R.string.lbl_delete_model),
                     confirmButtonText = R.string.btn_delete,
                     dismissButtonText = R.string.delete_dialog_btn_cancel,
                     onConfirmClicked = {

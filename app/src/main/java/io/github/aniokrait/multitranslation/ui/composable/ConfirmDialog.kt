@@ -24,14 +24,14 @@ import io.github.aniokrait.multitranslation.R
 @Composable
 fun ConfirmDialog(
     showConfirmDialog: MutableState<Boolean>,
-    @StringRes dialogText: Int,
+    dialogText: String,
     @StringRes confirmButtonText: Int,
     @StringRes dismissButtonText: Int,
     onConfirmClicked: () -> Unit,
 ) {
     AlertDialog(
         text = {
-            Text(text = stringResource(id = dialogText))
+            Text(text = dialogText)
         },
         onDismissRequest = { showConfirmDialog.value = false },
         confirmButton = {
@@ -55,7 +55,7 @@ fun ConfirmDialog(
 private fun ConfirmDialogPreview() {
     ConfirmDialog(
         showConfirmDialog = remember { mutableStateOf(false) },
-        dialogText = R.string.lbl_delete_model,
+        dialogText = "翻訳モデルを削除しますか？",
         confirmButtonText = R.string.btn_delete,
         dismissButtonText = R.string.delete_dialog_btn_cancel,
         onConfirmClicked = {}
