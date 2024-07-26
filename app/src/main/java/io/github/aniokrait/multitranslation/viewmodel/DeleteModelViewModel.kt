@@ -45,13 +45,15 @@ class DeleteModelViewModel(
             checkStateFlow,
             isDeleting,
         ) { checkState, isDeleting ->
-            val languageState = checkState.map {
-                EachLanguageState(
-                    locale = it.key,
-                    downloaded = null,
-                    checked = checkState[it.key] ?: mutableStateOf(false)
-                )
-            }
+            val languageState = checkState
+                .filter { it.key != Locale.ENGLISH }
+                .map {
+                    EachLanguageState(
+                        locale = it.key,
+                        downloaded = null,
+                        checked = checkState[it.key] ?: mutableStateOf(false)
+                    )
+                }
 
             DeleteModelUiState(
                 languagesState = languageState
