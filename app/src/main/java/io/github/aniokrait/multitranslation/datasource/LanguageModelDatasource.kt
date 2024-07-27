@@ -34,7 +34,7 @@ class LanguageModelDatasource(
         val downloadedModels = getDownloadedModels()
 
         emit(LanguageNameResolver.getAllLanguagesLabel().map { locale ->
-            val isDownloaded = downloadedModels.any { it.language == locale.language }
+            val isDownloaded = downloadedModels.any { it.language == locale.toLanguageTag() }
             DownloadedState(
                 locale = locale,
                 downloaded = mutableStateOf(isDownloaded)
@@ -76,7 +76,7 @@ class LanguageModelDatasource(
             .forEach { locale ->
                 val options = TranslatorOptions.Builder()
                     .setSourceLanguage(TranslateLanguage.JAPANESE)
-                    .setTargetLanguage(locale.language)
+                    .setTargetLanguage(locale.toLanguageTag())
                     .build()
                 val translator: Translator = Translation.getClient(options)
 
@@ -114,7 +114,7 @@ class LanguageModelDatasource(
         val modelManager = RemoteModelManager.getInstance()
 
         targetLanguages.forEach { locale ->
-            val model = TranslateRemoteModel.Builder(locale.language).build()
+            val model = TranslateRemoteModel.Builder(locale.toLanguageTag()).build()
             withContext(ioDispatcher) {
                 launch {
                     modelManager.deleteDownloadedModel(model).await()

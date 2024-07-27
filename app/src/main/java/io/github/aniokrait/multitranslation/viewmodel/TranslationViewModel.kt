@@ -109,7 +109,7 @@ class TranslationViewModel(
                     withContext(ioDispatcher) {
                         val options = TranslatorOptions.Builder()
                             .setSourceLanguage(TranslateLanguage.JAPANESE)
-                            .setTargetLanguage(targetLocale.language)
+                            .setTargetLanguage(targetLocale.toLanguageTag())
                             .build()
                         val japaneseToOtherTranslator = Translation.getClient(options)
 

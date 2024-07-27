@@ -7,10 +7,10 @@ class LanguageNameResolver {
     companion object {
         fun getAllLanguagesLabel(): List<Locale> {
             return TranslateLanguage.getAllLanguages().map {
-                val locale = Locale.forLanguageTag(it)
+                val locale = Locale.Builder().setLanguage(it).build()
                 locale
-//                locale.getDisplayLanguage(Locale.JAPANESE)
-            }.sortedBy { it.getDisplayLanguage(Locale.JAPANESE) } // TODO: Apply current system locale
+            }
+                .sortedBy { it.getDisplayLanguage(Locale.JAPANESE) } // TODO: Apply current system locale
 
         }
 
