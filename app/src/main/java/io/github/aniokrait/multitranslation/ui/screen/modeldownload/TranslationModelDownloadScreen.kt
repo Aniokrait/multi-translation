@@ -133,22 +133,21 @@ private fun TranslationModelDownloadScreen(
                 val context = LocalContext.current
                 val errorMessageTemplate =
                     stringResource(id = R.string.msg_download_failed_for_these_languages)
-                val showConfirmDialog = remember {
+                val showNoWifiAlertDialog = remember {
                     mutableStateOf(false)
                 }
+                val showDownloadConfirmDialog = remember {
+                    mutableStateOf(false)
+                }
+
                 Button(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
                         val isWifiConnected = NetworkChecker.isWifiConnected(context = context)
                         if (isWifiConnected) {
-                            onDownloadClicked(
-                                navigateToTranslation,
-                                errorMessageTemplate,
-                                snackBarMessage,
-                                false
-                            )
+                            showDownloadConfirmDialog.value = true
                         } else {
-                            showConfirmDialog.value = true
+                            showNoWifiAlertDialog.value = true
                         }
 
                     },
@@ -156,19 +155,46 @@ private fun TranslationModelDownloadScreen(
                     Text(text = stringResource(id = R.string.btn_download_translation_model))
                 }
 
-                if (showConfirmDialog.value) {
-                    val trafficVolume = (state.filter { it.checked.value }.size * 30).toString()
+                val trafficVolume = (state.filter { it.checked.value }.size * 30).toString()
+                if (showNoWifiAlertDialog.value) {
                     ConfirmDialog(
-                        showConfirmDialog = showConfirmDialog,
-                        dialogText = stringResource(id = R.string.dialog_content, trafficVolume),
+                        showConfirmDialog = showNoWifiAlertDialog,
+                        dialogText = stringResource(
+                            id = R.string.dialog_content_alert_no_wifi,
+                            trafficVolume
+                        ),
                         confirmButtonText = R.string.dialog_btn_proceed,
-                        dismissButtonText = R.string.dialog_btn_cancel,
+                        dismissButtonText = R.string.dialog_btn_cancel_use_wifi_later,
                         onConfirmClicked = {
                             onDownloadClicked(
                                 navigateToTranslation,
                                 errorMessageTemplate,
                                 snackBarMessage,
                                 true
+                            )
+                        }
+                    )
+                } else if (showDownloadConfirmDialog.value) {
+                    val checkedLanguages = state
+                        .filter { it.checked.value }
+                        .fold("") { acc, each ->
+                            acc + "・" + each.locale.displayLanguage + System.lineSeparator()
+                        }
+                    ConfirmDialog(
+                        showConfirmDialog = showDownloadConfirmDialog,
+                        dialogText = stringResource(
+                            id = R.string.dialog_content_confirm_download,
+                            checkedLanguages,
+                            trafficVolume
+                        ),
+                        confirmButtonText = R.string.dialog_btn_proceed,
+                        dismissButtonText = R.string.dialog_btn_cancel_just_cancel,
+                        onConfirmClicked = {
+                            onDownloadClicked(
+                                navigateToTranslation,
+                                errorMessageTemplate,
+                                snackBarMessage,
+                                false
                             )
                         }
                     )

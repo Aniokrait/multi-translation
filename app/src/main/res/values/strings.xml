@@ -18,9 +18,11 @@
     <string name="lbl_download_progress">翻訳モデルを\nダウンロードしています。\nそのままお待ち下さい</string>
     <string name="msg_download_failed_for_these_languages">以下の言語のダウンロードに失敗しました。\nインターネット接続状況を確認し、設定画面から再度ダウンロードしてください。</string>
     <string name="lbl_all_download_failed">翻訳モデルのダウンロードに失敗しました。\nインターネット接続状況を確認してから、再度実行してください</string>
-    <string name="dialog_btn_cancel">あとでWi-Fiを使う</string>
+    <string name="dialog_btn_cancel_use_wifi_later">あとでWi-Fiを使う</string>
+    <string name="dialog_btn_cancel_just_cancel">キャンセル</string>
     <string name="dialog_btn_proceed">続行</string>
-    <string name="dialog_content">Wi-Fiに接続されていません。\nモバイル通信を使うと、通信料金が発生する可能性がありますが、続行しますか？\n(約%sMB)</string>
+    <string name="dialog_content_alert_no_wifi">Wi-Fiに接続されていません。\nモバイル通信を使うと通信料金が発生する可能性がありますが、続行しますか？\n(アプリを終了してもダウンロードは中断できません)\n(約%sMB)</string>
+    <string name="dialog_content_confirm_download">以下の翻訳モデルをダウンロードします\n%s\n(約%sMB)</string>
 
     <!-- 削除画面 -->
     <string name="lbl_description_for_delete_models">削除したい言語を選んでください</string>
