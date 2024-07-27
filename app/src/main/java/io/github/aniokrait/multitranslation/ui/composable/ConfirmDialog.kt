@@ -32,9 +32,15 @@ fun ConfirmDialog(
     dialogText: String,
     @StringRes confirmButtonText: Int,
     @StringRes dismissButtonText: Int,
+    @StringRes titleText: Int? = null,
     onConfirmClicked: () -> Unit,
 ) {
     AlertDialog(
+        title = {
+            if (titleText != null) {
+                Text(text = stringResource(id = titleText))
+            }
+        },
         text = {
             Text(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -67,6 +73,7 @@ private fun ConfirmDialogPreview() {
     MultiTranslationTheme {
         ConfirmDialog(
             showConfirmDialog = remember { mutableStateOf(false) },
+            titleText = R.string.dialog_title_really_no_wifi_ok_title,
             dialogText = "翻訳モデルを削除しますか？",
             confirmButtonText = R.string.btn_delete,
             dismissButtonText = R.string.delete_dialog_btn_cancel,

@@ -136,6 +136,9 @@ private fun TranslationModelDownloadScreen(
                 val showNoWifiAlertDialog = remember {
                     mutableStateOf(false)
                 }
+                val showConfirmReallyOkDialog = remember {
+                    mutableStateOf(false)
+                }
                 val showDownloadConfirmDialog = remember {
                     mutableStateOf(false)
                 }
@@ -161,6 +164,21 @@ private fun TranslationModelDownloadScreen(
                         showConfirmDialog = showNoWifiAlertDialog,
                         dialogText = stringResource(
                             id = R.string.dialog_content_alert_no_wifi,
+                            trafficVolume
+                        ),
+                        confirmButtonText = R.string.dialog_btn_proceed,
+                        dismissButtonText = R.string.dialog_btn_cancel_use_wifi_later,
+                        onConfirmClicked = {
+                            showConfirmReallyOkDialog.value = true
+                            showNoWifiAlertDialog.value = false
+                        }
+                    )
+                } else if (showConfirmReallyOkDialog.value) {
+                    ConfirmDialog(
+                        showConfirmDialog = showConfirmReallyOkDialog,
+                        titleText = R.string.dialog_title_really_no_wifi_ok_title,
+                        dialogText = stringResource(
+                            id = R.string.dialog_content_really_no_wifi_ok,
                             trafficVolume
                         ),
                         confirmButtonText = R.string.dialog_btn_proceed,
