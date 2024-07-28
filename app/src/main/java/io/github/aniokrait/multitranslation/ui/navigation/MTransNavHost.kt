@@ -1,13 +1,11 @@
 package io.github.aniokrait.multitranslation.ui.navigation
 
-import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -24,8 +22,6 @@ import io.github.aniokrait.multitranslation.ui.screen.modeldownload.TranslationM
 import io.github.aniokrait.multitranslation.ui.screen.translate.Translation
 import io.github.aniokrait.multitranslation.ui.screen.translate.TranslationScreen
 import io.github.aniokrait.multitranslation.viewmodel.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
@@ -39,12 +35,13 @@ fun MTransNavHost(
     val startDestinationState: MutableState<StartDestination> = remember {
         mutableStateOf(Loading)
     }
-    startDestination(
-        context = LocalContext.current,
-        scope = rememberCoroutineScope(),
-        startDestinationState = startDestinationState,
-        mainViewModel = mainViewModel,
-    )
+
+    LaunchedEffect(Unit) {
+        startDestination(
+            startDestinationState = startDestinationState,
+            mainViewModel = mainViewModel,
+        )
+    }
 
     NavHost(
         modifier = modifier.padding(horizontal = 8.dp),
@@ -88,23 +85,19 @@ fun MTransNavHost(
 }
 
 // If first launch, start destination is TranslationModelDownload, else Transaction.
-private fun startDestination(
-    context: Context,
-    scope: CoroutineScope,
+private suspend fun startDestination(
     startDestinationState: MutableState<StartDestination>,
     mainViewModel: MainViewModel,
 ) {
-    scope.launch {
-        val isFirstLaunch = mainViewModel.checkIfFirstLaunch()
+    val isFirstLaunch = mainViewModel.checkIfFirstLaunch()
 
-        val startDestination = if (isFirstLaunch) {
-            TranslationModelDownload
-        } else {
-            Translation
-        }
-
-        startDestinationState.value = startDestination
+    val startDestination = if (isFirstLaunch) {
+        TranslationModelDownload
+    } else {
+        Translation
     }
+
+    startDestinationState.value = startDestination
 }
 
 interface StartDestination
