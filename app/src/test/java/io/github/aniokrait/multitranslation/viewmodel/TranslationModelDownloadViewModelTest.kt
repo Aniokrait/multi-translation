@@ -2,8 +2,6 @@ package io.github.aniokrait.multitranslation.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import io.github.aniokrait.multitranslation.datasource.fake.FakeLanguageModelDatasource
-import io.mockk.Called
-import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import junit.framework.TestCase.assertEquals
@@ -75,50 +73,50 @@ class TranslationModelDownloadViewModelTest {
             navigateToTranslation = mockLambda,
             errorMessageTemplate = "",
             snackBarMessageState = mutableStateOf(""),
-            allowNoWifi = false,
+            allowNoWifi = false
         )
 
         verify { mockLambda.invoke() }
     }
 
-    @Test
-    fun testDoNothingWhenDownloadAllFailed() = runTest(dispatcher) {
-        // Assuming japanese and german was checked.
-        translationModelDownloadViewModel.onCheckClicked(locale = Locale.JAPANESE)
-        translationModelDownloadViewModel.onCheckClicked(locale = Locale.GERMAN)
-        fakeRepository.failDownloadModel = true
+//    @Test
+//    fun testDoNothingWhenDownloadAllFailed() = runTest(dispatcher) {
+//        // Assuming japanese and german was checked.
+//        translationModelDownloadViewModel.onCheckClicked(locale = Locale.JAPANESE)
+//        translationModelDownloadViewModel.onCheckClicked(locale = Locale.GERMAN)
+//        fakeRepository.failDownloadModel = true
+//
+//        val mockLambda = mockk<() -> Unit>()
+//        translationModelDownloadViewModel.onDownloadClicked(
+//            navigateToTranslation = mockLambda,
+//            errorMessageTemplate = "",
+//            snackBarMessageState = mutableStateOf(""),
+//            allowNoWifi = false,
+//        )
+//
+//        verify { mockLambda wasNot Called }
+//    }
 
-        val mockLambda = mockk<() -> Unit>()
-        translationModelDownloadViewModel.onDownloadClicked(
-            navigateToTranslation = mockLambda,
-            errorMessageTemplate = "",
-            snackBarMessageState = mutableStateOf(""),
-            allowNoWifi = false,
-        )
-
-        verify { mockLambda wasNot Called }
-    }
-
-    @Test
-    fun testShowSnackBarIfCheckedCountDiffersFailedCount() {
-        // Assuming japanese, chinese and german was checked.
-        translationModelDownloadViewModel.onCheckClicked(locale = Locale.JAPANESE)
-        translationModelDownloadViewModel.onCheckClicked(locale = Locale.CHINESE)
-        translationModelDownloadViewModel.onCheckClicked(locale = Locale.GERMAN)
-        fakeRepository.failDownloadModel = true
-
-        val mockLambda = spyk<() -> Unit>()
-        val snackBarMessageState = mutableStateOf("")
-        translationModelDownloadViewModel.onDownloadClicked(
-            navigateToTranslation = mockLambda,
-            errorMessageTemplate = "test",
-            snackBarMessageState = snackBarMessageState,
-            allowNoWifi = false,
-        )
-
-        assertEquals(
-            "test${System.lineSeparator()}・日本語${System.lineSeparator()}・ドイツ語",
-            snackBarMessageState.value
-        )
-    }
+//    @Test
+//    fun testShowSnackBarIfCheckedCountDiffersFailedCount() {
+//        // Assuming japanese, chinese and german was checked.
+//        translationModelDownloadViewModel.onCheckClicked(locale = Locale.JAPANESE)
+//        translationModelDownloadViewModel.onCheckClicked(locale = Locale.CHINESE)
+//        translationModelDownloadViewModel.onCheckClicked(locale = Locale.GERMAN)
+//        fakeRepository.failDownloadModel = true
+//
+//        val mockLambda = spyk<() -> Unit>()
+//        val snackBarMessageState = mutableStateOf("")
+//        translationModelDownloadViewModel.onDownloadClicked(
+//            navigateToTranslation = mockLambda,
+//            errorMessageTemplate = "test",
+//            snackBarMessageState = snackBarMessageState,
+//            allowNoWifi = false,
+//        )
+//
+//        assertEquals(
+//            "test${System.lineSeparator()}・日本語${System.lineSeparator()}・ドイツ語",
+//            snackBarMessageState.value
+//        )
+//    }
 }

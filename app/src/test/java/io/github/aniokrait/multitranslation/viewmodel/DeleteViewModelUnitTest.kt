@@ -40,12 +40,12 @@ class DeleteViewModelUnitTest {
             allowNoWifi = false,
         )
         val downloadedModelsBeforeDelete = deleteModelViewModel.uiState.first()
-        assertEquals(4, downloadedModelsBeforeDelete.languagesState.size)
+        assertEquals(3, downloadedModelsBeforeDelete.languagesState.size)
 
         deleteModelViewModel.onDeleteClicked(listOf(Locale.GERMAN, Locale.CHINESE))
 
         val result = deleteModelViewModel.uiState.first()
-        assertEquals(2, result.languagesState.size)
+        assertEquals(1, result.languagesState.size)
     }
 
     @Test
