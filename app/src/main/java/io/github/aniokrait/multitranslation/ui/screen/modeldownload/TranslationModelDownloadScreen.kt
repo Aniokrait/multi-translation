@@ -99,6 +99,7 @@ private fun TranslationModelDownloadScreen(
                 showTrailingIcon = false,
                 onAddModelClicked = {},
                 onDeleteModelClicked = {},
+                onInquiryClicked = {},
                 onBackClicked = onBackClicked,
             )
         },

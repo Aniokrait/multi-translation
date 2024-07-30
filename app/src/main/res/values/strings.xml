@@ -3,7 +3,8 @@
 
     <!-- TopBar -->
     <string name="topbar_lbl_add_model">翻訳モデルの追加</string>
-    <string name="topbar_lbl_delete_model">翻訳モデルの削除</string>"
+    <string name="topbar_lbl_delete_model">翻訳モデルの削除</string>
+    <string name="topbar_lbl_inquiry">お問い合わせ</string>
 
     <!-- TODO: Rename string names. -->
     <!-- 翻訳画面 -->

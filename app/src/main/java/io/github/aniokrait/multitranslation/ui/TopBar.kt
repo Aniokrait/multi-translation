@@ -27,6 +27,7 @@ fun TopBar(
     showTrailingIcon: Boolean = true,
     onAddModelClicked: () -> Unit,
     onDeleteModelClicked: () -> Unit,
+    onInquiryClicked: () -> Unit,
     onBackClicked: (() -> Unit)? = null,
 ) {
     TopAppBar(
@@ -53,6 +54,11 @@ fun TopBar(
                             text = { Text(text = stringResource(id = R.string.topbar_lbl_delete_model)) },
                             onClick = onDeleteModelClicked,
                         )
+
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(id = R.string.topbar_lbl_inquiry)) },
+                            onClick = onInquiryClicked,
+                        )
                     }
                 }
 
@@ -76,5 +82,6 @@ private fun TopBarPreview() {
         onAddModelClicked = {},
         onDeleteModelClicked = {},
         onBackClicked = {},
+        onInquiryClicked = {},
     )
 }

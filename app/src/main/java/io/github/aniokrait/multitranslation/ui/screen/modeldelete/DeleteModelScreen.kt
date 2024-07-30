@@ -61,6 +61,7 @@ private fun DeleteModelScreen(
                 showTrailingIcon = false,
                 onAddModelClicked = {},
                 onDeleteModelClicked = {},
+                onInquiryClicked = {},
                 onBackClicked = onBackClicked,
             )
         },

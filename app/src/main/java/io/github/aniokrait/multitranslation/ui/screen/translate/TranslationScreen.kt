@@ -51,6 +51,7 @@ fun TranslationScreen(
     vm: TranslationViewModel = koinViewModel(),
     onAddModelClicked: () -> Unit,
     onDeleteModelClicked: () -> Unit,
+    onInquiryClicked: () -> Unit,
 ) {
     val uiState = vm.uiState.collectAsStateWithLifecycle().value
     TranslationScreen(
@@ -59,6 +60,7 @@ fun TranslationScreen(
         isTranslating = uiState.isTranslating,
         onAddModelClicked = onAddModelClicked,
         onDeleteModelClicked = onDeleteModelClicked,
+        onInquiryClicked = onInquiryClicked,
         onTranslateClick = vm::onTranslateClick,
     )
 }
@@ -71,6 +73,7 @@ private fun TranslationScreen(
     textBlockHeight: Dp = 100.dp,
     onAddModelClicked: () -> Unit,
     onDeleteModelClicked: () -> Unit,
+    onInquiryClicked: () -> Unit,
     onTranslateClick: (String) -> Unit,
 ) {
     Scaffold(
@@ -79,6 +82,7 @@ private fun TranslationScreen(
                 showTrailingIcon = true,
                 onDeleteModelClicked = onDeleteModelClicked,
                 onAddModelClicked = onAddModelClicked,
+                onInquiryClicked = onInquiryClicked,
             )
         }
     ) { innerPadding ->
@@ -198,5 +202,6 @@ fun TranslationScreenPreview() {
         onTranslateClick = { _ -> },
         onAddModelClicked = {},
         onDeleteModelClicked = {},
+        onInquiryClicked = {},
     )
 }

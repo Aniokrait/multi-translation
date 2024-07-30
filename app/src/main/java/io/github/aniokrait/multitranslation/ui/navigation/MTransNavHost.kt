@@ -15,6 +15,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import io.github.aniokrait.multitranslation.extension.dataStore
+import io.github.aniokrait.multitranslation.ui.screen.inquiry.Inquiry
+import io.github.aniokrait.multitranslation.ui.screen.inquiry.InquiryScreen
 import io.github.aniokrait.multitranslation.ui.screen.modeldelete.DeleteModel
 import io.github.aniokrait.multitranslation.ui.screen.modeldelete.DeleteModelScreen
 import io.github.aniokrait.multitranslation.ui.screen.modeldownload.TranslationModelDownload
@@ -73,12 +75,16 @@ fun MTransNavHost(
             TranslationScreen(
                 onAddModelClicked = { navController.navigate(TranslationModelDownload) },
                 onDeleteModelClicked = { navController.navigate(DeleteModel) },
+                onInquiryClicked = { navController.navigate(Inquiry) },
             )
         }
         composable<DeleteModel> {
             DeleteModelScreen(
                 onBackClicked = navController::navigateUp,
             )
+        }
+        composable<Inquiry> {
+            InquiryScreen()
         }
     }
 
