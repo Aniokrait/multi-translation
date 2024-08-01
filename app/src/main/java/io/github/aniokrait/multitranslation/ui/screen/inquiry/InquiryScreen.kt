@@ -54,7 +54,7 @@ private fun InquiryScreen(
     Scaffold(
         topBar = {
             TopBar(
-                title = stringResource(id = R.string.lbl_description_for_inquiry),
+                title = stringResource(id = R.string.topbar_lbl_inquiry),
                 showTrailingIcon = false,
                 onAddModelClicked = {},
                 onDeleteModelClicked = {},
@@ -102,7 +102,7 @@ private fun InquiryScreen(
                     )
                 },
 
-            )
+                )
 
             Spacer(
                 modifier = Modifier.weight(1f)

@@ -23,7 +23,7 @@ import io.github.aniokrait.multitranslation.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    title: String = stringResource(id = R.string.app_name),
+    title: String,
     // TODO: Think about the ways to handle the increasing args
     showTrailingIcon: Boolean = true,
     onAddModelClicked: () -> Unit,
@@ -79,6 +79,7 @@ fun TopBar(
 @Preview
 private fun TopBarPreview() {
     TopBar(
+        title = "複数翻訳",
         showTrailingIcon = true,
         onAddModelClicked = {},
         onDeleteModelClicked = {},

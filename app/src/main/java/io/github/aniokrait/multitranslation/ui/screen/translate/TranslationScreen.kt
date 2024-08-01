@@ -79,6 +79,7 @@ private fun TranslationScreen(
     Scaffold(
         topBar = {
             TopBar(
+                title = stringResource(id = R.string.app_name),
                 showTrailingIcon = true,
                 onDeleteModelClicked = onDeleteModelClicked,
                 onAddModelClicked = onAddModelClicked,

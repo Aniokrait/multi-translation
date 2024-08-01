@@ -96,6 +96,7 @@ private fun TranslationModelDownloadScreen(
     Scaffold(
         topBar = {
             TopBar(
+                title = stringResource(id = R.string.topbar_lbl_add_model),
                 showTrailingIcon = false,
                 onAddModelClicked = {},
                 onDeleteModelClicked = {},
