@@ -84,7 +84,9 @@ fun MTransNavHost(
             )
         }
         composable<Inquiry> {
-            InquiryScreen()
+            InquiryScreen(
+                onBackClicked = navController::navigateUp,
+            )
         }
     }
 

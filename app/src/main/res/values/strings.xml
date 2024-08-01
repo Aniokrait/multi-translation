@@ -4,7 +4,7 @@
     <!-- TopBar -->
     <string name="topbar_lbl_add_model">翻訳モデルの追加</string>
     <string name="topbar_lbl_delete_model">翻訳モデルの削除</string>
-    <string name="topbar_lbl_inquiry">お問い合わせ</string>
+    <string name="topbar_lbl_inquiry">お問い合わせ・不具合報告</string>
 
     <!-- TODO: Rename string names. -->
     <!-- 翻訳画面 -->
@@ -33,6 +33,11 @@
     <string name="btn_delete">削除</string>
     <string name="lbl_delete_model">翻訳モデルを削除しますか？</string>
     <string name="delete_dialog_btn_cancel">キャンセル</string>
+
+    <!-- お問い合わせ画面 -->
+    <string name="lbl_description_for_inquiry">お問い合わせ・不具合報告</string>
+    <string name="lbl_inquiry_hosoku">以下にお問い合わせ内容をご記入の上、送信をお願い致します。\nいただいた情報はアプリの改善に役立てさせていただきます。\n\n(こちらから回答を送信することはありません。)</string>
+    <string name="btn_inquiry">送信</string>
 
     <!-- 設定系 -->
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
