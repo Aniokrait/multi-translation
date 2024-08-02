@@ -28,6 +28,7 @@ class FakeLanguageModelDatasource : LanguageModelRepository {
     var failDownloadModel = false
     override suspend fun downloadModel(
         targetLanguages: List<Locale>,
+        allowNoWifi: Boolean,
     ): List<Locale> {
         set.addAll(targetLanguages.map { DownloadedState(it, mutableStateOf(true)) })
 

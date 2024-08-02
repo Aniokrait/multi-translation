@@ -74,7 +74,8 @@ class TranslationModelDownloadViewModelTest {
         translationModelDownloadViewModel.onDownloadClicked(
             navigateToTranslation = mockLambda,
             errorMessageTemplate = "",
-            snackBarMessageState = mutableStateOf("")
+            snackBarMessageState = mutableStateOf(""),
+            allowNoWifi = false,
         )
 
         verify { mockLambda.invoke() }
@@ -91,7 +92,8 @@ class TranslationModelDownloadViewModelTest {
         translationModelDownloadViewModel.onDownloadClicked(
             navigateToTranslation = mockLambda,
             errorMessageTemplate = "",
-            snackBarMessageState = mutableStateOf("")
+            snackBarMessageState = mutableStateOf(""),
+            allowNoWifi = false,
         )
 
         verify { mockLambda wasNot Called }
@@ -110,7 +112,8 @@ class TranslationModelDownloadViewModelTest {
         translationModelDownloadViewModel.onDownloadClicked(
             navigateToTranslation = mockLambda,
             errorMessageTemplate = "test",
-            snackBarMessageState = snackBarMessageState
+            snackBarMessageState = snackBarMessageState,
+            allowNoWifi = false,
         )
 
         assertEquals(

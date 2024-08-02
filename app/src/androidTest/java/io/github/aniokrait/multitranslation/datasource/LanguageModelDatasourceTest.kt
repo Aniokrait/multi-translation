@@ -18,6 +18,7 @@ class LanguageModelDatasourceTest {
         val targetLanguages = listOf(Locale.ENGLISH, Locale.GERMAN)
         datasource.downloadModel(
             targetLanguages = targetLanguages,
+            allowNoWifi = false
         )
 
         val downloadedModelsTask =
@@ -40,7 +41,10 @@ class LanguageModelDatasourceTest {
         assertEquals(0, modelsBeforeTesting.size)
 
         // Assert models count is incremented after downloading.
-        datasource.downloadModel(listOf(Locale.GERMAN))
+        datasource.downloadModel(
+            targetLanguages = listOf(Locale.GERMAN),
+            allowNoWifi = false,
+        )
         val modelsAfterDownloading = datasource.getDownloadedModels().omitExtraModel()
         assertEquals(1, modelsAfterDownloading.size)
 

@@ -42,10 +42,11 @@ class DeleteModelViewModelTest {
 
     private suspend fun assumeModelHasBeenDownloaded() {
         repository.downloadModel(
-            listOf(
+            targetLanguages = listOf(
                 Locale.GERMAN,
                 Locale.CHINESE,
-            )
+            ),
+            allowNoWifi = false
         )
     }
 }

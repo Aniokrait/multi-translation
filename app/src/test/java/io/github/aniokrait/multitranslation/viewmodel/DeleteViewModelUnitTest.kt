@@ -35,7 +35,10 @@ class DeleteViewModelUnitTest {
     @Test
     fun deleteModels() = runTest {
         // Assert initial state before deleting.
-        repository.downloadModel(listOf(Locale.GERMAN, Locale.CHINESE, Locale.ENGLISH))
+        repository.downloadModel(
+            targetLanguages = listOf(Locale.GERMAN, Locale.CHINESE, Locale.ENGLISH),
+            allowNoWifi = false,
+        )
         val downloadedModelsBeforeDelete = deleteModelViewModel.uiState.first()
         assertEquals(4, downloadedModelsBeforeDelete.languagesState.size)
 
