@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.aniokrait.multitranslation.repository.HttpRequestResult
 import io.github.aniokrait.multitranslation.repository.InquiryRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,6 +31,12 @@ class InquiryViewModel(
                 InquiryUiState.SentSuccess
             } else {
                 InquiryUiState.Failure
+            }
+
+            // After five seconds, return to initial state.
+            launch {
+                delay(5_000)
+                _uiState.value = InquiryUiState.Initial
             }
         }
     }

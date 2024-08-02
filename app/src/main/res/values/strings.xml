@@ -38,6 +38,7 @@
     <string name="lbl_description_for_inquiry">お問い合わせ・不具合報告</string>
     <string name="lbl_inquiry_hosoku">不具合内容や欲しい機能等、自由にご記入ください。\nいただいた情報はアプリの改善に役立てさせていただきます。\n\n(こちらから回答を送信することはありません。)</string>
     <string name="btn_inquiry">送信</string>
+    <string name="msg_inquiry_sent_success">送信が完了しました。</string>
 
     <!-- 設定系 -->
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>

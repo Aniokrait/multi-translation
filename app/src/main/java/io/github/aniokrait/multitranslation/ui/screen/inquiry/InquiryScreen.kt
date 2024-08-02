@@ -1,5 +1,6 @@
 package io.github.aniokrait.multitranslation.ui.screen.inquiry
 
+import SuspendableButton
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,25 +10,32 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.aniokrait.multitranslation.R
 import io.github.aniokrait.multitranslation.ui.TopBar
+import io.github.aniokrait.multitranslation.viewmodel.InquiryUiState
 import io.github.aniokrait.multitranslation.viewmodel.InquiryViewModel
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
@@ -40,6 +48,7 @@ fun InquiryScreen(
     onBackClicked: (() -> Unit),
 ) {
     InquiryScreen(
+        uiState = vm.uiState.collectAsStateWithLifecycle().value,
         onBackClicked = onBackClicked,
         onSentClicked = vm::sendInquiry
     )
@@ -48,9 +57,23 @@ fun InquiryScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun InquiryScreen(
+    uiState: InquiryUiState,
     onBackClicked: (() -> Unit),
     onSentClicked: (String) -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    if (uiState is InquiryUiState.SentSuccess) {
+        val snackbarMessage = stringResource(id = R.string.msg_inquiry_sent_success)
+        LaunchedEffect(uiState) {
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = snackbarMessage,
+                )
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             TopBar(
@@ -61,6 +84,9 @@ private fun InquiryScreen(
                 onInquiryClicked = {},
                 onBackClicked = onBackClicked,
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         },
     ) { innerPadding ->
         Column(
@@ -107,12 +133,17 @@ private fun InquiryScreen(
             Spacer(
                 modifier = Modifier.weight(1f)
             )
-            Button(
+
+            val keyboardController = LocalSoftwareKeyboardController.current
+            SuspendableButton(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = { onSentClicked(content) }
-            ) {
-                Text(text = stringResource(id = R.string.btn_inquiry))
-            }
+                isSuspending = uiState == InquiryUiState.Loading,
+                onClick = {
+                    keyboardController?.hide()
+                    onSentClicked(content)
+                },
+                text = stringResource(id = R.string.btn_inquiry),
+            )
         }
     }
 }
@@ -121,6 +152,7 @@ private fun InquiryScreen(
 @Composable
 private fun InquiryScreenPreview() {
     InquiryScreen(
+        uiState = InquiryUiState.Initial,
         onBackClicked = {},
         onSentClicked = {}
     )
