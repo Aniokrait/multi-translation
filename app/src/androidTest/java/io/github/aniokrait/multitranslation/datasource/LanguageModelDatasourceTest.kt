@@ -18,7 +18,7 @@ class LanguageModelDatasourceTest {
         val targetLanguages = listOf(Locale.ENGLISH, Locale.GERMAN)
         datasource.downloadModel(
             targetLanguages = targetLanguages,
-            allowNoWifi = false
+            allowNoWifi = false,
         )
 
         val downloadedModelsTask =

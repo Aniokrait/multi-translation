@@ -3,6 +3,7 @@ package io.github.aniokrait.multitranslation.datasource
 import io.github.aniokrait.multitranslation.BuildConfig
 import io.github.aniokrait.multitranslation.repository.HttpRequestResult
 import io.github.aniokrait.multitranslation.repository.InquiryRepository
+import io.github.aniokrait.multitranslation.repository.UserMetaInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
@@ -15,6 +16,9 @@ class SlackBotInquirer(
         private const val CHANNEL_NAME = "#問い合わせ"
     }
 
+    /**
+     * Send inquiry to slack.
+     */
     override suspend fun sendInquiry(content: String): HttpRequestResult {
         return withContext(ioDispatcher) {
             val response: HttpRequestResult = client.submitForm(
@@ -28,5 +32,24 @@ class SlackBotInquirer(
 
             return@withContext response
         }
+    }
+
+    /**
+     * Get user device meta info.
+     */
+    override fun getMetaInfo(): UserMetaInfo {
+        val sdk = android.os.Build.VERSION.SDK_INT
+        val model = android.os.Build.MODEL
+        val manufacturer = android.os.Build.MANUFACTURER
+        val product = android.os.Build.PRODUCT
+        val appVersion = BuildConfig.VERSION_CODE
+
+        return UserMetaInfo(
+            sdk = sdk,
+            model = model,
+            manufacturer = manufacturer,
+            product = product,
+            appVersion = appVersion,
+        )
     }
 }

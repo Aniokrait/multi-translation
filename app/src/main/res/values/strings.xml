@@ -36,7 +36,7 @@
 
     <!-- お問い合わせ画面 -->
     <string name="lbl_description_for_inquiry">お問い合わせ・不具合報告</string>
-    <string name="lbl_inquiry_hosoku">以下にお問い合わせ内容をご記入の上、送信をお願い致します。\nいただいた情報はアプリの改善に役立てさせていただきます。\n\n(こちらから回答を送信することはありません。)</string>
+    <string name="lbl_inquiry_hosoku">不具合内容や欲しい機能等、自由にご記入ください。\nいただいた情報はアプリの改善に役立てさせていただきます。\n\n(こちらから回答を送信することはありません。)</string>
     <string name="btn_inquiry">送信</string>
 
     <!-- 設定系 -->

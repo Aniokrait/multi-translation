@@ -46,7 +46,7 @@ class DeleteModelViewModelTest {
                 Locale.GERMAN,
                 Locale.CHINESE,
             ),
-            allowNoWifi = false
+            allowNoWifi = false,
         )
     }
 }
