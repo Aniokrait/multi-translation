@@ -11,7 +11,6 @@ class LanguageNameResolver {
                 locale
             }
                 .sortedBy { it.getDisplayLanguage(Locale.JAPANESE) } // TODO: Apply current system locale
-
         }
 
 //        fun getAllLanguagesLocale(): List<Locale> {

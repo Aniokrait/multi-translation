@@ -26,7 +26,7 @@ fun MTransApp() {
             val snackBarMessage = remember { mutableStateOf("") }
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
+                snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             ) { innerPadding ->
                 MTransNavHost(
                     modifier = Modifier.padding(innerPadding),
@@ -40,7 +40,6 @@ fun MTransApp() {
                         snackBarMessage.value = ""
                     }
                 }
-
             }
         }
     }

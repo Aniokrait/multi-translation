@@ -44,9 +44,9 @@ fun LanguageList(
 ) {
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Fixed(2)
+        columns = GridCells.Fixed(2),
     ) {
-        items(locales.filter { it != Locale.JAPANESE  && it != Locale.JAPAN }) { locale ->
+        items(locales.filter { it != Locale.JAPANESE && it != Locale.JAPAN }) { locale ->
             val eachLocaleState = state.find { it.locale == locale }
             val checked: Boolean = eachLocaleState?.checked?.value ?: false
             val downloaded: Boolean = eachLocaleState?.downloaded?.value ?: false
@@ -55,7 +55,7 @@ fun LanguageList(
                 locale = locale,
                 checked = checked,
                 downloaded = downloaded,
-                onCheckedChange = { onCheckClicked(locale) }
+                onCheckedChange = { onCheckClicked(locale) },
             )
         }
     }
@@ -69,16 +69,17 @@ private fun LanguageSelection(
     onCheckedChange: (Boolean) -> Unit,
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         // Interact checkbox ripple effect when text is clicked.
         val interactionSource = remember { MutableInteractionSource() }
 
         if (downloaded) {
             Icon(
-                modifier = Modifier
-                    .size(48.dp)
-                    .padding(12.dp),
+                modifier =
+                    Modifier
+                        .size(48.dp)
+                        .padding(12.dp),
                 painter = painterResource(id = R.drawable.download_done_24px),
                 contentDescription = null,
                 tint = Color.Gray,
@@ -87,20 +88,21 @@ private fun LanguageSelection(
             Checkbox(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
             )
         }
 
         Text(
-            modifier = Modifier
-                .conditional(condition = !downloaded) {
-                    clickable(
-                        interactionSource = interactionSource,
-                        indication = null
-                    ) {
-                        onCheckedChange.invoke(checked)
-                    }
-                },
+            modifier =
+                Modifier
+                    .conditional(condition = !downloaded) {
+                        clickable(
+                            interactionSource = interactionSource,
+                            indication = null,
+                        ) {
+                            onCheckedChange.invoke(checked)
+                        }
+                    },
             text = locale.getDisplayLanguage(Locale.JAPANESE),
             style = MaterialTheme.typography.titleMedium,
         ) // TODO: Apply current system locale
@@ -111,34 +113,36 @@ private fun LanguageSelection(
 @Composable
 fun LanguageListPreview() {
     LanguageList(
-        locales = listOf(
-            Locale.JAPANESE,
-            Locale.CHINESE,
-            Locale.GERMAN,
-            Locale.ENGLISH,
-        ),
-        state = listOf(
-            EachLanguageState(
-                locale = Locale.JAPANESE,
-                checked = remember { mutableStateOf(true) },
-                downloaded = remember { mutableStateOf(false) },
+        locales =
+            listOf(
+                Locale.JAPANESE,
+                Locale.CHINESE,
+                Locale.GERMAN,
+                Locale.ENGLISH,
             ),
-            EachLanguageState(
-                locale = Locale.CHINESE,
-                checked = remember { mutableStateOf(false) },
-                downloaded = remember { mutableStateOf(true) },
+        state =
+            listOf(
+                EachLanguageState(
+                    locale = Locale.JAPANESE,
+                    checked = remember { mutableStateOf(true) },
+                    downloaded = remember { mutableStateOf(false) },
+                ),
+                EachLanguageState(
+                    locale = Locale.CHINESE,
+                    checked = remember { mutableStateOf(false) },
+                    downloaded = remember { mutableStateOf(true) },
+                ),
+                EachLanguageState(
+                    locale = Locale.GERMAN,
+                    checked = remember { mutableStateOf(true) },
+                    downloaded = remember { mutableStateOf(true) },
+                ),
+                EachLanguageState(
+                    locale = Locale.ENGLISH,
+                    checked = remember { mutableStateOf(false) },
+                    downloaded = remember { mutableStateOf(false) },
+                ),
             ),
-            EachLanguageState(
-                locale = Locale.GERMAN,
-                checked = remember { mutableStateOf(true) },
-                downloaded = remember { mutableStateOf(true) },
-            ),
-            EachLanguageState(
-                locale = Locale.ENGLISH,
-                checked = remember { mutableStateOf(false) },
-                downloaded = remember { mutableStateOf(false) },
-            ),
-        ),
-        onCheckClicked = {}
+        onCheckClicked = {},
     )
 }

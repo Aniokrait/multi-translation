@@ -1,9 +1,9 @@
 package io.github.aniokrait.multitranslation.module
 
-//import io.ktor.client.HttpClient
-//import io.ktor.client.engine.cio.CIO
-//import io.ktor.client.engine.cio.endpoint
-//import io.ktor.client.plugins.logging.Logging
+// import io.ktor.client.HttpClient
+// import io.ktor.client.engine.cio.CIO
+// import io.ktor.client.engine.cio.endpoint
+// import io.ktor.client.plugins.logging.Logging
 import io.github.aniokrait.multitranslation.datasource.HttpClientInterface
 import io.github.aniokrait.multitranslation.datasource.KtorHttpClient
 import io.github.aniokrait.multitranslation.datasource.LanguageModelDatasource
@@ -23,27 +23,28 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val appModule = module {
-    single<HttpClient> {
-        HttpClient(CIO) {
-            expectSuccess = true
+val appModule =
+    module {
+        single<HttpClient> {
+            HttpClient(CIO) {
+                expectSuccess = true
 
-            engine {
-                endpoint {
-                    keepAliveTime = 10000
-                    connectTimeout = 10000
-                    connectAttempts = 5
+                engine {
+                    endpoint {
+                        keepAliveTime = 10000
+                        connectTimeout = 10000
+                        connectAttempts = 5
+                    }
                 }
+                install(Logging)
             }
-            install(Logging)
         }
+        single<LanguageModelRepository> { LanguageModelDatasource() }
+        single<HttpClientInterface> { KtorHttpClient(client = get(), ioDispatcher = Dispatchers.IO) }
+        single<InquiryRepository> { SlackBotInquirer(client = get(), ioDispatcher = Dispatchers.IO) }
+        viewModel { MainViewModel(languageModelRepository = get()) }
+        viewModel { TranslationModelDownloadViewModel(repository = get()) }
+        viewModel { TranslationViewModel(repository = get()) }
+        viewModel { DeleteModelViewModel(repository = get()) }
+        viewModel { InquiryViewModel(repository = get()) }
     }
-    single<LanguageModelRepository> { LanguageModelDatasource() }
-    single<HttpClientInterface> { KtorHttpClient(client = get(), ioDispatcher = Dispatchers.IO) }
-    single<InquiryRepository> { SlackBotInquirer(client = get(), ioDispatcher = Dispatchers.IO) }
-    viewModel { MainViewModel(languageModelRepository = get()) }
-    viewModel { TranslationModelDownloadViewModel(repository = get()) }
-    viewModel { TranslationViewModel(repository = get()) }
-    viewModel { DeleteModelViewModel(repository = get()) }
-    viewModel { InquiryViewModel(repository = get()) }
-}

@@ -19,7 +19,6 @@ import java.util.Locale
 class TranslationModelDownloadViewModel(
     private val repository: LanguageModelRepository,
 ) : ViewModel() {
-
     private val checkState: StateFlow<Map<Locale, MutableState<Boolean>>> = initCheckState()
     private val isDownloading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val allDownloadFailed: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -34,11 +33,12 @@ class TranslationModelDownloadViewModel(
             val list = mutableListOf<EachLanguageState>()
             for (info in downloadedInfo) {
                 val locale = info.locale
-                val eachState = EachLanguageState(
-                    locale = locale,
-                    downloaded = info.downloaded,
-                    checked = checkState[locale] ?: mutableStateOf(false)
-                )
+                val eachState =
+                    EachLanguageState(
+                        locale = locale,
+                        downloaded = info.downloaded,
+                        checked = checkState[locale] ?: mutableStateOf(false),
+                    )
 
                 list.add(eachState)
             }
@@ -52,7 +52,7 @@ class TranslationModelDownloadViewModel(
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),
-                initialValue = TranslationModelDownloadUiState()
+                initialValue = TranslationModelDownloadUiState(),
             )
 
     /**
@@ -76,11 +76,12 @@ class TranslationModelDownloadViewModel(
     ) {
         isDownloading.value = true
 
-        val checkedLanguages: List<Locale> = checkState.value
-            // filter map.value(MutableState).value
-            .filter { it.value.value }
-            // convert set to list
-            .keys.map { it }
+        val checkedLanguages: List<Locale> =
+            checkState.value
+                // filter map.value(MutableState).value
+                .filter { it.value.value }
+                // convert set to list
+                .keys.map { it }
         viewModelScope.launch {
             repository.downloadModel(
                 targetLanguages = checkedLanguages,
@@ -114,10 +115,9 @@ class TranslationModelDownloadViewModel(
     }
 
     private fun initCheckState(): StateFlow<Map<Locale, MutableState<Boolean>>> {
-
         return MutableStateFlow(
             LanguageNameResolver.getAllLanguagesLabel()
-                .associateWith { mutableStateOf(false) }
+                .associateWith { mutableStateOf(false) },
         )
     }
 }

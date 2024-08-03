@@ -14,9 +14,7 @@ import io.github.aniokrait.multitranslation.R
  * AdMob banner.
  */
 @Composable
-fun BannerAd(
-    modifier: Modifier = Modifier,
-) {
+fun BannerAd(modifier: Modifier = Modifier) {
     if (!LocalInspectionMode.current) {
         AndroidView(
             modifier = modifier.fillMaxWidth(),
@@ -26,7 +24,7 @@ fun BannerAd(
                     adUnitId = context.getString(R.string.admob_ad_unit_id)
                     loadAd(AdRequest.Builder().build())
                 }
-            }
+            },
         )
     }
 }

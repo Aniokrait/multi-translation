@@ -6,6 +6,7 @@ import io.github.aniokrait.multitranslation.repository.InquiryRepository
 class FakeSlackBotInquirer : InquiryRepository {
     var isSuccess = true
     var sentContent: String = ""
+
     override suspend fun sendInquiry(content: String): HttpRequestResult {
         sentContent = content
 

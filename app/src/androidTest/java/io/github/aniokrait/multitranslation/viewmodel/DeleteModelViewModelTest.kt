@@ -33,19 +33,22 @@ class DeleteModelViewModelTest {
     }
 
     @Test
-    fun `テスト中でダウンロードして、結果を取得できることを確認`() = runTest {
-        val b = RemoteModelManager.getInstance()
-            .getDownloadedModels(TranslateRemoteModel::class.java)
-        val c = b.await()
-        assertEquals(4, c.size)
-    }
+    fun `テスト中でダウンロードして、結果を取得できることを確認`() =
+        runTest {
+            val b =
+                RemoteModelManager.getInstance()
+                    .getDownloadedModels(TranslateRemoteModel::class.java)
+            val c = b.await()
+            assertEquals(4, c.size)
+        }
 
     private suspend fun assumeModelHasBeenDownloaded() {
         repository.downloadModel(
-            targetLanguages = listOf(
-                Locale.GERMAN,
-                Locale.CHINESE,
-            ),
+            targetLanguages =
+                listOf(
+                    Locale.GERMAN,
+                    Locale.CHINESE,
+                ),
             allowNoWifi = false,
         )
     }

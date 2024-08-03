@@ -35,49 +35,54 @@ class TranslationModelDownloadViewModelTest {
     }
 
     @Test
-    fun testGetStateFlow() = runTest(dispatcher) {
-        val result = translationModelDownloadViewModel.uiState.first()
-        advanceUntilIdle()
-        assertEquals(1, result.languagesState.size)
-        assertEquals(Locale.JAPANESE, result.languagesState.first().locale)
-    }
+    fun testGetStateFlow() =
+        runTest(dispatcher) {
+            val result = translationModelDownloadViewModel.uiState.first()
+            advanceUntilIdle()
+            assertEquals(1, result.languagesState.size)
+            assertEquals(Locale.JAPANESE, result.languagesState.first().locale)
+        }
 
     @Test
-    fun testUpdateChecked() = runTest(dispatcher) {
-        val before = translationModelDownloadViewModel
-            .uiState
-            .first()
-            .languagesState
-            .first { it.locale == Locale.JAPANESE }
-            .checked.value
-        assertFalse(before)
+    fun testUpdateChecked() =
+        runTest(dispatcher) {
+            val before =
+                translationModelDownloadViewModel
+                    .uiState
+                    .first()
+                    .languagesState
+                    .first { it.locale == Locale.JAPANESE }
+                    .checked.value
+            assertFalse(before)
 
-        translationModelDownloadViewModel.onCheckClicked(Locale.JAPANESE)
+            translationModelDownloadViewModel.onCheckClicked(Locale.JAPANESE)
 
-        val result = translationModelDownloadViewModel
-            .uiState
-            .first()
-            .languagesState
-            .first { it.locale == Locale.JAPANESE }
-            .checked.value
-        assertTrue(result)
-    }
+            val result =
+                translationModelDownloadViewModel
+                    .uiState
+                    .first()
+                    .languagesState
+                    .first { it.locale == Locale.JAPANESE }
+                    .checked.value
+            assertTrue(result)
+        }
 
     @Test
-    fun testNavigateToTranslationAfterDownloadSuccess() = runTest(dispatcher) {
-        // Assuming german was checked.
-        translationModelDownloadViewModel.onCheckClicked(locale = Locale.GERMAN)
+    fun testNavigateToTranslationAfterDownloadSuccess() =
+        runTest(dispatcher) {
+            // Assuming german was checked.
+            translationModelDownloadViewModel.onCheckClicked(locale = Locale.GERMAN)
 
-        val mockLambda = spyk<() -> Unit>()
-        translationModelDownloadViewModel.onDownloadClicked(
-            navigateToTranslation = mockLambda,
-            errorMessageTemplate = "",
-            snackBarMessageState = mutableStateOf(""),
-            allowNoWifi = false
-        )
+            val mockLambda = spyk<() -> Unit>()
+            translationModelDownloadViewModel.onDownloadClicked(
+                navigateToTranslation = mockLambda,
+                errorMessageTemplate = "",
+                snackBarMessageState = mutableStateOf(""),
+                allowNoWifi = false,
+            )
 
-        verify { mockLambda.invoke() }
-    }
+            verify { mockLambda.invoke() }
+        }
 
 //    @Test
 //    fun testDoNothingWhenDownloadAllFailed() = runTest(dispatcher) {

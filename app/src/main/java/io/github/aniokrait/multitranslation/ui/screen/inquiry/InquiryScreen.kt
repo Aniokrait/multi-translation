@@ -50,7 +50,7 @@ fun InquiryScreen(
     InquiryScreen(
         uiState = vm.uiState.collectAsStateWithLifecycle().value,
         onBackClicked = onBackClicked,
-        onSentClicked = vm::sendInquiry
+        onSentClicked = vm::sendInquiry,
     )
 }
 
@@ -90,29 +90,31 @@ private fun InquiryScreen(
         },
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             Text(
                 text = stringResource(id = R.string.lbl_inquiry_hosoku),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
 
             val maxLength = 2000
-            val bringIntoViewRequester = remember {
-                BringIntoViewRequester()
-            }
+            val bringIntoViewRequester =
+                remember {
+                    BringIntoViewRequester()
+                }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             var content by remember { mutableStateOf("") }
             TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .bringIntoViewRequester(bringIntoViewRequester)
-                    .height(200.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .bringIntoViewRequester(bringIntoViewRequester)
+                        .height(200.dp),
                 value = content,
                 onValueChange = {
                     if (it.length <= maxLength) {
@@ -127,11 +129,10 @@ private fun InquiryScreen(
                         textAlign = TextAlign.End,
                     )
                 },
-
-                )
+            )
 
             Spacer(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
 
             val keyboardController = LocalSoftwareKeyboardController.current
@@ -154,6 +155,6 @@ private fun InquiryScreenPreview() {
     InquiryScreen(
         uiState = InquiryUiState.Initial,
         onBackClicked = {},
-        onSentClicked = {}
+        onSentClicked = {},
     )
 }

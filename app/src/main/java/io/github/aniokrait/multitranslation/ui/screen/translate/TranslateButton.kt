@@ -31,7 +31,7 @@ fun TranslateButton(
         onClick = {
             keyboardController?.hide()
             onTranslateClick(translateSource)
-        }
+        },
     )
 }
 

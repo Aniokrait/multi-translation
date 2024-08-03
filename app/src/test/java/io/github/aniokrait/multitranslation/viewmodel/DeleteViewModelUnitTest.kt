@@ -33,35 +33,39 @@ class DeleteViewModelUnitTest {
     }
 
     @Test
-    fun deleteModels() = runTest {
-        // Assert initial state before deleting.
-        repository.downloadModel(
-            targetLanguages = listOf(Locale.GERMAN, Locale.CHINESE, Locale.ENGLISH),
-            allowNoWifi = false,
-        )
-        val downloadedModelsBeforeDelete = deleteModelViewModel.uiState.first()
-        assertEquals(3, downloadedModelsBeforeDelete.languagesState.size)
+    fun deleteModels() =
+        runTest {
+            // Assert initial state before deleting.
+            repository.downloadModel(
+                targetLanguages = listOf(Locale.GERMAN, Locale.CHINESE, Locale.ENGLISH),
+                allowNoWifi = false,
+            )
+            val downloadedModelsBeforeDelete = deleteModelViewModel.uiState.first()
+            assertEquals(3, downloadedModelsBeforeDelete.languagesState.size)
 
-        deleteModelViewModel.onDeleteClicked(listOf(Locale.GERMAN, Locale.CHINESE))
+            deleteModelViewModel.onDeleteClicked(listOf(Locale.GERMAN, Locale.CHINESE))
 
-        val result = deleteModelViewModel.uiState.first()
-        assertEquals(1, result.languagesState.size)
-    }
+            val result = deleteModelViewModel.uiState.first()
+            assertEquals(1, result.languagesState.size)
+        }
 
     @Test
-    fun testUpdateChecked() = runTest(dispatcher) {
-        val before = deleteModelViewModel.uiState
-            .first()
-            .languagesState
-            .first { it.locale == Locale.JAPANESE }
-            .checked.value
-        assertFalse(before)
+    fun testUpdateChecked() =
+        runTest(dispatcher) {
+            val before =
+                deleteModelViewModel.uiState
+                    .first()
+                    .languagesState
+                    .first { it.locale == Locale.JAPANESE }
+                    .checked.value
+            assertFalse(before)
 
-        deleteModelViewModel.onCheckClicked(Locale.JAPANESE)
-        val result = deleteModelViewModel.uiState.first()
-            .languagesState
-            .first { it.locale == Locale.JAPANESE }
-            .checked.value
-        assertTrue(result)
-    }
+            deleteModelViewModel.onCheckClicked(Locale.JAPANESE)
+            val result =
+                deleteModelViewModel.uiState.first()
+                    .languagesState
+                    .first { it.locale == Locale.JAPANESE }
+                    .checked.value
+            assertTrue(result)
+        }
 }

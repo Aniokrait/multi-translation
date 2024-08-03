@@ -13,17 +13,18 @@ class SlackBotInquirerTest {
     @Before
     fun setUp() {
         val client = FakeHttpClient()
-        slackBotInquirer = SlackBotInquirer(
-            client = client,
-            ioDispatcher = Dispatchers.IO
-        )
+        slackBotInquirer =
+            SlackBotInquirer(
+                client = client,
+                ioDispatcher = Dispatchers.IO,
+            )
     }
 
     @Test
-    fun testSendInquiry() = runTest {
-        val content = "テスト問い合わせ"
-        val result = slackBotInquirer.sendInquiry(content = content)
-        assert(result is HttpRequestResult.Success)
-    }
-
+    fun testSendInquiry() =
+        runTest {
+            val content = "テスト問い合わせ"
+            val result = slackBotInquirer.sendInquiry(content = content)
+            assert(result is HttpRequestResult.Success)
+        }
 }

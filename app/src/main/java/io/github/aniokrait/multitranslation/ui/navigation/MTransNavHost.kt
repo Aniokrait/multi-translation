@@ -34,9 +34,10 @@ fun MTransNavHost(
     snackBarMessage: MutableState<String>,
     mainViewModel: MainViewModel = koinViewModel(),
 ) {
-    val startDestinationState: MutableState<StartDestination> = remember {
-        mutableStateOf(Loading)
-    }
+    val startDestinationState: MutableState<StartDestination> =
+        remember {
+            mutableStateOf(Loading)
+        }
 
     LaunchedEffect(Unit) {
         startDestination(
@@ -48,19 +49,23 @@ fun MTransNavHost(
     NavHost(
         modifier = modifier.padding(horizontal = 8.dp),
         navController = navController,
-        startDestination = startDestinationState.value
+        startDestination = startDestinationState.value,
     ) {
         composable<Loading> {
-
         }
         composable<TranslationModelDownload> {
             TranslationModelDownloadScreen(
                 navigateToTranslation = { navController.navigate(Translation) },
                 snackBarMessage = snackBarMessage,
-                onBackClicked = if (navController.previousBackStackEntry != null) {
-                    ->
-                    navController.navigateUp()
-                } else null,
+                onBackClicked =
+                    if (navController.previousBackStackEntry != null) {
+                        {
+                            ->
+                            navController.navigateUp()
+                        }
+                    } else {
+                        null
+                    },
             )
 
             val context = LocalContext.current
@@ -69,7 +74,6 @@ fun MTransNavHost(
                     settings[booleanPreferencesKey(IS_FIRST_LAUNCH)] = true
                 }
             }
-
         }
         composable<Translation> {
             TranslationScreen(
@@ -89,7 +93,6 @@ fun MTransNavHost(
             )
         }
     }
-
 }
 
 // If first launch, start destination is TranslationModelDownload, else Transaction.
@@ -99,11 +102,12 @@ private suspend fun startDestination(
 ) {
     val isFirstLaunch = mainViewModel.checkIfFirstLaunch()
 
-    val startDestination = if (isFirstLaunch) {
-        TranslationModelDownload
-    } else {
-        Translation
-    }
+    val startDestination =
+        if (isFirstLaunch) {
+            TranslationModelDownload
+        } else {
+            Translation
+        }
 
     startDestinationState.value = startDestination
 }

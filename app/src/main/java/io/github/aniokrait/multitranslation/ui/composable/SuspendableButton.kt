@@ -45,10 +45,12 @@ fun SuspendableButton(
             val density = LocalDensity.current
             with(density) {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .then(Modifier.size(32.dp))  // change indicator size.
-                        .height(textButtonSize.height.toDp()) // fix button size.
-                        .width(textButtonSize.width.toDp()), // fix button size.
+                    modifier =
+                        Modifier
+                            .then(Modifier.size(32.dp)) // change indicator size.
+                            .height(textButtonSize.height.toDp()) // fix button size.
+                            .width(textButtonSize.width.toDp()),
+                    // fix button size.
                     strokeWidth = 4.dp,
                     color = MaterialTheme.colorScheme.primary,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -56,9 +58,10 @@ fun SuspendableButton(
             }
         } else {
             Text(
-                modifier = Modifier.onGloballyPositioned {
-                    textButtonSize = it.size
-                },
+                modifier =
+                    Modifier.onGloballyPositioned {
+                        textButtonSize = it.size
+                    },
                 text = text,
             )
         }

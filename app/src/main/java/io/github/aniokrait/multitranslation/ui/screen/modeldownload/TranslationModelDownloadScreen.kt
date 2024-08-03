@@ -76,11 +76,10 @@ fun TranslationModelDownloadScreen(
                 Button(onClick = vm::onDownloadFailedDialogOkClicked) {
                     Text(text = "OK")
                 }
-            }
+            },
         )
     }
 }
-
 
 @Composable
 private fun TranslationModelDownloadScreen(
@@ -106,13 +105,15 @@ private fun TranslationModelDownloadScreen(
         },
     ) { innerPadding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             Column(
-                modifier = modifier
-                    .fillMaxSize()
+                modifier =
+                    modifier
+                        .fillMaxSize(),
             ) {
                 Text(
                     text = stringResource(id = R.string.lbl_description_for_download_models),
@@ -120,7 +121,7 @@ private fun TranslationModelDownloadScreen(
                 )
                 Text(
                     text = stringResource(id = R.string.lbl_hosoku),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -135,15 +136,18 @@ private fun TranslationModelDownloadScreen(
                 val context = LocalContext.current
                 val errorMessageTemplate =
                     stringResource(id = R.string.msg_download_failed_for_these_languages)
-                val showNoWifiAlertDialog = remember {
-                    mutableStateOf(false)
-                }
-                val showConfirmReallyOkDialog = remember {
-                    mutableStateOf(false)
-                }
-                val showDownloadConfirmDialog = remember {
-                    mutableStateOf(false)
-                }
+                val showNoWifiAlertDialog =
+                    remember {
+                        mutableStateOf(false)
+                    }
+                val showConfirmReallyOkDialog =
+                    remember {
+                        mutableStateOf(false)
+                    }
+                val showDownloadConfirmDialog =
+                    remember {
+                        mutableStateOf(false)
+                    }
 
                 Button(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -154,7 +158,6 @@ private fun TranslationModelDownloadScreen(
                         } else {
                             showNoWifiAlertDialog.value = true
                         }
-
                     },
                 ) {
                     Text(text = stringResource(id = R.string.btn_download_translation_model))
@@ -164,25 +167,27 @@ private fun TranslationModelDownloadScreen(
                 if (showNoWifiAlertDialog.value) {
                     ConfirmDialog(
                         showConfirmDialog = showNoWifiAlertDialog,
-                        dialogText = stringResource(
-                            id = R.string.dialog_content_alert_no_wifi,
-                            trafficVolume
-                        ),
+                        dialogText =
+                            stringResource(
+                                id = R.string.dialog_content_alert_no_wifi,
+                                trafficVolume,
+                            ),
                         confirmButtonText = R.string.dialog_btn_proceed,
                         dismissButtonText = R.string.dialog_btn_cancel_use_wifi_later,
                         onConfirmClicked = {
                             showConfirmReallyOkDialog.value = true
                             showNoWifiAlertDialog.value = false
-                        }
+                        },
                     )
                 } else if (showConfirmReallyOkDialog.value) {
                     ConfirmDialog(
                         showConfirmDialog = showConfirmReallyOkDialog,
                         titleText = R.string.dialog_title_really_no_wifi_ok_title,
-                        dialogText = stringResource(
-                            id = R.string.dialog_content_really_no_wifi_ok,
-                            trafficVolume
-                        ),
+                        dialogText =
+                            stringResource(
+                                id = R.string.dialog_content_really_no_wifi_ok,
+                                trafficVolume,
+                            ),
                         confirmButtonText = R.string.dialog_btn_proceed,
                         dismissButtonText = R.string.dialog_btn_cancel_use_wifi_later,
                         onConfirmClicked = {
@@ -190,23 +195,25 @@ private fun TranslationModelDownloadScreen(
                                 navigateToTranslation,
                                 errorMessageTemplate,
                                 snackBarMessage,
-                                true
+                                true,
                             )
-                        }
+                        },
                     )
                 } else if (showDownloadConfirmDialog.value) {
-                    val checkedLanguages = state
-                        .filter { it.checked.value }
-                        .fold("") { acc, each ->
-                            acc + "・" + each.locale.displayLanguage + System.lineSeparator()
-                        }
+                    val checkedLanguages =
+                        state
+                            .filter { it.checked.value }
+                            .fold("") { acc, each ->
+                                acc + "・" + each.locale.displayLanguage + System.lineSeparator()
+                            }
                     ConfirmDialog(
                         showConfirmDialog = showDownloadConfirmDialog,
-                        dialogText = stringResource(
-                            id = R.string.dialog_content_confirm_download,
-                            checkedLanguages,
-                            trafficVolume
-                        ),
+                        dialogText =
+                            stringResource(
+                                id = R.string.dialog_content_confirm_download,
+                                checkedLanguages,
+                                trafficVolume,
+                            ),
                         confirmButtonText = R.string.dialog_btn_proceed,
                         dismissButtonText = R.string.dialog_btn_cancel_just_cancel,
                         onConfirmClicked = {
@@ -214,9 +221,9 @@ private fun TranslationModelDownloadScreen(
                                 navigateToTranslation,
                                 errorMessageTemplate,
                                 snackBarMessage,
-                                false
+                                false,
                             )
-                        }
+                        },
                     )
                 }
             }
@@ -226,8 +233,6 @@ private fun TranslationModelDownloadScreen(
             }
         }
     }
-
-
 }
 
 @Composable
@@ -238,16 +243,17 @@ private fun LanguageSelection(
     onCheckedChange: (Boolean) -> Unit,
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         // Interact checkbox ripple effect when text is clicked.
         val interactionSource = remember { MutableInteractionSource() }
 
         if (downloaded) {
             Icon(
-                modifier = Modifier
-                    .size(48.dp)
-                    .padding(12.dp),
+                modifier =
+                    Modifier
+                        .size(48.dp)
+                        .padding(12.dp),
                 painter = painterResource(id = R.drawable.download_done_24px),
                 contentDescription = null,
                 tint = Color.Gray,
@@ -256,20 +262,21 @@ private fun LanguageSelection(
             Checkbox(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
             )
         }
 
         Text(
-            modifier = Modifier
-                .conditional(condition = !downloaded) {
-                    clickable(
-                        interactionSource = interactionSource,
-                        indication = null
-                    ) {
-                        onCheckedChange.invoke(checked)
-                    }
-                },
+            modifier =
+                Modifier
+                    .conditional(condition = !downloaded) {
+                        clickable(
+                            interactionSource = interactionSource,
+                            indication = null,
+                        ) {
+                            onCheckedChange.invoke(checked)
+                        }
+                    },
             text = locale.getDisplayLanguage(Locale.JAPANESE),
             style = MaterialTheme.typography.titleMedium,
         ) // TODO: Apply current system locale
@@ -279,16 +286,18 @@ private fun LanguageSelection(
 @Preview(showBackground = true)
 @Composable
 private fun TranslationModelDownloadScreenPreview() {
-    val iceLandState = EachLanguageState(
-        locale = Locale.forLanguageTag("is"),
-        checked = remember { mutableStateOf(true) },
-        downloaded = remember { mutableStateOf(false) },
-    )
-    val arabicState = EachLanguageState(
-        locale = Locale.forLanguageTag("ar"),
-        checked = remember { mutableStateOf(false) },
-        downloaded = remember { mutableStateOf(true) },
-    )
+    val iceLandState =
+        EachLanguageState(
+            locale = Locale.forLanguageTag("is"),
+            checked = remember { mutableStateOf(true) },
+            downloaded = remember { mutableStateOf(false) },
+        )
+    val arabicState =
+        EachLanguageState(
+            locale = Locale.forLanguageTag("ar"),
+            checked = remember { mutableStateOf(false) },
+            downloaded = remember { mutableStateOf(true) },
+        )
 
     TranslationModelDownloadScreen(
         state = listOf(iceLandState, arabicState),

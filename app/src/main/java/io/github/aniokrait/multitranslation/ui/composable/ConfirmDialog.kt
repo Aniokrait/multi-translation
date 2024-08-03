@@ -44,7 +44,7 @@ fun ConfirmDialog(
         text = {
             Text(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
-                text = dialogText
+                text = dialogText,
             )
         },
         onDismissRequest = { showConfirmDialog.value = false },
@@ -60,10 +60,10 @@ fun ConfirmDialog(
             OutlinedButton(onClick = { showConfirmDialog.value = false }) {
                 Text(
                     text = stringResource(id = dismissButtonText),
-                    color = OnPrimary
+                    color = OnPrimary,
                 )
             }
-        }
+        },
     )
 }
 
@@ -77,7 +77,7 @@ private fun ConfirmDialogPreview() {
             dialogText = "翻訳モデルを削除しますか？",
             confirmButtonText = R.string.btn_delete,
             dismissButtonText = R.string.delete_dialog_btn_cancel,
-            onConfirmClicked = {}
+            onConfirmClicked = {},
         )
     }
 }

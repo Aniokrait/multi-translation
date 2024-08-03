@@ -26,21 +26,23 @@ import java.util.concurrent.TimeoutException
 class LanguageModelDatasource(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : LanguageModelRepository {
-
     /**
      * Get downloaded models info and emit state.
      */
-    override fun getDownloadedInfo(): Flow<List<DownloadedState>> = flow {
-        val downloadedModels = getDownloadedModels()
+    override fun getDownloadedInfo(): Flow<List<DownloadedState>> =
+        flow {
+            val downloadedModels = getDownloadedModels()
 
-        emit(LanguageNameResolver.getAllLanguagesLabel().map { locale ->
-            val isDownloaded = downloadedModels.any { it.language == locale.toLanguageTag() }
-            DownloadedState(
-                locale = locale,
-                downloaded = mutableStateOf(isDownloaded)
+            emit(
+                LanguageNameResolver.getAllLanguagesLabel().map { locale ->
+                    val isDownloaded = downloadedModels.any { it.language == locale.toLanguageTag() }
+                    DownloadedState(
+                        locale = locale,
+                        downloaded = mutableStateOf(isDownloaded),
+                    )
+                },
             )
-        })
-    }
+        }
 
     /**
      * Get downloaded models.
@@ -74,10 +76,11 @@ class LanguageModelDatasource(
             // FIXME: Hide Japanese till implementing changing source language.
             .filter { it != Locale.JAPANESE }
             .forEach { locale ->
-                val options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.JAPANESE)
-                    .setTargetLanguage(locale.toLanguageTag())
-                    .build()
+                val options =
+                    TranslatorOptions.Builder()
+                        .setSourceLanguage(TranslateLanguage.JAPANESE)
+                        .setTargetLanguage(locale.toLanguageTag())
+                        .build()
                 val translator: Translator = Translation.getClient(options)
 
                 try {

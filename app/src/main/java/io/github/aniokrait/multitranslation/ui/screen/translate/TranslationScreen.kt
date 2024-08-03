@@ -85,23 +85,24 @@ private fun TranslationScreen(
                 onAddModelClicked = onAddModelClicked,
                 onInquiryClicked = onInquiryClicked,
             )
-        }
+        },
     ) { innerPadding ->
         Box {
             var bannerHeight by remember {
                 mutableIntStateOf(0)
             }
             LazyColumn(
-                modifier = modifier
-                    .statusBarsPadding()
-                    .padding(innerPadding)
-                    .fillMaxSize()
+                modifier =
+                    modifier
+                        .statusBarsPadding()
+                        .padding(innerPadding)
+                        .fillMaxSize(),
             ) {
                 TranslateSourceArea(
                     isTranslating = isTranslating,
-                    onTranslateClick = onTranslateClick
+                    onTranslateClick = onTranslateClick,
                 )
-                
+
                 ResultArea(
                     textBlockHeight = textBlockHeight,
                     translateResults = translateResults,
@@ -110,11 +111,12 @@ private fun TranslationScreen(
             }
 
             BannerAd(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .onGloballyPositioned {
-                        bannerHeight = it.size.height
-                    }
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .onGloballyPositioned {
+                            bannerHeight = it.size.height
+                        },
             )
         }
     }
@@ -135,18 +137,20 @@ private fun LazyListScope.TranslateSourceArea(
                 label = { Text(text = stringResource(id = R.string.lbl_translation_source)) },
                 value = input.value,
                 onValueChange = { input.value = it },
-                colors = TextFieldDefaults.colors().copy(
-                    focusedLabelColor = OnPrimary,
-                    focusedIndicatorColor = OnPrimary,
-                    cursorColor = OnPrimary
-                )
+                colors =
+                    TextFieldDefaults.colors().copy(
+                        focusedLabelColor = OnPrimary,
+                        focusedIndicatorColor = OnPrimary,
+                        cursorColor = OnPrimary,
+                    ),
             )
 
             TranslateButton(
-                modifier = Modifier
-                    .width(140.dp)
-                    .padding(top = 16.dp)
-                    .align(Alignment.CenterHorizontally),
+                modifier =
+                    Modifier
+                        .width(140.dp)
+                        .padding(top = 16.dp)
+                        .align(Alignment.CenterHorizontally),
                 isTranslating = isTranslating,
                 translateSource = input.value,
                 onTranslateClick = onTranslateClick,
@@ -166,7 +170,7 @@ private fun LazyListScope.ResultArea(
         Text(
             text = stringResource(id = R.string.lbl_translation_result),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 4.dp)
+            modifier = Modifier.padding(bottom = 4.dp),
         )
     }
     item {
@@ -174,7 +178,7 @@ private fun LazyListScope.ResultArea(
     }
     items(
         items = translateResults.toList(),
-        key = { it.first }
+        key = { it.first },
     ) { (key, value) ->
         Timber.d("lang: ${key.language}")
 

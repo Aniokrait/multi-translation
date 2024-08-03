@@ -21,14 +21,16 @@ class SlackBotInquirer(
      */
     override suspend fun sendInquiry(content: String): HttpRequestResult {
         return withContext(ioDispatcher) {
-            val response: HttpRequestResult = client.submitForm(
-                url = "https://slack.com/api/chat.postMessage",
-                formParameters = mapOf(
-                    "token" to SLACK_API_TOKEN,
-                    "channel" to CHANNEL_NAME,
-                    "text" to content
+            val response: HttpRequestResult =
+                client.submitForm(
+                    url = "https://slack.com/api/chat.postMessage",
+                    formParameters =
+                        mapOf(
+                            "token" to SLACK_API_TOKEN,
+                            "channel" to CHANNEL_NAME,
+                            "text" to content,
+                        ),
                 )
-            )
 
             return@withContext response
         }

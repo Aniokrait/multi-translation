@@ -5,6 +5,7 @@ import io.github.aniokrait.multitranslation.repository.HttpRequestResult
 
 class FakeHttpClient() : HttpClientInterface {
     var fail = false
+
     override suspend fun submitForm(
         url: String,
         formParameters: Map<String, String>,

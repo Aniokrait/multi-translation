@@ -44,11 +44,12 @@ fun TranslateResultCard(
     content: String,
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth(),
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         ) {
             Row {
                 Text(
@@ -61,15 +62,16 @@ fun TranslateResultCard(
                 Box {
                     val clipboardManager = LocalClipboardManager.current
                     IconButton(
-                        modifier = Modifier
-                            .offset(x = 8.dp, y = (-8).dp),
+                        modifier =
+                            Modifier
+                                .offset(x = 8.dp, y = (-8).dp),
                         onClick = {
                             clipboardManager.setText(AnnotatedString(content))
-                        }
+                        },
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.content_copy_24px),
-                            contentDescription = "copy"
+                            contentDescription = "copy",
                         )
                     }
                 }
@@ -77,17 +79,19 @@ fun TranslateResultCard(
 
             val scrollState = rememberScrollState()
 //        Box {
-            val indentedText = buildAnnotatedString {
-                withStyle(style = SpanStyle()) {
-                    // indentation
-                    append("  ")
+            val indentedText =
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle()) {
+                        // indentation
+                        append("  ")
+                    }
+                    append(content)
                 }
-                append(content)
-            }
             Text(
-                modifier = Modifier
-                    .height(textBlockHeight)
-                    .verticalScroll(scrollState),
+                modifier =
+                    Modifier
+                        .height(textBlockHeight)
+                        .verticalScroll(scrollState),
                 text = indentedText,
             )
 
@@ -105,11 +109,12 @@ fun TranslateResultCard(
 
                     val uriHandler = LocalUriHandler.current
                     Image(
-                        modifier = Modifier.clickable {
-                            uriHandler.openUri("http://translate.google.com")
-                        },
+                        modifier =
+                            Modifier.clickable {
+                                uriHandler.openUri("http://translate.google.com")
+                            },
                         painter = painterResource(id = R.drawable.powered_by_google),
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }
@@ -130,14 +135,14 @@ fun TranslateResultCardPreview(
 }
 
 private class UserPreviewParameterProvider : PreviewParameterProvider<Pair<String, String>> {
-    override val values = sequenceOf(
-        Pair("Japanese", "こんにちは"),
-        Pair("English", "Hello2"),
-        Pair(
-            "Japanese",
-            "こんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちは"
-        ),
-        Pair("hoge", "fuga")
-    )
+    override val values =
+        sequenceOf(
+            Pair("Japanese", "こんにちは"),
+            Pair("English", "Hello2"),
+            Pair(
+                "Japanese",
+                "こんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちはこんにちは",
+            ),
+            Pair("hoge", "fuga"),
+        )
 }
-

@@ -111,11 +111,17 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun getSharedPreferences(p0: String?, p1: Int): SharedPreferences {
+    override fun getSharedPreferences(
+        p0: String?,
+        p1: Int,
+    ): SharedPreferences {
         TODO("Not yet implemented")
     }
 
-    override fun moveSharedPreferencesFrom(p0: Context?, p1: String?): Boolean {
+    override fun moveSharedPreferencesFrom(
+        p0: Context?,
+        p1: String?,
+    ): Boolean {
         TODO("Not yet implemented")
     }
 
@@ -127,7 +133,10 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun openFileOutput(p0: String?, p1: Int): FileOutputStream {
+    override fun openFileOutput(
+        p0: String?,
+        p1: Int,
+    ): FileOutputStream {
         TODO("Not yet implemented")
     }
 
@@ -191,7 +200,10 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun getDir(p0: String?, p1: Int): File {
+    override fun getDir(
+        p0: String?,
+        p1: Int,
+    ): File {
         TODO("Not yet implemented")
     }
 
@@ -212,7 +224,10 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun moveDatabaseFrom(p0: Context?, p1: String?): Boolean {
+    override fun moveDatabaseFrom(
+        p0: Context?,
+        p1: String?,
+    ): Boolean {
         TODO("Not yet implemented")
     }
 
@@ -260,7 +275,10 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun startActivity(p0: Intent?, p1: Bundle?) {
+    override fun startActivity(
+        p0: Intent?,
+        p1: Bundle?,
+    ) {
         TODO("Not yet implemented")
     }
 
@@ -268,11 +286,20 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun startActivities(p0: Array<out Intent>?, p1: Bundle?) {
+    override fun startActivities(
+        p0: Array<out Intent>?,
+        p1: Bundle?,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun startIntentSender(p0: IntentSender?, p1: Intent?, p2: Int, p3: Int, p4: Int) {
+    override fun startIntentSender(
+        p0: IntentSender?,
+        p1: Intent?,
+        p2: Int,
+        p3: Int,
+        p4: Int,
+    ) {
         TODO("Not yet implemented")
     }
 
@@ -291,11 +318,17 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun sendBroadcast(p0: Intent?, p1: String?) {
+    override fun sendBroadcast(
+        p0: Intent?,
+        p1: String?,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun sendOrderedBroadcast(p0: Intent?, p1: String?) {
+    override fun sendOrderedBroadcast(
+        p0: Intent?,
+        p1: String?,
+    ) {
         TODO("Not yet implemented")
     }
 
@@ -311,11 +344,18 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun sendBroadcastAsUser(p0: Intent?, p1: UserHandle?) {
+    override fun sendBroadcastAsUser(
+        p0: Intent?,
+        p1: UserHandle?,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun sendBroadcastAsUser(p0: Intent?, p1: UserHandle?, p2: String?) {
+    override fun sendBroadcastAsUser(
+        p0: Intent?,
+        p1: UserHandle?,
+        p2: String?,
+    ) {
         TODO("Not yet implemented")
     }
 
@@ -351,7 +391,10 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun sendStickyBroadcastAsUser(p0: Intent?, p1: UserHandle?) {
+    override fun sendStickyBroadcastAsUser(
+        p0: Intent?,
+        p1: UserHandle?,
+    ) {
         TODO("Not yet implemented")
     }
 
@@ -367,15 +410,25 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun removeStickyBroadcastAsUser(p0: Intent?, p1: UserHandle?) {
+    override fun removeStickyBroadcastAsUser(
+        p0: Intent?,
+        p1: UserHandle?,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun registerReceiver(p0: BroadcastReceiver?, p1: IntentFilter?): Intent? {
+    override fun registerReceiver(
+        p0: BroadcastReceiver?,
+        p1: IntentFilter?,
+    ): Intent? {
         TODO("Not yet implemented")
     }
 
-    override fun registerReceiver(p0: BroadcastReceiver?, p1: IntentFilter?, p2: Int): Intent? {
+    override fun registerReceiver(
+        p0: BroadcastReceiver?,
+        p1: IntentFilter?,
+        p2: Int,
+    ): Intent? {
         TODO("Not yet implemented")
     }
 
@@ -414,7 +467,11 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun bindService(p0: Intent, p1: ServiceConnection, p2: Int): Boolean {
+    override fun bindService(
+        p0: Intent,
+        p1: ServiceConnection,
+        p2: Int,
+    ): Boolean {
         TODO("Not yet implemented")
     }
 
@@ -422,7 +479,11 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun startInstrumentation(p0: ComponentName, p1: String?, p2: Bundle?): Boolean {
+    override fun startInstrumentation(
+        p0: ComponentName,
+        p1: String?,
+        p2: Bundle?,
+    ): Boolean {
         TODO("Not yet implemented")
     }
 
@@ -430,7 +491,11 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun checkPermission(p0: String, p1: Int, p2: Int): Int {
+    override fun checkPermission(
+        p0: String,
+        p1: Int,
+        p2: Int,
+    ): Int {
         TODO("Not yet implemented")
     }
 
@@ -446,31 +511,58 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun enforcePermission(p0: String, p1: Int, p2: Int, p3: String?) {
+    override fun enforcePermission(
+        p0: String,
+        p1: Int,
+        p2: Int,
+        p3: String?,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun enforceCallingPermission(p0: String, p1: String?) {
+    override fun enforceCallingPermission(
+        p0: String,
+        p1: String?,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun enforceCallingOrSelfPermission(p0: String, p1: String?) {
+    override fun enforceCallingOrSelfPermission(
+        p0: String,
+        p1: String?,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun grantUriPermission(p0: String?, p1: Uri?, p2: Int) {
+    override fun grantUriPermission(
+        p0: String?,
+        p1: Uri?,
+        p2: Int,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun revokeUriPermission(p0: Uri?, p1: Int) {
+    override fun revokeUriPermission(
+        p0: Uri?,
+        p1: Int,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun revokeUriPermission(p0: String?, p1: Uri?, p2: Int) {
+    override fun revokeUriPermission(
+        p0: String?,
+        p1: Uri?,
+        p2: Int,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun checkUriPermission(p0: Uri?, p1: Int, p2: Int, p3: Int): Int {
+    override fun checkUriPermission(
+        p0: Uri?,
+        p1: Int,
+        p2: Int,
+        p3: Int,
+    ): Int {
         TODO("Not yet implemented")
     }
 
@@ -485,15 +577,27 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun checkCallingUriPermission(p0: Uri?, p1: Int): Int {
+    override fun checkCallingUriPermission(
+        p0: Uri?,
+        p1: Int,
+    ): Int {
         TODO("Not yet implemented")
     }
 
-    override fun checkCallingOrSelfUriPermission(p0: Uri?, p1: Int): Int {
+    override fun checkCallingOrSelfUriPermission(
+        p0: Uri?,
+        p1: Int,
+    ): Int {
         TODO("Not yet implemented")
     }
 
-    override fun enforceUriPermission(p0: Uri?, p1: Int, p2: Int, p3: Int, p4: String?) {
+    override fun enforceUriPermission(
+        p0: Uri?,
+        p1: Int,
+        p2: Int,
+        p3: Int,
+        p4: String?,
+    ) {
         TODO("Not yet implemented")
     }
 
@@ -509,15 +613,26 @@ class FakeContext(
         TODO("Not yet implemented")
     }
 
-    override fun enforceCallingUriPermission(p0: Uri?, p1: Int, p2: String?) {
+    override fun enforceCallingUriPermission(
+        p0: Uri?,
+        p1: Int,
+        p2: String?,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun enforceCallingOrSelfUriPermission(p0: Uri?, p1: Int, p2: String?) {
+    override fun enforceCallingOrSelfUriPermission(
+        p0: Uri?,
+        p1: Int,
+        p2: String?,
+    ) {
         TODO("Not yet implemented")
     }
 
-    override fun createPackageContext(p0: String?, p1: Int): Context {
+    override fun createPackageContext(
+        p0: String?,
+        p1: Int,
+    ): Context {
         TODO("Not yet implemented")
     }
 
@@ -540,5 +655,4 @@ class FakeContext(
     override fun isDeviceProtectedStorage(): Boolean {
         TODO("Not yet implemented")
     }
-
 }

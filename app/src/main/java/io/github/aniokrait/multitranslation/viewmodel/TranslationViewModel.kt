@@ -34,31 +34,33 @@ class TranslationViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel() {
-
     // Store partial languages translated results.
     private val partialTranslatedResults: StateFlow<MutableMap<Locale, String>> =
         initTranslationResults()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),
-                initialValue = mutableMapOf()
+                initialValue = mutableMapOf(),
             )
 
     // Store each language translated results.
-    private val eachTranslatedResult: MutableStateFlow<Pair<Locale, String>> = MutableStateFlow(
-        Pair(
-            Locale.getDefault(), ""
+    private val eachTranslatedResult: MutableStateFlow<Pair<Locale, String>> =
+        MutableStateFlow(
+            Pair(
+                Locale.getDefault(),
+                "",
+            ),
         )
-    )
 
     // Store all languages translated results.
-    private val allTranslatedResults = combine(
-        partialTranslatedResults,
-        eachTranslatedResult.flatMapMerge { MutableStateFlow(it) }
-    ) { translationResult, eachTranslatedResult ->
-        translationResult[eachTranslatedResult.first] = eachTranslatedResult.second
-        translationResult
-    }
+    private val allTranslatedResults =
+        combine(
+            partialTranslatedResults,
+            eachTranslatedResult.flatMapMerge { MutableStateFlow(it) },
+        ) { translationResult, eachTranslatedResult ->
+            translationResult[eachTranslatedResult.first] = eachTranslatedResult.second
+            translationResult
+        }
 
     private val isTranslating: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
@@ -69,34 +71,34 @@ class TranslationViewModel(
         ) { isTranslating, allTranslatedResults ->
 
             TranslationUiState(
-                translationResult = allTranslatedResults
-                    .filter { it.key != Locale.JAPAN && it.key != Locale.JAPANESE }
-                    .toMap(),
+                translationResult =
+                    allTranslatedResults
+                        .filter { it.key != Locale.JAPAN && it.key != Locale.JAPANESE }
+                        .toMap(),
                 isTranslating = isTranslating,
             )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = TranslationUiState()
+            initialValue = TranslationUiState(),
         )
 
-    private fun initTranslationResults(): Flow<MutableMap<Locale, String>> = flow {
-        val downloadedModels = repository.getDownloadedModels()
+    private fun initTranslationResults(): Flow<MutableMap<Locale, String>> =
+        flow {
+            val downloadedModels = repository.getDownloadedModels()
 
-        emit(
-            downloadedModels.associate {
-                Locale.forLanguageTag(it.language) to ""
-            }.toSortedMap(compareBy { it.displayLanguage })
-                .toMutableMap()
-        )
-    }
+            emit(
+                downloadedModels.associate {
+                    Locale.forLanguageTag(it.language) to ""
+                }.toSortedMap(compareBy { it.displayLanguage })
+                    .toMutableMap(),
+            )
+        }
 
     /**
      * Translate from input text to other languages.
      */
-    fun onTranslateClick(
-        input: String,
-    ) {
+    fun onTranslateClick(input: String) {
         isTranslating.value = true
         viewModelScope.launch(ioDispatcher) {
             val downloadedLanguages = uiState.value.translationResult.keys.toList()
@@ -107,10 +109,11 @@ class TranslationViewModel(
                     Timber.d("targetLocale: $targetLocale")
 
                     withContext(ioDispatcher) {
-                        val options = TranslatorOptions.Builder()
-                            .setSourceLanguage(TranslateLanguage.JAPANESE)
-                            .setTargetLanguage(targetLocale.toLanguageTag())
-                            .build()
+                        val options =
+                            TranslatorOptions.Builder()
+                                .setSourceLanguage(TranslateLanguage.JAPANESE)
+                                .setTargetLanguage(targetLocale.toLanguageTag())
+                                .build()
                         val japaneseToOtherTranslator = Translation.getClient(options)
 
                         // Guard against not exist model.
@@ -121,12 +124,12 @@ class TranslationViewModel(
                             val translateResult =
                                 Pair(
                                     targetLocale,
-                                    japaneseToOtherTranslator.translate(input).await()
+                                    japaneseToOtherTranslator.translate(input).await(),
                                 )
                             japaneseToOtherTranslator.close()
                             withContext(mainDispatcher) {
                                 eachTranslatedResult.emit(
-                                    translateResult
+                                    translateResult,
                                 )
                             }
                         }
@@ -138,5 +141,4 @@ class TranslationViewModel(
             }
         }
     }
-
 }

@@ -27,16 +27,17 @@ class DeleteModelViewModel(
 ) : ViewModel() {
     private val retryEvent: MutableStateFlow<RetryEvent> = MutableStateFlow(RetryEvent.Retrying)
 
-    private val checkStateFlow: StateFlow<Map<Locale, MutableState<Boolean>>> = retryEvent
-        .filter { it == RetryEvent.Retrying }
-        .flatMapLatest { initCheckState() }
-        .onEach {
-            retryEvent.value = RetryEvent.Idle
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = mapOf()
-        )
+    private val checkStateFlow: StateFlow<Map<Locale, MutableState<Boolean>>> =
+        retryEvent
+            .filter { it == RetryEvent.Retrying }
+            .flatMapLatest { initCheckState() }
+            .onEach {
+                retryEvent.value = RetryEvent.Idle
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = mapOf(),
+            )
 
     private val isDeleting: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
@@ -45,34 +46,36 @@ class DeleteModelViewModel(
             checkStateFlow,
             isDeleting,
         ) { checkState, isDeleting ->
-            val languageState = checkState
-                .filter { it.key != Locale.ENGLISH }
-                .map {
-                    EachLanguageState(
-                        locale = it.key,
-                        downloaded = null,
-                        checked = checkState[it.key] ?: mutableStateOf(false)
-                    )
-                }.sortedBy { it.locale.displayLanguage }
+            val languageState =
+                checkState
+                    .filter { it.key != Locale.ENGLISH }
+                    .map {
+                        EachLanguageState(
+                            locale = it.key,
+                            downloaded = null,
+                            checked = checkState[it.key] ?: mutableStateOf(false),
+                        )
+                    }.sortedBy { it.locale.displayLanguage }
 
             DeleteModelUiState(
-                languagesState = languageState
+                languagesState = languageState,
             )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = DeleteModelUiState()
+            initialValue = DeleteModelUiState(),
         )
 
-    private fun initCheckState(): Flow<Map<Locale, MutableState<Boolean>>> = flow {
-        val downloadedModels: Map<Locale, MutableState<Boolean>> =
-            repository.getDownloadedModels().associate {
-                val checked =
-                    checkStateFlow.value[Locale.forLanguageTag(it.language)]?.value ?: false
-                Locale.forLanguageTag(it.language) to mutableStateOf(checked)
-            }
-        emit(downloadedModels)
-    }
+    private fun initCheckState(): Flow<Map<Locale, MutableState<Boolean>>> =
+        flow {
+            val downloadedModels: Map<Locale, MutableState<Boolean>> =
+                repository.getDownloadedModels().associate {
+                    val checked =
+                        checkStateFlow.value[Locale.forLanguageTag(it.language)]?.value ?: false
+                    Locale.forLanguageTag(it.language) to mutableStateOf(checked)
+                }
+            emit(downloadedModels)
+        }
 
     /**
      * Delete language translation models.
@@ -101,5 +104,6 @@ class DeleteModelViewModel(
 
 private sealed interface RetryEvent {
     data object Idle : RetryEvent
+
     data object Retrying : RetryEvent
 }

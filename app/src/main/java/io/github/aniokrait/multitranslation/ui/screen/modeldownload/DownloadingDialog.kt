@@ -28,34 +28,36 @@ import io.github.aniokrait.multitranslation.R
 fun DownloadingDialog() {
     // TODO: find more appropriate composable.
     Dialog(
-        onDismissRequest = {}
+        onDismissRequest = {},
     ) {
         Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .padding(16.dp),
         ) {
             Column {
                 Text(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .fillMaxWidth()
-                        .wrapContentSize(Alignment.Center),
+                    modifier =
+                        Modifier
+                            .padding(top = 16.dp)
+                            .fillMaxWidth()
+                            .wrapContentSize(Alignment.Center),
                     text = stringResource(id = R.string.lbl_download_progress),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .width(32.dp)
-                        .align(Alignment.CenterHorizontally),
+                    modifier =
+                        Modifier
+                            .width(32.dp)
+                            .align(Alignment.CenterHorizontally),
                     strokeWidth = 4.dp,
                     color = MaterialTheme.colorScheme.primary,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
             }
-
         }
     }
 }

@@ -26,12 +26,13 @@ class InquiryViewModelTest {
     }
 
     @Test
-    fun testSendInquiry() = runTest {
-        val viewModel = InquiryViewModel(repository = fakeRepository)
+    fun testSendInquiry() =
+        runTest {
+            val viewModel = InquiryViewModel(repository = fakeRepository)
 
-        viewModel.sendInquiry("test content")
-        advanceUntilIdle()
+            viewModel.sendInquiry("test content")
+            advanceUntilIdle()
 
-        assertEquals(InquiryUiState.SentSuccess, viewModel.uiState.value)
-    }
+            assertEquals(InquiryUiState.SentSuccess, viewModel.uiState.value)
+        }
 }

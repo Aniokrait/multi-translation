@@ -23,30 +23,31 @@ class SlackBotInquirerAndroidTest {
         }
 
         private fun createHttpClient(): KtorHttpClient {
-            val httpClient = HttpClient(CIO) {
-                expectSuccess = true
+            val httpClient =
+                HttpClient(CIO) {
+                    expectSuccess = true
 
-                engine {
-                    endpoint {
-                        keepAliveTime = 10000
-                        connectTimeout = 10000
-                        connectAttempts = 5
+                    engine {
+                        endpoint {
+                            keepAliveTime = 10000
+                            connectTimeout = 10000
+                            connectAttempts = 5
+                        }
                     }
+                    install(Logging)
                 }
-                install(Logging)
-            }
 
             return KtorHttpClient(client = httpClient, ioDispatcher = Dispatchers.IO)
         }
     }
 
-
     @Before
     fun setUp() {
-        slackBotInquirer = SlackBotInquirer(
-            client = client,
-            ioDispatcher = Dispatchers.IO
-        )
+        slackBotInquirer =
+            SlackBotInquirer(
+                client = client,
+                ioDispatcher = Dispatchers.IO,
+            )
     }
 
     @Test
@@ -54,7 +55,7 @@ class SlackBotInquirerAndroidTest {
         val result = slackBotInquirer.getMetaInfo()
 
         assertEquals(33, result.sdk)
-        assertEquals("sdk_gphone64_arm64", result.model)  // Pixel emulator
+        assertEquals("sdk_gphone64_arm64", result.model) // Pixel emulator
         assertEquals("Google", result.manufacturer)
         assertEquals("sdk_gphone64_arm64", result.product)
         assertEquals(1, result.appVersion)

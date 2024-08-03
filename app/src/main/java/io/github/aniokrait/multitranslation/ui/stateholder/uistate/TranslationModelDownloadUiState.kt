@@ -7,4 +7,3 @@ data class TranslationModelDownloadUiState(
     val isDownloading: Boolean = false,
     val allDownloadFailed: Boolean = false,
 )
-

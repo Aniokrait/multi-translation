@@ -31,14 +31,17 @@ fun DangerActionButton(
     border: BorderStroke? = null,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: @Composable() (RowScope.() -> Unit),
+    content:
+        @Composable()
+        (RowScope.() -> Unit),
 ) {
-    val colors = ButtonColors(
-        containerColor = DeepOrange500,
-        contentColor = Color.Black.copy(alpha = 0.87f),
-        disabledContainerColor = ButtonDefaults.buttonColors().disabledContainerColor,
-        disabledContentColor = ButtonDefaults.buttonColors().disabledContainerColor
-    )
+    val colors =
+        ButtonColors(
+            containerColor = DeepOrange500,
+            contentColor = Color.Black.copy(alpha = 0.87f),
+            disabledContainerColor = ButtonDefaults.buttonColors().disabledContainerColor,
+            disabledContentColor = ButtonDefaults.buttonColors().disabledContainerColor,
+        )
     Button(
         onClick = onClick,
         modifier = modifier,

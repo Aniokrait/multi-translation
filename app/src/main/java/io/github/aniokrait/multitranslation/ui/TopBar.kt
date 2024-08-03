@@ -62,7 +62,6 @@ fun TopBar(
                         )
                     }
                 }
-
             }
         },
         navigationIcon = {

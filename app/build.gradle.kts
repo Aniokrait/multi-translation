@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.androidx.navigation.safeargs)
     alias(libs.plugins.gms.google.services)
+    alias(libs.plugins.ktlint)
 }
 
 android {
@@ -26,13 +27,14 @@ android {
             useSupportLibrary = true
         }
 
-        val prop = Properties().apply {
-            load(FileInputStream(File(rootProject.rootDir, "local.properties")))
-        }
+        val prop =
+            Properties().apply {
+                load(FileInputStream(File(rootProject.rootDir, "local.properties")))
+            }
         buildConfigField(
             type = "String",
             name = "SLACK_API_KEY",
-            value = prop.getProperty("slack_api_key")
+            value = prop.getProperty("slack_api_key"),
         )
     }
 
@@ -41,7 +43,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }

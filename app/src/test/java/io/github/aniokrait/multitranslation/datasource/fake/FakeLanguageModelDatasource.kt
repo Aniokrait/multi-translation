@@ -9,23 +9,25 @@ import kotlinx.coroutines.flow.flow
 import java.util.Locale
 
 class FakeLanguageModelDatasource : LanguageModelRepository {
-    private var set: MutableSet<DownloadedState> = mutableSetOf(
-        DownloadedState(
-            locale = Locale.JAPANESE,
-            downloaded = mutableStateOf(false)
+    private var set: MutableSet<DownloadedState> =
+        mutableSetOf(
+            DownloadedState(
+                locale = Locale.JAPANESE,
+                downloaded = mutableStateOf(false),
+            ),
         )
-    )
 
-    override fun getDownloadedInfo(): Flow<List<DownloadedState>> = flow {
-        emit(set.toList())
-
-    }
+    override fun getDownloadedInfo(): Flow<List<DownloadedState>> =
+        flow {
+            emit(set.toList())
+        }
 
     override suspend fun getDownloadedModels(): Set<TranslateRemoteModel> {
         return set.map { TranslateRemoteModel.Builder(it.locale.toLanguageTag()).build() }.toSet()
     }
 
     var failDownloadModel = false
+
     override suspend fun downloadModel(
         targetLanguages: List<Locale>,
         allowNoWifi: Boolean,
@@ -40,16 +42,16 @@ class FakeLanguageModelDatasource : LanguageModelRepository {
     }
 
     override suspend fun deleteModel(targetLanguages: List<Locale>) {
-        val targetModels = targetLanguages.map {
-            DownloadedState(
-                locale = Locale.forLanguageTag(it.language),
-                downloaded = mutableStateOf(true)
-            )
-        }
+        val targetModels =
+            targetLanguages.map {
+                DownloadedState(
+                    locale = Locale.forLanguageTag(it.language),
+                    downloaded = mutableStateOf(true),
+                )
+            }
 
         targetModels.forEach {
             set.removeIf { downloadedState -> downloadedState.locale == it.locale }
         }
     }
-
 }

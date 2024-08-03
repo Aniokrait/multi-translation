@@ -18,14 +18,16 @@ class KtorHttpClient(
         formParameters: Map<String, String>,
     ): HttpRequestResult {
         return withContext(ioDispatcher) {
-            val response: HttpResponse = client.submitForm(
-                url = url,
-                formParameters = parameters {
-                    formParameters.forEach {
-                        append(it.key, it.value)
-                    }
-                }
-            )
+            val response: HttpResponse =
+                client.submitForm(
+                    url = url,
+                    formParameters =
+                        parameters {
+                            formParameters.forEach {
+                                append(it.key, it.value)
+                            }
+                        },
+                )
 
             return@withContext if (!response.status.isSuccess()) {
                 HttpRequestResult.Failure(message = "${response.status.value} : ${response.status.description}")

@@ -68,9 +68,10 @@ private fun DeleteModelScreen(
         },
     ) { innerPadding ->
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             Text(
                 text = stringResource(id = R.string.lbl_description_for_delete_models),
@@ -78,7 +79,7 @@ private fun DeleteModelScreen(
             )
             Text(
                 text = stringResource(id = R.string.lbl_delete_hosoku),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -107,9 +108,9 @@ private fun DeleteModelScreen(
                     dismissButtonText = R.string.delete_dialog_btn_cancel,
                     onConfirmClicked = {
                         onDeleteClicked(
-                            state.filter { it.checked.value }.map { it.locale }
+                            state.filter { it.checked.value }.map { it.locale },
                         )
-                    }
+                    },
                 )
             }
         }
@@ -120,18 +121,19 @@ private fun DeleteModelScreen(
 @Composable
 fun DeleteModelScreenPreview() {
     DeleteModelScreen(
-        state = listOf(
-            EachLanguageState(
-                locale = Locale.GERMAN,
-                checked = remember { mutableStateOf(false) },
-                downloaded = null
+        state =
+            listOf(
+                EachLanguageState(
+                    locale = Locale.GERMAN,
+                    checked = remember { mutableStateOf(false) },
+                    downloaded = null,
+                ),
+                EachLanguageState(
+                    locale = Locale.CHINESE,
+                    checked = remember { mutableStateOf(true) },
+                    downloaded = null,
+                ),
             ),
-            EachLanguageState(
-                locale = Locale.CHINESE,
-                checked = remember { mutableStateOf(true) },
-                downloaded = null
-            )
-        ),
         onCheckClicked = {},
         onDeleteClicked = {},
         onBackClicked = {},
