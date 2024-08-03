@@ -24,11 +24,17 @@ interface LanguageModelRepository {
     suspend fun downloadModel(
         targetLanguages: List<Locale>,
         allowNoWifi: Boolean,
-    ): List<Locale>
+    ): DownloadResult
 
     /**
      * Delete language translation models.
      * @param targetLanguages which to delete from the user device.
      */
     suspend fun deleteModel(targetLanguages: List<Locale>)
+}
+
+sealed interface DownloadResult {
+    data object Success : DownloadResult
+    data class Failure(val failedModels: List<Locale>) : DownloadResult
+    data class NotEnoughSpace(val failedModels: List<Locale>) : DownloadResult
 }

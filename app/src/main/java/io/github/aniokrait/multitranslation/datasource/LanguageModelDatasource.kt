@@ -1,6 +1,7 @@
 package io.github.aniokrait.multitranslation.datasource
 
 import androidx.compose.runtime.mutableStateOf
+import com.google.mlkit.common.MlKitException
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.TranslateLanguage
@@ -9,6 +10,7 @@ import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
 import io.github.aniokrait.multitranslation.core.LanguageNameResolver
+import io.github.aniokrait.multitranslation.repository.DownloadResult
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.ui.stateholder.DownloadedState
 import kotlinx.coroutines.CoroutineDispatcher
@@ -65,7 +67,7 @@ class LanguageModelDatasource(
     override suspend fun downloadModel(
         targetLanguages: List<Locale>,
         allowNoWifi: Boolean,
-    ): List<Locale> {
+    ): DownloadResult {
         val conditionsBuilder = DownloadConditions.Builder()
         if (!allowNoWifi) {
             conditionsBuilder.requireWifi()
@@ -84,9 +86,27 @@ class LanguageModelDatasource(
                         .build()
                 val translator: Translator = Translation.getClient(options)
 
+                var notEnoughSpace = false
+
                 try {
                     withContext(Dispatchers.IO) {
-                        val deferred = translator.downloadModelIfNeeded(conditions).asDeferred()
+                        val deferred = translator.downloadModelIfNeeded(conditions)
+                            .addOnFailureListener { ex ->
+                                if (ex is MlKitException) {
+                                    if (ex.errorCode == MlKitException.NOT_ENOUGH_SPACE) {
+                                        notEnoughSpace = true
+                                    } else {
+                                        Timber.d(ex.errorCode.toString())
+                                        // TODO Until implement handling, make it crash to log what happened.
+                                        throw ex
+                                    }
+                                } else {
+                                    Timber.d("ex is ${ex.javaClass.name}")
+                                    // TODO Until implement handling, make it crash to log what happened.
+                                    throw ex
+                                }
+                            }
+                            .asDeferred()
 
                         // TODO Fix show downloaded models in ui asynchronously.
 //                        val timeoutJob = launch {
@@ -106,9 +126,18 @@ class LanguageModelDatasource(
                 } finally {
                     translator.close()
                 }
+
+                if (notEnoughSpace) {
+                    Timber.w("Not enough space.")
+                    return DownloadResult.NotEnoughSpace(failedModels)
+                }
             }
 
-        return failedModels.toList()
+        return if (failedModels.isEmpty()) {
+            DownloadResult.Success
+        } else {
+            DownloadResult.Failure(failedModels)
+        }
     }
 
     /**
