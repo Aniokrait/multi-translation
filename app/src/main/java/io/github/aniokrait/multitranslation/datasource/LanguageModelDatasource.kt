@@ -35,7 +35,8 @@ class LanguageModelDatasource(
 
             emit(
                 LanguageNameResolver.getAllLanguagesLabel().map { locale ->
-                    val isDownloaded = downloadedModels.any { it.language == locale.toLanguageTag() }
+                    val isDownloaded =
+                        downloadedModels.any { it.language == locale.toLanguageTag() }
                     DownloadedState(
                         locale = locale,
                         downloaded = mutableStateOf(isDownloaded),
@@ -102,6 +103,8 @@ class LanguageModelDatasource(
                 } catch (e: TimeoutException) {
                     Timber.w(e.message)
                     failedModels.add(locale)
+                } finally {
+                    translator.close()
                 }
             }
 
