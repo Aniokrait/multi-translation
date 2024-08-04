@@ -10,7 +10,7 @@ class LanguageNameResolver {
                 val locale = Locale.Builder().setLanguage(it).build()
                 locale
             }
-                .sortedBy { it.getDisplayLanguage(Locale.JAPANESE) } // TODO: Apply current system locale
+                .sortedBy { it.getDisplayLanguage(Locale.getDefault()) }
         }
 
 //        fun getAllLanguagesLocale(): List<Locale> {

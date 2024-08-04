@@ -46,7 +46,7 @@ fun LanguageList(
         modifier = modifier,
         columns = GridCells.Fixed(2),
     ) {
-        items(locales.filter { it != Locale.JAPANESE && it != Locale.JAPAN }) { locale ->
+        items(locales.filter { it != Locale.getDefault() }) { locale ->
             val eachLocaleState = state.find { it.locale == locale }
             val checked: Boolean = eachLocaleState?.checked?.value ?: false
             val downloaded: Boolean = eachLocaleState?.downloaded?.value ?: false
@@ -77,9 +77,9 @@ private fun LanguageSelection(
         if (downloaded) {
             Icon(
                 modifier =
-                    Modifier
-                        .size(48.dp)
-                        .padding(12.dp),
+                Modifier
+                    .size(48.dp)
+                    .padding(12.dp),
                 painter = painterResource(id = R.drawable.download_done_24px),
                 contentDescription = null,
                 tint = Color.Gray,
@@ -94,16 +94,16 @@ private fun LanguageSelection(
 
         Text(
             modifier =
-                Modifier
-                    .conditional(condition = !downloaded) {
-                        clickable(
-                            interactionSource = interactionSource,
-                            indication = null,
-                        ) {
-                            onCheckedChange.invoke(checked)
-                        }
-                    },
-            text = locale.getDisplayLanguage(Locale.JAPANESE),
+            Modifier
+                .conditional(condition = !downloaded) {
+                    clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                    ) {
+                        onCheckedChange.invoke(checked)
+                    }
+                },
+            text = locale.getDisplayLanguage(Locale.getDefault()),
             style = MaterialTheme.typography.titleMedium,
         ) // TODO: Apply current system locale
     }
@@ -114,35 +114,35 @@ private fun LanguageSelection(
 fun LanguageListPreview() {
     LanguageList(
         locales =
-            listOf(
-                Locale.JAPANESE,
-                Locale.CHINESE,
-                Locale.GERMAN,
-                Locale.ENGLISH,
-            ),
+        listOf(
+            Locale.JAPANESE,
+            Locale.CHINESE,
+            Locale.GERMAN,
+            Locale.ENGLISH,
+        ),
         state =
-            listOf(
-                EachLanguageState(
-                    locale = Locale.JAPANESE,
-                    checked = remember { mutableStateOf(true) },
-                    downloaded = remember { mutableStateOf(false) },
-                ),
-                EachLanguageState(
-                    locale = Locale.CHINESE,
-                    checked = remember { mutableStateOf(false) },
-                    downloaded = remember { mutableStateOf(true) },
-                ),
-                EachLanguageState(
-                    locale = Locale.GERMAN,
-                    checked = remember { mutableStateOf(true) },
-                    downloaded = remember { mutableStateOf(true) },
-                ),
-                EachLanguageState(
-                    locale = Locale.ENGLISH,
-                    checked = remember { mutableStateOf(false) },
-                    downloaded = remember { mutableStateOf(false) },
-                ),
+        listOf(
+            EachLanguageState(
+                locale = Locale.JAPANESE,
+                checked = remember { mutableStateOf(true) },
+                downloaded = remember { mutableStateOf(false) },
             ),
+            EachLanguageState(
+                locale = Locale.CHINESE,
+                checked = remember { mutableStateOf(false) },
+                downloaded = remember { mutableStateOf(true) },
+            ),
+            EachLanguageState(
+                locale = Locale.GERMAN,
+                checked = remember { mutableStateOf(true) },
+                downloaded = remember { mutableStateOf(true) },
+            ),
+            EachLanguageState(
+                locale = Locale.ENGLISH,
+                checked = remember { mutableStateOf(false) },
+                downloaded = remember { mutableStateOf(false) },
+            ),
+        ),
         onCheckClicked = {},
     )
 }

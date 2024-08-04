@@ -76,12 +76,11 @@ class LanguageModelDatasource(
 
         val failedModels = mutableListOf<Locale>()
         targetLanguages
-            // FIXME: Hide Japanese till implementing changing source language.
-            .filter { it != Locale.JAPANESE }
+            .filter { it != Locale.getDefault() }
             .forEach { locale ->
                 val options =
                     TranslatorOptions.Builder()
-                        .setSourceLanguage(TranslateLanguage.JAPANESE)
+                        .setSourceLanguage(TranslateLanguage.ENGLISH) // All languages are translated via English according to the firebase specification.
                         .setTargetLanguage(locale.toLanguageTag())
                         .build()
                 val translator: Translator = Translation.getClient(options)

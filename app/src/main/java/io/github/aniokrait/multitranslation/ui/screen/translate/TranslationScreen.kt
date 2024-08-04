@@ -1,7 +1,9 @@
 package io.github.aniokrait.multitranslation.ui.screen.translate
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +14,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -57,10 +63,12 @@ fun TranslationScreen(
     TranslationScreen(
         modifier = modifier,
         translateResults = uiState.translationResult,
+        sourceLanguage = uiState.sourceLanguage.getDisplayLanguage(Locale.getDefault()),
         isTranslating = uiState.isTranslating,
         onAddModelClicked = onAddModelClicked,
         onDeleteModelClicked = onDeleteModelClicked,
         onInquiryClicked = onInquiryClicked,
+        onSourceLanguageClick = vm::onSourceLanguageClick,
         onTranslateClick = vm::onTranslateClick,
     )
 }
@@ -69,11 +77,13 @@ fun TranslationScreen(
 private fun TranslationScreen(
     modifier: Modifier = Modifier,
     translateResults: Map<Locale, String>,
+    sourceLanguage: String,
     isTranslating: Boolean,
     textBlockHeight: Dp = 100.dp,
     onAddModelClicked: () -> Unit,
     onDeleteModelClicked: () -> Unit,
     onInquiryClicked: () -> Unit,
+    onSourceLanguageClick: (Locale) -> Unit,
     onTranslateClick: (String) -> Unit,
 ) {
     Scaffold(
@@ -93,13 +103,16 @@ private fun TranslationScreen(
             }
             LazyColumn(
                 modifier =
-                    modifier
-                        .statusBarsPadding()
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                modifier
+                    .statusBarsPadding()
+                    .padding(innerPadding)
+                    .fillMaxSize(),
             ) {
                 TranslateSourceArea(
+                    sourceLanguage = sourceLanguage,
+                    availableLanguages = translateResults.keys.toList(),
                     isTranslating = isTranslating,
+                    onSourceLanguageClick = onSourceLanguageClick,
                     onTranslateClick = onTranslateClick,
                 )
 
@@ -112,11 +125,11 @@ private fun TranslationScreen(
 
             BannerAd(
                 modifier =
-                    Modifier
-                        .align(Alignment.BottomCenter)
-                        .onGloballyPositioned {
-                            bannerHeight = it.size.height
-                        },
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .onGloballyPositioned {
+                        bannerHeight = it.size.height
+                    },
             )
         }
     }
@@ -125,11 +138,48 @@ private fun TranslationScreen(
 // Translation source area.
 @Suppress("FunctionName")
 private fun LazyListScope.TranslateSourceArea(
+    sourceLanguage: String,
+    availableLanguages: List<Locale>,
     isTranslating: Boolean,
+    onSourceLanguageClick: (Locale) -> Unit,
     onTranslateClick: (String) -> Unit,
 ) {
     item {
         Column {
+            Box {
+                var expanded by remember { mutableStateOf(false) }
+                Row(
+                    modifier = Modifier.clickable {
+                        expanded = true
+                    }
+                ) {
+                    Text(
+                        modifier = Modifier,
+                        text = sourceLanguage,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.unfold_more),
+                        contentDescription = null,
+                    )
+                }
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                ) {
+                    availableLanguages.forEach { language ->
+                        DropdownMenuItem(
+                            text = { Text(text = language.getDisplayName(Locale.getDefault())) },
+                            onClick = { onSourceLanguageClick(language) },
+                        )
+                    }
+                }
+            }
+
+
+            Spacer(modifier = Modifier.height(4.dp))
+
             val input = remember { mutableStateOf("") }
             // TODO: Fix height and show scrollbar
             TextField(
@@ -147,10 +197,10 @@ private fun LazyListScope.TranslateSourceArea(
 
             TranslateButton(
                 modifier =
-                    Modifier
-                        .width(140.dp)
-                        .padding(top = 16.dp)
-                        .align(Alignment.CenterHorizontally),
+                Modifier
+                    .width(140.dp)
+                    .padding(top = 16.dp)
+                    .align(Alignment.CenterHorizontally),
                 isTranslating = isTranslating,
                 translateSource = input.value,
                 onTranslateClick = onTranslateClick,
@@ -203,7 +253,9 @@ private fun LazyListScope.ResultArea(
 fun TranslationScreenPreview() {
     TranslationScreen(
         translateResults = mapOf(Locale.JAPANESE to "こんにちは", Locale.ENGLISH to "Hello"),
+        sourceLanguage = "Japanese",
         isTranslating = false,
+        onSourceLanguageClick = {},
         onTranslateClick = { _ -> },
         onAddModelClicked = {},
         onDeleteModelClicked = {},

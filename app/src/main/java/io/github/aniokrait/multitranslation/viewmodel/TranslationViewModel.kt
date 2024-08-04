@@ -64,18 +64,22 @@ class TranslationViewModel(
 
     private val isTranslating: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
+    private val sourceLanguage: MutableStateFlow<Locale> = MutableStateFlow(Locale.getDefault())
+
     val uiState: StateFlow<TranslationUiState> =
         combine(
             isTranslating,
             allTranslatedResults,
-        ) { isTranslating, allTranslatedResults ->
+            sourceLanguage,
+        ) { isTranslating, allTranslatedResults, sourceLanguage ->
 
             TranslationUiState(
                 translationResult =
-                    allTranslatedResults
-                        .filter { it.key != Locale.JAPAN && it.key != Locale.JAPANESE }
-                        .toMap(),
+                allTranslatedResults
+                    .filter { it.key.language != sourceLanguage.language }
+                    .toMap(),
                 isTranslating = isTranslating,
+                sourceLanguage = sourceLanguage,
             )
         }.stateIn(
             scope = viewModelScope,
@@ -99,34 +103,45 @@ class TranslationViewModel(
      * Translate from input text to other languages.
      */
     fun onTranslateClick(input: String) {
+        Timber.d("source: ${sourceLanguage.value.language}")
         isTranslating.value = true
         viewModelScope.launch(ioDispatcher) {
             val downloadedLanguages = uiState.value.translationResult.keys.toList()
 
             downloadedLanguages
-                .filter { it != Locale.JAPANESE && it != Locale.JAPAN }
+                .filter { it.language != sourceLanguage.value.language }
                 .forEach { targetLocale ->
                     Timber.d("targetLocale: $targetLocale")
+                    sourceLanguage.value.language
+
+                    Timber.d("source tag: ${TranslateLanguage.fromLanguageTag(sourceLanguage.value.toLanguageTag())}, target tag: ${targetLocale.toLanguageTag()}")
 
                     withContext(ioDispatcher) {
                         val options =
                             TranslatorOptions.Builder()
-                                .setSourceLanguage(TranslateLanguage.JAPANESE)
-                                .setTargetLanguage(targetLocale.toLanguageTag())
+                                .setSourceLanguage(
+                                    sourceLanguage.value.toLanguageTag()
+                                        .substring(0, 2) // Trim en_US to en.
+                                )
+                                .setTargetLanguage(
+                                    targetLocale.toLanguageTag().substring(0, 2)
+                                )  // Trim en_US to en.
                                 .build()
-                        val japaneseToOtherTranslator = Translation.getClient(options)
+                        val translator = Translation.getClient(options)
 
                         // Guard against not exist model.
-                        japaneseToOtherTranslator.downloadModelIfNeeded()
+                        val modelDownloadTask = translator.downloadModelIfNeeded()
 
                         // To translate parallel, launch coroutine for each language.
                         launch {
+                            modelDownloadTask.await()
+
                             val translateResult =
                                 Pair(
                                     targetLocale,
-                                    japaneseToOtherTranslator.translate(input).await(),
+                                    translator.translate(input).await(),
                                 )
-                            japaneseToOtherTranslator.close()
+                            translator.close()
                             withContext(mainDispatcher) {
                                 eachTranslatedResult.emit(
                                     translateResult,
@@ -140,5 +155,9 @@ class TranslationViewModel(
                 isTranslating.value = false
             }
         }
+    }
+
+    fun onSourceLanguageClick(locale: Locale) {
+        sourceLanguage.value = locale
     }
 }
