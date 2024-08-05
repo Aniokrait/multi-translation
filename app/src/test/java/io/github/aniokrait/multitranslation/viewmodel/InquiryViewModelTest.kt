@@ -31,9 +31,15 @@ class InquiryViewModelTest {
             val viewModel = InquiryViewModel(repository = fakeRepository)
 
             viewModel.sendInquiry("test content")
+
             advanceTimeBy(4999)
             assertEquals(InquiryUiState.SentSuccess, viewModel.uiState.value)
             advanceTimeBy(2)
             assertEquals(InquiryUiState.Initial, viewModel.uiState.value)
+
+            assertEquals(
+                "test content${System.lineSeparator()}UserMetaInfo(sdk=34, model=Pixel 6, manufacturer=Google, product=Pixel 6, appVersion=1)",
+                fakeRepository.sentContent
+            )
         }
 }

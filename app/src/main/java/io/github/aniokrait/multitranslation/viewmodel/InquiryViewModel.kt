@@ -25,7 +25,10 @@ class InquiryViewModel(
     fun sendInquiry(content: String) {
         _uiState.value = InquiryUiState.Loading
         viewModelScope.launch {
-            val result = repository.sendInquiry(content = content)
+            val metaInfo = repository.getMetaInfo()
+
+            val result =
+                repository.sendInquiry(content = content + System.lineSeparator() + metaInfo.toString())
             _uiState.value =
                 if (result is HttpRequestResult.Success) {
                     InquiryUiState.SentSuccess

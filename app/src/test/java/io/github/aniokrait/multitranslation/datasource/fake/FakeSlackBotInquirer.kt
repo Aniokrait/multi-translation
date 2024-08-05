@@ -19,6 +19,18 @@ class FakeSlackBotInquirer : InquiryRepository {
     }
 
     override fun getMetaInfo(): UserMetaInfo {
-        TODO("Not yet implemented")
+        val sdk = 34
+        val model = "Pixel 6"
+        val manufacturer = "Google"
+        val product = "Pixel 6"
+        val appVersion = 1
+
+        return UserMetaInfo(
+            sdk = sdk,
+            model = model,
+            manufacturer = manufacturer,
+            product = product,
+            appVersion = appVersion,
+        )
     }
 }
