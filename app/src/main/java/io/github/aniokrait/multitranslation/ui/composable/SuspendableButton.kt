@@ -46,10 +46,10 @@ fun SuspendableButton(
             with(density) {
                 CircularProgressIndicator(
                     modifier =
-                        Modifier
-                            .then(Modifier.size(32.dp)) // change indicator size.
-                            .height(textButtonSize.height.toDp()) // fix button size.
-                            .width(textButtonSize.width.toDp()),
+                    Modifier
+                        .then(Modifier.size(32.dp)) // change indicator size.
+                        .height(textButtonSize.height.toDp()) // fix button size.
+                        .width(textButtonSize.width.toDp()),
                     // fix button size.
                     strokeWidth = 4.dp,
                     color = MaterialTheme.colorScheme.primary,
@@ -59,9 +59,9 @@ fun SuspendableButton(
         } else {
             Text(
                 modifier =
-                    Modifier.onGloballyPositioned {
-                        textButtonSize = it.size
-                    },
+                Modifier.onGloballyPositioned {
+                    textButtonSize = it.size
+                },
                 text = text,
             )
         }
@@ -73,7 +73,7 @@ fun SuspendableButton(
 fun SuspendableButtonSuspendingPreview() {
     SuspendableButton(
         isSuspending = true,
-        text = stringResource(id = R.string.btn_translation_button),
+        text = stringResource(id = R.string.feature_translation_translate_by_google),
         onClick = {},
     )
 }
@@ -83,7 +83,7 @@ fun SuspendableButtonSuspendingPreview() {
 fun SuspendableButtonNotSuspendingPreview() {
     SuspendableButton(
         isSuspending = false,
-        text = stringResource(id = R.string.btn_translation_button),
+        text = stringResource(id = R.string.feature_translation_translate_by_google),
         onClick = {},
     )
 }

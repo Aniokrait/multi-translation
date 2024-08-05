@@ -69,16 +69,16 @@ private fun DeleteModelScreen(
     ) { innerPadding ->
         Column(
             modifier =
-                modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+            modifier
+                .fillMaxSize()
+                .padding(innerPadding),
         ) {
             Text(
-                text = stringResource(id = R.string.lbl_description_for_delete_models),
+                text = stringResource(id = R.string.feature_delete_models_choose_language_desc),
                 style = MaterialTheme.typography.headlineSmall,
             )
             Text(
-                text = stringResource(id = R.string.lbl_delete_hosoku),
+                text = stringResource(id = R.string.feature_delete_models_re_download_desc),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -97,15 +97,15 @@ private fun DeleteModelScreen(
                     showConfirmDialog.value = true
                 },
             ) {
-                Text(text = stringResource(id = R.string.btn_delete))
+                Text(text = stringResource(id = R.string.feature_delete_models_delete))
             }
 
             if (showConfirmDialog.value) {
                 ConfirmDialog(
                     showConfirmDialog = showConfirmDialog,
-                    dialogText = stringResource(id = R.string.lbl_delete_model),
-                    confirmButtonText = R.string.btn_delete,
-                    dismissButtonText = R.string.delete_dialog_btn_cancel,
+                    dialogText = stringResource(id = R.string.feature_delete_models_confirm_delete),
+                    confirmButtonText = R.string.feature_delete_models_delete,
+                    dismissButtonText = R.string.feature_delete_models_cancel,
                     onConfirmClicked = {
                         onDeleteClicked(
                             state.filter { it.checked.value }.map { it.locale },
@@ -122,18 +122,18 @@ private fun DeleteModelScreen(
 fun DeleteModelScreenPreview() {
     DeleteModelScreen(
         state =
-            listOf(
-                EachLanguageState(
-                    locale = Locale.GERMAN,
-                    checked = remember { mutableStateOf(false) },
-                    downloaded = null,
-                ),
-                EachLanguageState(
-                    locale = Locale.CHINESE,
-                    checked = remember { mutableStateOf(true) },
-                    downloaded = null,
-                ),
+        listOf(
+            EachLanguageState(
+                locale = Locale.GERMAN,
+                checked = remember { mutableStateOf(false) },
+                downloaded = null,
             ),
+            EachLanguageState(
+                locale = Locale.CHINESE,
+                checked = remember { mutableStateOf(true) },
+                downloaded = null,
+            ),
+        ),
         onCheckClicked = {},
         onDeleteClicked = {},
         onBackClicked = {},

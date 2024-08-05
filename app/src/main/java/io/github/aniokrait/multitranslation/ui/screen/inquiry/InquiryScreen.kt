@@ -64,7 +64,7 @@ private fun InquiryScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     if (uiState is InquiryUiState.SentSuccess) {
-        val snackbarMessage = stringResource(id = R.string.msg_inquiry_sent_success)
+        val snackbarMessage = stringResource(id = R.string.feature_inquiry_inquiry_sent)
         LaunchedEffect(uiState) {
             scope.launch {
                 snackbarHostState.showSnackbar(
@@ -91,12 +91,12 @@ private fun InquiryScreen(
     ) { innerPadding ->
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
         ) {
             Text(
-                text = stringResource(id = R.string.lbl_inquiry_hosoku),
+                text = stringResource(id = R.string.feature_inquiry_please_input_issues_desc),
                 style = MaterialTheme.typography.bodyMedium,
             )
 
@@ -111,10 +111,10 @@ private fun InquiryScreen(
             var content by remember { mutableStateOf("") }
             TextField(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .bringIntoViewRequester(bringIntoViewRequester)
-                        .height(200.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .bringIntoViewRequester(bringIntoViewRequester)
+                    .height(200.dp),
                 value = content,
                 onValueChange = {
                     if (it.length <= maxLength) {
@@ -143,7 +143,7 @@ private fun InquiryScreen(
                     keyboardController?.hide()
                     onSentClicked(content)
                 },
-                text = stringResource(id = R.string.btn_inquiry),
+                text = stringResource(id = R.string.feature_inquiry_send),
             )
         }
     }

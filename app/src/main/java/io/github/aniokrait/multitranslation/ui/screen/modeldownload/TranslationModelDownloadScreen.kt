@@ -60,7 +60,7 @@ fun TranslationModelDownloadScreen(
     if (state.allDownloadFailed) {
         AlertDialog(
             text = {
-                Text(text = stringResource(id = R.string.lbl_all_download_failed))
+                Text(text = stringResource(id = R.string.feature_download_models_download_failed_all))
             },
             onDismissRequest = vm::onDownloadFailedDialogOkClicked,
             confirmButton = {
@@ -97,21 +97,21 @@ private fun TranslationModelDownloadScreen(
     ) { innerPadding ->
         Box(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
         ) {
             Column(
                 modifier =
-                    modifier
-                        .fillMaxSize(),
+                modifier
+                    .fillMaxSize(),
             ) {
                 Text(
-                    text = stringResource(id = R.string.lbl_description_for_download_models),
+                    text = stringResource(id = R.string.feature_download_models_choose_language_desc),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Text(
-                    text = stringResource(id = R.string.lbl_hosoku),
+                    text = stringResource(id = R.string.feature_download_models_model_size_desc),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -126,7 +126,7 @@ private fun TranslationModelDownloadScreen(
 
                 val context = LocalContext.current
                 val errorMessageTemplate =
-                    stringResource(id = R.string.msg_download_failed_for_these_languages)
+                    stringResource(id = R.string.feature_download_models_download_failed_partially)
                 val showNoWifiAlertDialog =
                     remember {
                         mutableStateOf(false)
@@ -151,7 +151,7 @@ private fun TranslationModelDownloadScreen(
                         }
                     },
                 ) {
-                    Text(text = stringResource(id = R.string.btn_download_translation_model))
+                    Text(text = stringResource(id = R.string.feature_download_models_download))
                 }
 
                 val trafficVolume = (state.filter { it.checked.value }.size * 30).toString()
@@ -159,12 +159,12 @@ private fun TranslationModelDownloadScreen(
                     ConfirmDialog(
                         showConfirmDialog = showNoWifiAlertDialog,
                         dialogText =
-                            stringResource(
-                                id = R.string.dialog_content_alert_no_wifi,
-                                trafficVolume,
-                            ),
-                        confirmButtonText = R.string.dialog_btn_proceed,
-                        dismissButtonText = R.string.dialog_btn_cancel_use_wifi_later,
+                        stringResource(
+                            id = R.string.feature_download_models_confirm_no_wifi,
+                            trafficVolume,
+                        ),
+                        confirmButtonText = R.string.feature_download_models_proceed,
+                        dismissButtonText = R.string.feature_download_models_use_wifi_later,
                         onConfirmClicked = {
                             showConfirmReallyOkDialog.value = true
                             showNoWifiAlertDialog.value = false
@@ -173,14 +173,14 @@ private fun TranslationModelDownloadScreen(
                 } else if (showConfirmReallyOkDialog.value) {
                     ConfirmDialog(
                         showConfirmDialog = showConfirmReallyOkDialog,
-                        titleText = R.string.dialog_title_really_no_wifi_ok_title,
+                        titleText = R.string.feature_download_models_final_confirm_title,
                         dialogText =
-                            stringResource(
-                                id = R.string.dialog_content_really_no_wifi_ok,
-                                trafficVolume,
-                            ),
-                        confirmButtonText = R.string.dialog_btn_proceed,
-                        dismissButtonText = R.string.dialog_btn_cancel_use_wifi_later,
+                        stringResource(
+                            id = R.string.feature_download_models_final_confirm_desc,
+                            trafficVolume,
+                        ),
+                        confirmButtonText = R.string.feature_download_models_proceed,
+                        dismissButtonText = R.string.feature_download_models_use_wifi_later,
                         onConfirmClicked = {
                             onDownloadClicked(
                                 navigateToTranslation,
@@ -200,13 +200,13 @@ private fun TranslationModelDownloadScreen(
                     ConfirmDialog(
                         showConfirmDialog = showDownloadConfirmDialog,
                         dialogText =
-                            stringResource(
-                                id = R.string.dialog_content_confirm_download,
-                                checkedLanguages,
-                                trafficVolume,
-                            ),
-                        confirmButtonText = R.string.dialog_btn_proceed,
-                        dismissButtonText = R.string.dialog_btn_cancel_just_cancel,
+                        stringResource(
+                            id = R.string.feature_download_models_confirm_download,
+                            checkedLanguages,
+                            trafficVolume,
+                        ),
+                        confirmButtonText = R.string.feature_download_models_proceed,
+                        dismissButtonText = R.string.feature_download_models_cancel,
                         onConfirmClicked = {
                             onDownloadClicked(
                                 navigateToTranslation,

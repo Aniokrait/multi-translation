@@ -73,10 +73,10 @@ private fun ConfirmDialogPreview() {
     MultiTranslationTheme {
         ConfirmDialog(
             showConfirmDialog = remember { mutableStateOf(false) },
-            titleText = R.string.dialog_title_really_no_wifi_ok_title,
+            titleText = R.string.feature_download_models_final_confirm_title,
             dialogText = "翻訳モデルを削除しますか？",
-            confirmButtonText = R.string.btn_delete,
-            dismissButtonText = R.string.delete_dialog_btn_cancel,
+            confirmButtonText = R.string.feature_delete_models_delete,
+            dismissButtonText = R.string.feature_delete_models_cancel,
             onConfirmClicked = {},
         )
     }

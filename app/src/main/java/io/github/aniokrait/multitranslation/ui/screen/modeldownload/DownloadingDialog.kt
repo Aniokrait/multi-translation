@@ -32,27 +32,27 @@ fun DownloadingDialog() {
     ) {
         Card(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .padding(16.dp),
+            Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(16.dp),
         ) {
             Column {
                 Text(
                     modifier =
-                        Modifier
-                            .padding(top = 16.dp)
-                            .fillMaxWidth()
-                            .wrapContentSize(Alignment.Center),
-                    text = stringResource(id = R.string.lbl_download_progress),
+                    Modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth()
+                        .wrapContentSize(Alignment.Center),
+                    text = stringResource(id = R.string.feature_download_models_download_progress),
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 CircularProgressIndicator(
                     modifier =
-                        Modifier
-                            .width(32.dp)
-                            .align(Alignment.CenterHorizontally),
+                    Modifier
+                        .width(32.dp)
+                        .align(Alignment.CenterHorizontally),
                     strokeWidth = 4.dp,
                     color = MaterialTheme.colorScheme.primary,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,

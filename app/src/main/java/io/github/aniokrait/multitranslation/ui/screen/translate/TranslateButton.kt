@@ -27,7 +27,7 @@ fun TranslateButton(
     SuspendableButton(
         modifier = modifier,
         isSuspending = isTranslating,
-        text = stringResource(id = R.string.btn_translation_button),
+        text = stringResource(id = R.string.feature_translation_translate_by_google),
         onClick = {
             keyboardController?.hide()
             onTranslateClick(translateSource)

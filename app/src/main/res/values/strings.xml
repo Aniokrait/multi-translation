@@ -6,39 +6,37 @@
     <string name="topbar_lbl_delete_model">翻訳モデルの削除</string>
     <string name="topbar_lbl_inquiry">お問い合わせ・不具合報告</string>
 
-    <!-- TODO: Rename string names. -->
     <!-- 翻訳画面 -->
-    <string name="lbl_translation_source">翻訳元</string>
-    <string name="btn_translation_button">Googleで翻訳</string>
-    <string name="lbl_translation_result">翻訳結果</string>
+    <string name="feature_translation_source">翻訳元</string>
+    <string name="feature_translation_translate_by_google">Googleで翻訳</string>
+    <string name="feature_translation_results">翻訳結果</string>
 
     <!-- 選択画面 -->
-    <string name="lbl_description_for_download_models">翻訳したい言語を選んでください</string>
-    <string name="lbl_hosoku">(いち言語あたり約30MBの容量が必要です)</string>
-    <string name="btn_download_translation_model">次へ</string>
-    <string name="lbl_download_progress">翻訳モデルを\nダウンロードしています。\nそのままお待ち下さい</string>
-    <string name="msg_download_failed_for_these_languages">以下の言語のダウンロードに失敗しました。\nインターネット接続状況を確認し、設定画面から再度ダウンロードしてください。</string>
-    <string name="lbl_all_download_failed">翻訳モデルのダウンロードに失敗しました。\nインターネット接続状況を確認してから、再度実行してください</string>
-    <string name="dialog_btn_cancel_use_wifi_later">あとでWi-Fiを使う</string>
-    <string name="dialog_btn_cancel_just_cancel">キャンセル</string>
-    <string name="dialog_btn_proceed">続行</string>
-    <string name="dialog_title_really_no_wifi_ok_title">最終確認</string>
-    <string name="dialog_content_alert_no_wifi">Wi-Fiに接続されていません。\nモバイル通信を使うと通信料金が発生する可能性がありますが、続行しますか？\n(約%sMB)</string>
-    <string name="dialog_content_really_no_wifi_ok">アプリを終了してもダウンロードは中断されません。\n本当にモバイル通信で続行しますか？\n(約%sMB)</string>
-    <string name="dialog_content_confirm_download">以下の翻訳モデルをダウンロードします\n%s\n(約%sMB)</string>
+    <string name="feature_download_models_choose_language_desc">翻訳したい言語を選んでください</string>
+    <string name="feature_download_models_model_size_desc">(いち言語あたり約30MBの容量が必要です)</string>
+    <string name="feature_download_models_download">次へ</string>
+    <string name="feature_download_models_download_progress">翻訳モデルを\nダウンロードしています。\nそのままお待ち下さい</string>
+    <string name="feature_download_models_download_failed_partially">以下の言語のダウンロードに失敗しました。\nインターネット接続状況を確認し、設定画面から再度ダウンロードしてください。</string>
+    <string name="feature_download_models_download_failed_all">翻訳モデルのダウンロードに失敗しました。\nインターネット接続状況を確認してから、再度実行してください</string>
+    <string name="feature_download_models_use_wifi_later">あとでWi-Fiを使う</string>
+    <string name="feature_download_models_cancel">キャンセル</string>
+    <string name="feature_download_models_proceed">続行</string>
+    <string name="feature_download_models_final_confirm_title">最終確認</string>
+    <string name="feature_download_models_confirm_no_wifi">Wi-Fiに接続されていません。\nモバイル通信を使うと通信料金が発生する可能性がありますが、続行しますか？\n(約%sMB)</string>
+    <string name="feature_download_models_final_confirm_desc">アプリを終了してもダウンロードは中断されません。\n本当にモバイル通信で続行しますか？\n(約%sMB)</string>
+    <string name="feature_download_models_confirm_download">以下の翻訳モデルをダウンロードします\n%s\n(約%sMB)</string>
 
     <!-- 削除画面 -->
-    <string name="lbl_description_for_delete_models">削除したい言語を選んでください</string>
-    <string name="lbl_delete_hosoku">(削除した場合、再度翻訳するには翻訳モデルを再ダウンロードする必要があります)</string>
-    <string name="btn_delete">削除</string>
-    <string name="lbl_delete_model">翻訳モデルを削除しますか？</string>
-    <string name="delete_dialog_btn_cancel">キャンセル</string>
+    <string name="feature_delete_models_choose_language_desc">削除したい言語を選んでください</string>
+    <string name="feature_delete_models_re_download_desc">(削除した場合、再度翻訳するには翻訳モデルを再ダウンロードする必要があります)</string>
+    <string name="feature_delete_models_delete">削除</string>
+    <string name="feature_delete_models_confirm_delete">翻訳モデルを削除しますか？</string>
+    <string name="feature_delete_models_cancel">キャンセル</string>
 
     <!-- お問い合わせ画面 -->
-    <string name="lbl_description_for_inquiry">お問い合わせ・不具合報告</string>
-    <string name="lbl_inquiry_hosoku">不具合内容や欲しい機能等、自由にご記入ください。\nいただいた情報はアプリの改善に役立てさせていただきます。\n\n(こちらから回答を送信することはありません。)</string>
-    <string name="btn_inquiry">送信</string>
-    <string name="msg_inquiry_sent_success">送信が完了しました。</string>
+    <string name="feature_inquiry_please_input_issues_desc">不具合内容や欲しい機能等、自由にご記入ください。\nいただいた情報はアプリの改善に役立てさせていただきます。\n\n(こちらから回答を送信することはありません。)</string>
+    <string name="feature_inquiry_send">送信</string>
+    <string name="feature_inquiry_inquiry_sent">送信が完了しました。</string>
 
     <!-- 設定系 -->
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
