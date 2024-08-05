@@ -170,7 +170,7 @@ private fun LazyListScope.TranslateSourceArea(
                 ) {
                     availableLanguages.forEach { language ->
                         DropdownMenuItem(
-                            text = { Text(text = language.getDisplayName(Locale.getDefault())) },
+                            text = { Text(text = language.getDisplayLanguage(Locale.getDefault())) },
                             onClick = { onSourceLanguageClick(language) },
                         )
                     }
@@ -188,11 +188,11 @@ private fun LazyListScope.TranslateSourceArea(
                 value = input.value,
                 onValueChange = { input.value = it },
                 colors =
-                    TextFieldDefaults.colors().copy(
-                        focusedLabelColor = OnPrimary,
-                        focusedIndicatorColor = OnPrimary,
-                        cursorColor = OnPrimary,
-                    ),
+                TextFieldDefaults.colors().copy(
+                    focusedLabelColor = OnPrimary,
+                    focusedIndicatorColor = OnPrimary,
+                    cursorColor = OnPrimary,
+                ),
             )
 
             TranslateButton(

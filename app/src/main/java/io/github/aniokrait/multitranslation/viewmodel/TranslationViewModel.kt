@@ -2,7 +2,6 @@ package io.github.aniokrait.multitranslation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
@@ -76,7 +75,7 @@ class TranslationViewModel(
             TranslationUiState(
                 translationResult =
                 allTranslatedResults
-                    .filter { it.key.language != sourceLanguage.language }
+                    .filter { it.key.language != sourceLanguage.language && it.key.country.isEmpty() }
                     .toMap(),
                 isTranslating = isTranslating,
                 sourceLanguage = sourceLanguage,
@@ -103,18 +102,18 @@ class TranslationViewModel(
      * Translate from input text to other languages.
      */
     fun onTranslateClick(input: String) {
-        Timber.d("source: ${sourceLanguage.value.language}")
         isTranslating.value = true
         viewModelScope.launch(ioDispatcher) {
             val downloadedLanguages = uiState.value.translationResult.keys.toList()
 
             downloadedLanguages
-                .filter { it.language != sourceLanguage.value.language }
+                .filter {
+                    it.language.substring(0, 2) != sourceLanguage.value
+                        .language.substring(0, 2)
+                }
                 .forEach { targetLocale ->
                     Timber.d("targetLocale: $targetLocale")
                     sourceLanguage.value.language
-
-                    Timber.d("source tag: ${TranslateLanguage.fromLanguageTag(sourceLanguage.value.toLanguageTag())}, target tag: ${targetLocale.toLanguageTag()}")
 
                     withContext(ioDispatcher) {
                         val options =

@@ -88,7 +88,7 @@ class LanguageModelDatasource(
                 var notEnoughSpace = false
 
                 try {
-                    withContext(Dispatchers.IO) {
+                    withContext(ioDispatcher) {
                         val deferred = translator.downloadModelIfNeeded(conditions)
                             .addOnFailureListener { ex ->
                                 if (ex is MlKitException) {
