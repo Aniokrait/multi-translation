@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
@@ -27,12 +27,13 @@ class InquiryViewModelTest {
 
     @Test
     fun testSendInquiry() =
-        runTest {
+        runTest(dispatcher) {
             val viewModel = InquiryViewModel(repository = fakeRepository)
 
             viewModel.sendInquiry("test content")
-            advanceUntilIdle()
-
+            advanceTimeBy(4999)
             assertEquals(InquiryUiState.SentSuccess, viewModel.uiState.value)
+            advanceTimeBy(2)
+            assertEquals(InquiryUiState.Initial, viewModel.uiState.value)
         }
 }

@@ -2,6 +2,7 @@ package io.github.aniokrait.multitranslation.datasource.fake
 
 import androidx.compose.runtime.mutableStateOf
 import com.google.mlkit.nl.translate.TranslateRemoteModel
+import io.github.aniokrait.multitranslation.repository.DownloadResult
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.ui.stateholder.DownloadedState
 import kotlinx.coroutines.flow.Flow
@@ -31,13 +32,13 @@ class FakeLanguageModelDatasource : LanguageModelRepository {
     override suspend fun downloadModel(
         targetLanguages: List<Locale>,
         allowNoWifi: Boolean,
-    ): List<Locale> {
+    ): DownloadResult {
         set.addAll(targetLanguages.map { DownloadedState(it, mutableStateOf(true)) })
 
         return if (failDownloadModel) {
-            listOf(Locale.JAPANESE, Locale.GERMAN)
+            DownloadResult.Failure(failedModels = listOf(Locale.JAPANESE, Locale.GERMAN))
         } else {
-            emptyList()
+            DownloadResult.Success
         }
     }
 
