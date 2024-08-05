@@ -97,14 +97,14 @@ private fun TranslationModelDownloadScreen(
     ) { innerPadding ->
         Box(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             Column(
                 modifier =
-                modifier
-                    .fillMaxSize(),
+                    modifier
+                        .fillMaxSize(),
             ) {
                 Text(
                     text = stringResource(id = R.string.lbl_description_for_download_models),
@@ -159,10 +159,10 @@ private fun TranslationModelDownloadScreen(
                     ConfirmDialog(
                         showConfirmDialog = showNoWifiAlertDialog,
                         dialogText =
-                        stringResource(
-                            id = R.string.dialog_content_alert_no_wifi,
-                            trafficVolume,
-                        ),
+                            stringResource(
+                                id = R.string.dialog_content_alert_no_wifi,
+                                trafficVolume,
+                            ),
                         confirmButtonText = R.string.dialog_btn_proceed,
                         dismissButtonText = R.string.dialog_btn_cancel_use_wifi_later,
                         onConfirmClicked = {
@@ -175,10 +175,10 @@ private fun TranslationModelDownloadScreen(
                         showConfirmDialog = showConfirmReallyOkDialog,
                         titleText = R.string.dialog_title_really_no_wifi_ok_title,
                         dialogText =
-                        stringResource(
-                            id = R.string.dialog_content_really_no_wifi_ok,
-                            trafficVolume,
-                        ),
+                            stringResource(
+                                id = R.string.dialog_content_really_no_wifi_ok,
+                                trafficVolume,
+                            ),
                         confirmButtonText = R.string.dialog_btn_proceed,
                         dismissButtonText = R.string.dialog_btn_cancel_use_wifi_later,
                         onConfirmClicked = {
@@ -200,11 +200,11 @@ private fun TranslationModelDownloadScreen(
                     ConfirmDialog(
                         showConfirmDialog = showDownloadConfirmDialog,
                         dialogText =
-                        stringResource(
-                            id = R.string.dialog_content_confirm_download,
-                            checkedLanguages,
-                            trafficVolume,
-                        ),
+                            stringResource(
+                                id = R.string.dialog_content_confirm_download,
+                                checkedLanguages,
+                                trafficVolume,
+                            ),
                         confirmButtonText = R.string.dialog_btn_proceed,
                         dismissButtonText = R.string.dialog_btn_cancel_just_cancel,
                         onConfirmClicked = {

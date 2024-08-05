@@ -35,6 +35,8 @@ interface LanguageModelRepository {
 
 sealed interface DownloadResult {
     data object Success : DownloadResult
+
     data class Failure(val failedModels: List<Locale>) : DownloadResult
+
     data class NotEnoughSpace(val failedModels: List<Locale>) : DownloadResult
 }

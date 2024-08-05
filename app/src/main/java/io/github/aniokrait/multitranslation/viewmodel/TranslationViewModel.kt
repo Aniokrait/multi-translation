@@ -74,9 +74,9 @@ class TranslationViewModel(
 
             TranslationUiState(
                 translationResult =
-                allTranslatedResults
-                    .filter { it.key.language != sourceLanguage.language && it.key.country.isEmpty() }
-                    .toMap(),
+                    allTranslatedResults
+                        .filter { it.key.language != sourceLanguage.language && it.key.country.isEmpty() }
+                        .toMap(),
                 isTranslating = isTranslating,
                 sourceLanguage = sourceLanguage,
             )
@@ -108,8 +108,9 @@ class TranslationViewModel(
 
             downloadedLanguages
                 .filter {
-                    it.language.substring(0, 2) != sourceLanguage.value
-                        .language.substring(0, 2)
+                    it.language.substring(0, 2) !=
+                        sourceLanguage.value
+                            .language.substring(0, 2)
                 }
                 .forEach { targetLocale ->
                     Timber.d("targetLocale: $targetLocale")
@@ -120,11 +121,11 @@ class TranslationViewModel(
                             TranslatorOptions.Builder()
                                 .setSourceLanguage(
                                     sourceLanguage.value.toLanguageTag()
-                                        .substring(0, 2) // Trim en_US to en.
+                                        .substring(0, 2), // Trim en_US to en.
                                 )
                                 .setTargetLanguage(
-                                    targetLocale.toLanguageTag().substring(0, 2)
-                                )  // Trim en_US to en.
+                                    targetLocale.toLanguageTag().substring(0, 2),
+                                ) // Trim en_US to en.
                                 .build()
                         val translator = Translation.getClient(options)
 

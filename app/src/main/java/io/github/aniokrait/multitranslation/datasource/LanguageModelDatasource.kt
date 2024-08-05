@@ -80,7 +80,9 @@ class LanguageModelDatasource(
             .forEach { locale ->
                 val options =
                     TranslatorOptions.Builder()
-                        .setSourceLanguage(TranslateLanguage.ENGLISH) // All languages are translated via English according to the firebase specification.
+                        .setSourceLanguage(
+                            TranslateLanguage.ENGLISH,
+                        ) // All languages are translated via English according to the firebase specification.
                         .setTargetLanguage(locale.toLanguageTag())
                         .build()
                 val translator: Translator = Translation.getClient(options)
@@ -89,23 +91,24 @@ class LanguageModelDatasource(
 
                 try {
                     withContext(ioDispatcher) {
-                        val deferred = translator.downloadModelIfNeeded(conditions)
-                            .addOnFailureListener { ex ->
-                                if (ex is MlKitException) {
-                                    if (ex.errorCode == MlKitException.NOT_ENOUGH_SPACE) {
-                                        notEnoughSpace = true
+                        val deferred =
+                            translator.downloadModelIfNeeded(conditions)
+                                .addOnFailureListener { ex ->
+                                    if (ex is MlKitException) {
+                                        if (ex.errorCode == MlKitException.NOT_ENOUGH_SPACE) {
+                                            notEnoughSpace = true
+                                        } else {
+                                            Timber.d(ex.errorCode.toString())
+                                            // TODO Until implement handling, make it crash to log what happened.
+                                            throw ex
+                                        }
                                     } else {
-                                        Timber.d(ex.errorCode.toString())
+                                        Timber.d("ex is ${ex.javaClass.name}")
                                         // TODO Until implement handling, make it crash to log what happened.
                                         throw ex
                                     }
-                                } else {
-                                    Timber.d("ex is ${ex.javaClass.name}")
-                                    // TODO Until implement handling, make it crash to log what happened.
-                                    throw ex
                                 }
-                            }
-                            .asDeferred()
+                                .asDeferred()
 
                         // TODO Fix show downloaded models in ui asynchronously.
 //                        val timeoutJob = launch {

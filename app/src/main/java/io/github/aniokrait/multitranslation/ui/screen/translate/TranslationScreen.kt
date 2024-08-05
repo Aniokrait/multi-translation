@@ -103,10 +103,10 @@ private fun TranslationScreen(
             }
             LazyColumn(
                 modifier =
-                modifier
-                    .statusBarsPadding()
-                    .padding(innerPadding)
-                    .fillMaxSize(),
+                    modifier
+                        .statusBarsPadding()
+                        .padding(innerPadding)
+                        .fillMaxSize(),
             ) {
                 TranslateSourceArea(
                     sourceLanguage = sourceLanguage,
@@ -125,11 +125,11 @@ private fun TranslationScreen(
 
             BannerAd(
                 modifier =
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .onGloballyPositioned {
-                        bannerHeight = it.size.height
-                    },
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .onGloballyPositioned {
+                            bannerHeight = it.size.height
+                        },
             )
         }
     }
@@ -149,9 +149,10 @@ private fun LazyListScope.TranslateSourceArea(
             Box {
                 var expanded by remember { mutableStateOf(false) }
                 Row(
-                    modifier = Modifier.clickable {
-                        expanded = true
-                    }
+                    modifier =
+                        Modifier.clickable {
+                            expanded = true
+                        },
                 ) {
                     Text(
                         modifier = Modifier,
@@ -177,7 +178,6 @@ private fun LazyListScope.TranslateSourceArea(
                 }
             }
 
-
             Spacer(modifier = Modifier.height(4.dp))
 
             val input = remember { mutableStateOf("") }
@@ -188,19 +188,19 @@ private fun LazyListScope.TranslateSourceArea(
                 value = input.value,
                 onValueChange = { input.value = it },
                 colors =
-                TextFieldDefaults.colors().copy(
-                    focusedLabelColor = OnPrimary,
-                    focusedIndicatorColor = OnPrimary,
-                    cursorColor = OnPrimary,
-                ),
+                    TextFieldDefaults.colors().copy(
+                        focusedLabelColor = OnPrimary,
+                        focusedIndicatorColor = OnPrimary,
+                        cursorColor = OnPrimary,
+                    ),
             )
 
             TranslateButton(
                 modifier =
-                Modifier
-                    .width(140.dp)
-                    .padding(top = 16.dp)
-                    .align(Alignment.CenterHorizontally),
+                    Modifier
+                        .width(140.dp)
+                        .padding(top = 16.dp)
+                        .align(Alignment.CenterHorizontally),
                 isTranslating = isTranslating,
                 translateSource = input.value,
                 onTranslateClick = onTranslateClick,
