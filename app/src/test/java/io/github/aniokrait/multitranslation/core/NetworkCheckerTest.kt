@@ -43,17 +43,26 @@ class NetworkCheckerTest {
 
         assertEquals(true, result)
     }
+
+    @Test
+    fun testReturnTrueIfDeviceIsNotConnectedToInternet() {
+        val context: Context = FakeContext(isNetworkConnected = false)
+        val result = NetworkChecker.isNetworkConnected(context = context)
+
+        assertEquals(false, result)
+    }
 }
 
 class FakeContext(
-    private val isWifiConnected: Boolean,
+    private val isWifiConnected: Boolean = true,
+    private val isNetworkConnected: Boolean = true,
 ) : Context() {
     override fun getSystemService(p0: String): Any {
         val connectivityManager: ConnectivityManager = mockk()
         val networkCapabilities: NetworkCapabilities = mockk()
 
         every { connectivityManager.activeNetwork } returns mockk()
-        every { connectivityManager.getNetworkCapabilities(any()) } returns networkCapabilities
+        every { connectivityManager.getNetworkCapabilities(any()) } returns if (isNetworkConnected) networkCapabilities else null
         every { networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) } returns isWifiConnected
 
         return connectivityManager

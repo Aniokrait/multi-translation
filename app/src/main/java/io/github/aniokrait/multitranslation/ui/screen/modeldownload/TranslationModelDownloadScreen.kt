@@ -13,8 +13,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -127,11 +129,11 @@ private fun TranslationModelDownloadScreen(
                 val context = LocalContext.current
                 val errorMessageTemplate =
                     stringResource(id = R.string.feature_download_models_download_failed_partially)
+                var showNoNetworkDialog by
+                remember {
+                    mutableStateOf(false)
+                }
                 val showNoWifiAlertDialog =
-                    remember {
-                        mutableStateOf(false)
-                    }
-                val showConfirmReallyOkDialog =
                     remember {
                         mutableStateOf(false)
                     }
@@ -143,11 +145,18 @@ private fun TranslationModelDownloadScreen(
                 Button(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
-                        val isWifiConnected = NetworkChecker.isWifiConnected(context = context)
-                        if (isWifiConnected) {
-                            showDownloadConfirmDialog.value = true
+                        val isNetworkConnected =
+                            NetworkChecker.isNetworkConnected(context = context)
+
+                        if (isNetworkConnected) {
+                            val isWifiConnected = NetworkChecker.isWifiConnected(context = context)
+                            if (isWifiConnected) {
+                                showDownloadConfirmDialog.value = true
+                            } else {
+                                showNoWifiAlertDialog.value = true
+                            }
                         } else {
-                            showNoWifiAlertDialog.value = true
+                            showNoNetworkDialog = true
                         }
                     },
                 ) {
@@ -161,22 +170,6 @@ private fun TranslationModelDownloadScreen(
                         dialogText =
                         stringResource(
                             id = R.string.feature_download_models_confirm_no_wifi,
-                            trafficVolume,
-                        ),
-                        confirmButtonText = R.string.feature_download_models_proceed,
-                        dismissButtonText = R.string.feature_download_models_use_wifi_later,
-                        onConfirmClicked = {
-                            showConfirmReallyOkDialog.value = true
-                            showNoWifiAlertDialog.value = false
-                        },
-                    )
-                } else if (showConfirmReallyOkDialog.value) {
-                    ConfirmDialog(
-                        showConfirmDialog = showConfirmReallyOkDialog,
-                        titleText = R.string.feature_download_models_final_confirm_title,
-                        dialogText =
-                        stringResource(
-                            id = R.string.feature_download_models_final_confirm_desc,
                             trafficVolume,
                         ),
                         confirmButtonText = R.string.feature_download_models_proceed,
@@ -215,6 +208,20 @@ private fun TranslationModelDownloadScreen(
                                 false,
                             )
                         },
+                    )
+                } else if (showNoNetworkDialog) {
+                    AlertDialog(
+                        onDismissRequest = {
+                            showNoNetworkDialog = false
+                        },
+                        confirmButton = {
+                            Button(onClick = { showNoNetworkDialog = false }) {
+                                Text(text = "OK")
+                            }
+                        },
+                        text = {
+                            Text(text = stringResource(id = R.string.feature_download_models_no_network))
+                        }
                     )
                 }
             }

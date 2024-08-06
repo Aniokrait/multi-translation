@@ -23,8 +23,8 @@
     <string name="feature_download_models_proceed">続行</string>
     <string name="feature_download_models_final_confirm_title">最終確認</string>
     <string name="feature_download_models_confirm_no_wifi">Wi-Fiに接続されていません。\nモバイル通信を使うと通信料金が発生する可能性がありますが、続行しますか？\n(約%sMB)</string>
-    <string name="feature_download_models_final_confirm_desc">アプリを終了してもダウンロードは中断されません。\n本当にモバイル通信で続行しますか？\n(約%sMB)</string>
     <string name="feature_download_models_confirm_download">以下の翻訳モデルをダウンロードします\n%s\n(約%sMB)</string>
+    <string name="feature_download_models_no_network">インターネットに接続されていません。接続状況を確認してから再度お試しください。</string>
 
     <!-- 削除画面 -->
     <string name="feature_delete_models_choose_language_desc">削除したい言語を選んでください</string>
