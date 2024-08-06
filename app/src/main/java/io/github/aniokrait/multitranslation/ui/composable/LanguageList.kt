@@ -46,7 +46,7 @@ fun LanguageList(
         modifier = modifier,
         columns = GridCells.Fixed(2),
     ) {
-        items(locales.filter { it != Locale.getDefault() }) { locale ->
+        items(locales.filter { it.language != Locale.getDefault().language }) { locale ->
             val eachLocaleState = state.find { it.locale == locale }
             val checked: Boolean = eachLocaleState?.checked?.value ?: false
             val downloaded: Boolean = eachLocaleState?.downloaded?.value ?: false
