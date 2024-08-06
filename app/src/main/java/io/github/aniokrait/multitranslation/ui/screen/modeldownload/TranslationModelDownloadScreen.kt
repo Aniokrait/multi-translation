@@ -129,22 +129,19 @@ private fun TranslationModelDownloadScreen(
                 val context = LocalContext.current
                 val errorMessageTemplate =
                     stringResource(id = R.string.feature_download_models_download_failed_partially)
-                var showNoNetworkDialog by
-                remember {
-                    mutableStateOf(false)
-                }
-                val showNoWifiAlertDialog =
-                    remember {
-                        mutableStateOf(false)
-                    }
-                val showDownloadConfirmDialog =
-                    remember {
-                        mutableStateOf(false)
-                    }
+                var showNoNetworkDialog by remember { mutableStateOf(false) }
+                val showNoWifiAlertDialog = remember { mutableStateOf(false) }
+                val showDownloadConfirmDialog = remember { mutableStateOf(false) }
+                var showSelectLeastOneDialog by remember { mutableStateOf(false) }
 
                 Button(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
+                        if (state.none { it.checked.value }) {
+                            showSelectLeastOneDialog = true
+                            return@Button
+                        }
+
                         val isNetworkConnected =
                             NetworkChecker.isNetworkConnected(context = context)
 
@@ -164,7 +161,21 @@ private fun TranslationModelDownloadScreen(
                 }
 
                 val trafficVolume = (state.filter { it.checked.value }.size * 30).toString()
-                if (showNoWifiAlertDialog.value) {
+                if (showSelectLeastOneDialog) {
+                    AlertDialog(
+                        onDismissRequest = {
+                            showSelectLeastOneDialog = false
+                        },
+                        confirmButton = {
+                            Button(onClick = { showSelectLeastOneDialog = false }) {
+                                Text(text = "OK")
+                            }
+                        },
+                        text = {
+                            Text(text = stringResource(id = R.string.feature_download_models_select_least_one))
+                        }
+                    )
+                } else if (showNoWifiAlertDialog.value) {
                     ConfirmDialog(
                         showConfirmDialog = showNoWifiAlertDialog,
                         dialogText =
@@ -220,7 +231,7 @@ private fun TranslationModelDownloadScreen(
                             }
                         },
                         text = {
-                            Text(text = stringResource(id = R.string.feature_download_models_no_network))
+                            Text(text = stringResource(id = R.string.feature_download_models_select_least_one))
                         }
                     )
                 }
