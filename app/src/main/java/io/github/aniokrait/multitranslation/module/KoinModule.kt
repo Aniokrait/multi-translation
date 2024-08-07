@@ -1,9 +1,5 @@
 package io.github.aniokrait.multitranslation.module
 
-// import io.ktor.client.HttpClient
-// import io.ktor.client.engine.cio.CIO
-// import io.ktor.client.engine.cio.endpoint
-// import io.ktor.client.plugins.logging.Logging
 import io.github.aniokrait.multitranslation.datasource.HttpClientInterface
 import io.github.aniokrait.multitranslation.datasource.KtorHttpClient
 import io.github.aniokrait.multitranslation.datasource.LanguageModelDatasource
@@ -40,11 +36,21 @@ val appModule =
             }
         }
         single<LanguageModelRepository> { LanguageModelDatasource() }
-        single<HttpClientInterface> { KtorHttpClient(client = get(), ioDispatcher = Dispatchers.IO) }
-        single<InquiryRepository> { SlackBotInquirer(client = get(), ioDispatcher = Dispatchers.IO) }
+        single<HttpClientInterface> {
+            KtorHttpClient(
+                client = get(),
+                ioDispatcher = Dispatchers.IO
+            )
+        }
+        single<InquiryRepository> {
+            SlackBotInquirer(
+                client = get(),
+                ioDispatcher = Dispatchers.IO
+            )
+        }
         viewModel { MainViewModel(languageModelRepository = get()) }
         viewModel { TranslationModelDownloadViewModel(repository = get()) }
-        viewModel { TranslationViewModel(repository = get()) }
+        viewModel { TranslationViewModel(repository = get(), savedStateHandle = get()) }
         viewModel { DeleteModelViewModel(repository = get()) }
         viewModel { InquiryViewModel(repository = get()) }
     }

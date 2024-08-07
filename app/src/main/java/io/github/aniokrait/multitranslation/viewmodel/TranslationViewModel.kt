@@ -1,5 +1,6 @@
 package io.github.aniokrait.multitranslation.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.nl.translate.Translation
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -30,9 +32,14 @@ import java.util.Locale
 @OptIn(ExperimentalCoroutinesApi::class)
 class TranslationViewModel(
     private val repository: LanguageModelRepository,
+    private val savedStateHandle: SavedStateHandle,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel() {
+    companion object {
+        private const val INITIALIZED = "initialized"
+    }
+
     // Store partial languages translated results.
     private val partialTranslatedResults: StateFlow<MutableMap<Locale, String>> =
         initTranslationResults()
@@ -74,12 +81,14 @@ class TranslationViewModel(
 
             TranslationUiState(
                 translationResult =
-                    allTranslatedResults
-                        .filter { it.key.language != sourceLanguage.language && it.key.country.isEmpty() }
-                        .toMap(),
+                allTranslatedResults
+                    .filter { it.key.language != sourceLanguage.language && it.key.country.isEmpty() }
+                    .toMap(),
                 isTranslating = isTranslating,
                 sourceLanguage = sourceLanguage,
             )
+        }.onEach {
+            savedStateHandle[INITIALIZED] = true
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
@@ -88,14 +97,17 @@ class TranslationViewModel(
 
     private fun initTranslationResults(): Flow<MutableMap<Locale, String>> =
         flow {
-            val downloadedModels = repository.getDownloadedModels()
+            val isInitialized: Boolean? = savedStateHandle[INITIALIZED]
+            if (isInitialized == null || isInitialized == false) {
+                val downloadedModels = repository.getDownloadedModels()
 
-            emit(
-                downloadedModels.associate {
-                    Locale.forLanguageTag(it.language) to ""
-                }.toSortedMap(compareBy { it.displayLanguage })
-                    .toMutableMap(),
-            )
+                emit(
+                    downloadedModels.associate {
+                        Locale.forLanguageTag(it.language) to ""
+                    }.toSortedMap(compareBy { it.displayLanguage })
+                        .toMutableMap(),
+                )
+            }
         }
 
     /**
@@ -109,8 +121,8 @@ class TranslationViewModel(
             downloadedLanguages
                 .filter {
                     it.language.substring(0, 2) !=
-                        sourceLanguage.value
-                            .language.substring(0, 2)
+                            sourceLanguage.value
+                                .language.substring(0, 2)
                 }
                 .forEach { targetLocale ->
                     Timber.d("targetLocale: $targetLocale")
@@ -159,5 +171,10 @@ class TranslationViewModel(
 
     fun onSourceLanguageClick(locale: Locale) {
         sourceLanguage.value = locale
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        savedStateHandle[INITIALIZED] = false
     }
 }
