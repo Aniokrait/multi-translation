@@ -23,9 +23,14 @@ import io.github.aniokrait.multitranslation.R
 
 /**
  * Dialog to show downloading progress.
+ * @param totalDownloadingCount Total number of models to download.
+ * @param successDownloadedCount Number of successfully downloaded models.
  */
 @Composable
-fun DownloadingDialog() {
+fun DownloadingDialog(
+    totalDownloadingCount: Int,
+    successDownloadedCount: Int,
+) {
     // TODO: find more appropriate composable.
     Dialog(
         onDismissRequest = {},
@@ -44,7 +49,11 @@ fun DownloadingDialog() {
                         .padding(top = 16.dp)
                         .fillMaxWidth()
                         .wrapContentSize(Alignment.Center),
-                    text = stringResource(id = R.string.feature_download_models_download_progress),
+                    text = stringResource(
+                        id = R.string.feature_download_models_download_progress,
+                        successDownloadedCount,
+                        totalDownloadingCount
+                    ),
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
@@ -65,5 +74,8 @@ fun DownloadingDialog() {
 @Preview(showBackground = true)
 @Composable
 private fun DownloadingDialogPreview() {
-    DownloadingDialog()
+    DownloadingDialog(
+        totalDownloadingCount = 6,
+        successDownloadedCount = 2,
+    )
 }

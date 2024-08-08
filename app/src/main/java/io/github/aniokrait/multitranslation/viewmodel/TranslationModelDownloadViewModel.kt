@@ -8,12 +8,14 @@ import io.github.aniokrait.multitranslation.core.LanguageNameResolver
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.ui.stateholder.EachLanguageState
 import io.github.aniokrait.multitranslation.ui.stateholder.uistate.TranslationModelDownloadUiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.Locale
 
 class TranslationModelDownloadViewModel(
@@ -22,6 +24,7 @@ class TranslationModelDownloadViewModel(
     private val checkState: StateFlow<Map<Locale, MutableState<Boolean>>> = initCheckState()
     private val isDownloading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val allDownloadFailed: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private val successDownloadedCount: MutableStateFlow<Int> = MutableStateFlow(0)
 
     val uiState: StateFlow<TranslationModelDownloadUiState> =
         combine(
@@ -29,7 +32,8 @@ class TranslationModelDownloadViewModel(
             checkState,
             isDownloading,
             allDownloadFailed,
-        ) { downloadedInfo, checkState, isDownloading, allDownloadFailed ->
+            successDownloadedCount,
+        ) { downloadedInfo, checkState, isDownloading, allDownloadFailed, successDownloadedCount ->
             val list = mutableListOf<EachLanguageState>()
             for (info in downloadedInfo) {
                 val locale = info.locale
@@ -47,6 +51,7 @@ class TranslationModelDownloadViewModel(
                 languagesState = list,
                 isDownloading = isDownloading,
                 allDownloadFailed = allDownloadFailed,
+                successDownloadedCount = successDownloadedCount,
             )
         }
             .stateIn(
@@ -75,6 +80,7 @@ class TranslationModelDownloadViewModel(
         allowNoWifi: Boolean,
     ) {
         isDownloading.value = true
+        successDownloadedCount.value = 0
 
         val checkedLanguages: List<Locale> =
             checkState.value
@@ -86,7 +92,11 @@ class TranslationModelDownloadViewModel(
             repository.downloadModel(
                 targetLanguages = checkedLanguages,
                 allowNoWifi = allowNoWifi,
+                successDownloadedCount = successDownloadedCount,
             )
+            Timber.d("successDownloadedCount: ${successDownloadedCount.value}")
+            // Add some delay to show downloaded count so that user can know all models are downloaded successfully.
+            delay(800)
             isDownloading.value = false
 
 //            if (checkedLanguages.size == failedModels.size) {

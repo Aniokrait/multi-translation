@@ -54,6 +54,7 @@ fun TranslationModelDownloadScreen(
         state = state.languagesState,
         isDownloading = state.isDownloading,
         snackBarMessage = snackBarMessage,
+        successDownloadedCount = state.successDownloadedCount,
         onCheckClicked = vm::onCheckClicked,
         onDownloadClicked = vm::onDownloadClicked,
         navigateToTranslation = navigateToTranslation,
@@ -80,6 +81,7 @@ private fun TranslationModelDownloadScreen(
     state: List<EachLanguageState>,
     isDownloading: Boolean,
     snackBarMessage: MutableState<String>,
+    successDownloadedCount: Int,
     onCheckClicked: (Locale) -> Unit,
     onDownloadClicked: (() -> Unit, String, MutableState<String>, Boolean) -> Unit,
     navigateToTranslation: () -> Unit,
@@ -231,14 +233,17 @@ private fun TranslationModelDownloadScreen(
                             }
                         },
                         text = {
-                            Text(text = stringResource(id = R.string.feature_download_models_select_least_one))
+                            Text(text = stringResource(id = R.string.feature_download_models_no_network))
                         }
                     )
                 }
             }
 
             if (isDownloading) {
-                DownloadingDialog()
+                DownloadingDialog(
+                    totalDownloadingCount = state.filter { it.checked.value }.size,
+                    successDownloadedCount = successDownloadedCount,
+                )
             }
         }
     }
@@ -264,6 +269,7 @@ private fun TranslationModelDownloadScreenPreview() {
         state = listOf(iceLandState, arabicState),
         isDownloading = false,
         snackBarMessage = remember { mutableStateOf("") },
+        successDownloadedCount = 0,
         onCheckClicked = {},
         onDownloadClicked = { _, _, _, _ -> },
         navigateToTranslation = {},

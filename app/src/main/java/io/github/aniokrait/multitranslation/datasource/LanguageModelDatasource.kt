@@ -14,10 +14,16 @@ import io.github.aniokrait.multitranslation.repository.DownloadResult
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.ui.stateholder.DownloadedState
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.tasks.asDeferred
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -27,6 +33,7 @@ import java.util.concurrent.TimeoutException
 
 class LanguageModelDatasource(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : LanguageModelRepository {
     /**
      * Get downloaded models info and emit state.
@@ -63,10 +70,12 @@ class LanguageModelDatasource(
      * Download language translation models.
      * @param targetLanguages Checked languages on selection screen.
      * @param allowNoWifi Allow download even if the device is not connected to the internet.
+     * @param successDownloadedCount The number of successfully downloaded models.
      */
     override suspend fun downloadModel(
         targetLanguages: List<Locale>,
         allowNoWifi: Boolean,
+        successDownloadedCount: MutableStateFlow<Int>,
     ): DownloadResult {
         val conditionsBuilder = DownloadConditions.Builder()
         if (!allowNoWifi) {
@@ -74,6 +83,8 @@ class LanguageModelDatasource(
         }
         val conditions = conditionsBuilder.build()
 
+        val mutex = Mutex()
+        val tasks: MutableList<Deferred<Void>> = mutableListOf()
         val failedModels = mutableListOf<Locale>()
         targetLanguages
             .filter { it != Locale.getDefault() }
@@ -107,6 +118,13 @@ class LanguageModelDatasource(
                                         // TODO Until implement handling, make it crash to log what happened.
                                         throw ex
                                     }
+                                }.addOnSuccessListener {
+                                    CoroutineScope(mainDispatcher).launch {
+                                        mutex.withLock {
+                                            successDownloadedCount.value++
+                                        }
+                                    }
+
                                 }
                                 .asDeferred()
 
@@ -119,7 +137,8 @@ class LanguageModelDatasource(
 //                            throw TimeoutException("Download timed out for ${locale.language}.")
 //                        }
 
-                        deferred.await()
+                        tasks.add(deferred)
+//                        deferred.await()
 //                        timeoutJob.cancel()
                     }
                 } catch (e: TimeoutException) {
@@ -134,6 +153,13 @@ class LanguageModelDatasource(
                     return DownloadResult.NotEnoughSpace(failedModels)
                 }
             }
+
+        val jobs = tasks.map {
+            CoroutineScope(ioDispatcher).launch {
+                it.await()
+            }
+        }
+        jobs.joinAll()
 
         return if (failedModels.isEmpty()) {
             DownloadResult.Success

@@ -5,6 +5,7 @@ import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -39,6 +40,7 @@ class DeleteViewModelUnitTest {
             repository.downloadModel(
                 targetLanguages = listOf(Locale.GERMAN, Locale.CHINESE, Locale.ENGLISH),
                 allowNoWifi = false,
+                successDownloadedCount = MutableStateFlow(0)
             )
             val downloadedModelsBeforeDelete = deleteModelViewModel.uiState.first()
             assertEquals(3, downloadedModelsBeforeDelete.languagesState.size)
