@@ -40,6 +40,6 @@
     <string name="feature_inquiry_inquiry_sent">送信が完了しました。</string>
 
     <!-- 設定系 -->
-    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="admob_ad_unit_id">ca-app-pub-3940256099942544/9214589741</string>
+    <string name="admob_app_id">ca-app-pub-7985790583857508~8565899776</string>
+    <string name="admob_ad_unit_id">ca-app-pub-7985790583857508/6819920874</string>
 </resources>
