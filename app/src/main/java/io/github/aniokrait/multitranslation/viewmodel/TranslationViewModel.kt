@@ -3,6 +3,7 @@ package io.github.aniokrait.multitranslation.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
@@ -10,6 +11,7 @@ import io.github.aniokrait.multitranslation.ui.stateholder.uistate.TranslationUi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -62,7 +65,11 @@ class TranslationViewModel(
     private val allTranslatedResults =
         combine(
             partialTranslatedResults,
-            eachTranslatedResult.flatMapMerge { MutableStateFlow(it) },
+            eachTranslatedResult.flatMapMerge(
+                concurrency = TranslateLanguage.getAllLanguages().size //Concurrently translate 59 languages at most.
+            ) {
+                MutableStateFlow(it)
+            }
         ) { translationResult, eachTranslatedResult ->
             translationResult[eachTranslatedResult.first] = eachTranslatedResult.second
             translationResult
@@ -116,6 +123,7 @@ class TranslationViewModel(
     fun onTranslateClick(input: String) {
         isTranslating.value = true
         viewModelScope.launch(ioDispatcher) {
+            val translateJobs: MutableList<Job> = mutableListOf()
             val downloadedLanguages = uiState.value.translationResult.keys.toList()
 
             downloadedLanguages
@@ -145,7 +153,7 @@ class TranslationViewModel(
                         val modelDownloadTask = translator.downloadModelIfNeeded()
 
                         // To translate parallel, launch coroutine for each language.
-                        launch {
+                        val job = launch {
                             modelDownloadTask.await()
 
                             val translateResult =
@@ -153,6 +161,7 @@ class TranslationViewModel(
                                     targetLocale,
                                     translator.translate(input).await(),
                                 )
+                            Timber.d("translateResult: $translateResult")
                             translator.close()
                             withContext(mainDispatcher) {
                                 eachTranslatedResult.emit(
@@ -160,9 +169,11 @@ class TranslationViewModel(
                                 )
                             }
                         }
+                        translateJobs.add(job)
                     }
                 }
 
+            translateJobs.joinAll()
             withContext(mainDispatcher) {
                 isTranslating.value = false
             }

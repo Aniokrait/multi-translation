@@ -45,7 +45,6 @@ import io.github.aniokrait.multitranslation.ui.theme.OnPrimary
 import io.github.aniokrait.multitranslation.viewmodel.TranslationViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 import java.util.Locale
 
 @Serializable
@@ -230,8 +229,6 @@ private fun LazyListScope.ResultArea(
         items = translateResults.toList(),
         key = { it.first },
     ) { (key, value) ->
-        Timber.d("lang: ${key.language}")
-
         TranslateResultCard(
             modifier = Modifier.padding(bottom = 8.dp),
             textBlockHeight = textBlockHeight,
