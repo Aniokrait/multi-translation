@@ -45,8 +45,8 @@ fun TranslateResultCard(
 ) {
     Card(
         modifier =
-            modifier
-                .fillMaxWidth(),
+        modifier
+            .fillMaxWidth(),
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -59,20 +59,22 @@ fun TranslateResultCard(
                 )
                 Spacer(modifier = Modifier.weight(1f))
 
-                Box {
-                    val clipboardManager = LocalClipboardManager.current
-                    IconButton(
-                        modifier =
+                if (content.isNotEmpty()) {
+                    Box {
+                        val clipboardManager = LocalClipboardManager.current
+                        IconButton(
+                            modifier =
                             Modifier
                                 .offset(x = 8.dp, y = (-8).dp),
-                        onClick = {
-                            clipboardManager.setText(AnnotatedString(content))
-                        },
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.content_copy_24px),
-                            contentDescription = "copy",
-                        )
+                            onClick = {
+                                clipboardManager.setText(AnnotatedString(content))
+                            },
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.content_copy_24px),
+                                contentDescription = "copy",
+                            )
+                        }
                     }
                 }
             }
@@ -89,9 +91,9 @@ fun TranslateResultCard(
                 }
             Text(
                 modifier =
-                    Modifier
-                        .height(textBlockHeight)
-                        .verticalScroll(scrollState),
+                Modifier
+                    .height(textBlockHeight)
+                    .verticalScroll(scrollState),
                 text = indentedText,
             )
 
@@ -110,9 +112,9 @@ fun TranslateResultCard(
                     val uriHandler = LocalUriHandler.current
                     Image(
                         modifier =
-                            Modifier.clickable {
-                                uriHandler.openUri("http://translate.google.com")
-                            },
+                        Modifier.clickable {
+                            uriHandler.openUri("http://translate.google.com")
+                        },
                         painter = painterResource(id = R.drawable.powered_by_google),
                         contentDescription = null,
                     )
