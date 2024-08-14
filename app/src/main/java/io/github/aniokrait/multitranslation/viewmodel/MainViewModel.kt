@@ -9,9 +9,7 @@ class MainViewModel(
     private val languageModelRepository: LanguageModelRepository,
 ) : ViewModel() {
     suspend fun checkIfFirstLaunch(): Boolean {
-        val downloadedModels =
-            languageModelRepository.getDownloadedModels()
-                .filter { it.language != TranslateLanguage.ENGLISH && it.language != Locale.getDefault().language }
-        return downloadedModels.isEmpty()
+        return languageModelRepository.getDownloadedModels()
+            .none { it.language != TranslateLanguage.ENGLISH || it.language != Locale.getDefault().language }
     }
 }
