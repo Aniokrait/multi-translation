@@ -39,6 +39,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            kotlinOptions {
+                freeCompilerArgs = listOf("-Xdebug")
+            }
+        }
         release {
             isDebuggable = false
             isMinifyEnabled = true
