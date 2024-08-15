@@ -171,7 +171,10 @@ private fun LazyListScope.TranslateSourceArea(
                     availableLanguages.forEach { language ->
                         DropdownMenuItem(
                             text = { Text(text = language.getDisplayLanguage(Locale.getDefault())) },
-                            onClick = { onSourceLanguageClick(language) },
+                            onClick = {
+                                expanded = false
+                                onSourceLanguageClick(language)
+                            },
                         )
                     }
                 }

@@ -6,6 +6,7 @@ import io.github.aniokrait.multitranslation.repository.DownloadResult
 import io.github.aniokrait.multitranslation.repository.LanguageModelRepository
 import io.github.aniokrait.multitranslation.ui.stateholder.DownloadedState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import java.util.Locale
 
@@ -32,12 +33,14 @@ class FakeLanguageModelDatasource : LanguageModelRepository {
     override suspend fun downloadModel(
         targetLanguages: List<Locale>,
         allowNoWifi: Boolean,
+        successDownloadedCount: MutableStateFlow<Int>,
     ): DownloadResult {
         set.addAll(targetLanguages.map { DownloadedState(it, mutableStateOf(true)) })
 
         return if (failDownloadModel) {
             DownloadResult.Failure(failedModels = listOf(Locale.JAPANESE, Locale.GERMAN))
         } else {
+            successDownloadedCount.value = targetLanguages.size
             DownloadResult.Success
         }
     }
