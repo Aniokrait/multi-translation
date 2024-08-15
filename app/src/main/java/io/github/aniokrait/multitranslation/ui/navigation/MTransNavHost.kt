@@ -86,7 +86,9 @@ fun MTransNavHost(
         }
         composable<DeleteModel> {
             DeleteModelScreen(
+                snackBarMessage = snackBarMessage,
                 onBackClicked = navController::navigateUp,
+                navigateToTranslation = { navController.navigate(Translation) },
             )
         }
         composable<Inquiry> {

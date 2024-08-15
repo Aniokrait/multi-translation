@@ -81,14 +81,20 @@ class DeleteModelViewModel(
      * Delete language translation models.
      *
      * @param targetLanguages which to delete from the user device.
+     * @param navigateToTranslation After delete, navigate to Translation screen.
      */
-    fun onDeleteClicked(targetLanguages: List<Locale>) {
+    fun onDeleteClicked(
+        targetLanguages: List<Locale>,
+        navigateToTranslation: () -> Unit,
+    ) {
         isDeleting.value = true
 
         viewModelScope.launch {
             repository.deleteModel(targetLanguages)
             isDeleting.value = false
             retryEvent.value = RetryEvent.Retrying
+
+            navigateToTranslation()
         }
     }
 

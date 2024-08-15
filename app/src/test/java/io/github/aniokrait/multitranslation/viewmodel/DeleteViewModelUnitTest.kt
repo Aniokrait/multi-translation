@@ -45,7 +45,10 @@ class DeleteViewModelUnitTest {
             val downloadedModelsBeforeDelete = deleteModelViewModel.uiState.first()
             assertEquals(3, downloadedModelsBeforeDelete.languagesState.size)
 
-            deleteModelViewModel.onDeleteClicked(listOf(Locale.GERMAN, Locale.CHINESE))
+            deleteModelViewModel.onDeleteClicked(
+                targetLanguages = listOf(Locale.GERMAN, Locale.CHINESE),
+                navigateToTranslation = {}
+            )
 
             val result = deleteModelViewModel.uiState.first()
             assertEquals(1, result.languagesState.size)

@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,18 +32,30 @@ import java.util.Locale
 @Serializable
 object DeleteModel
 
+/**
+ * The screen for deleting translation models.
+ * @param modifier Modifier.
+ * @param vm ViewModel.
+ * @param snackBarMessage Message for SnackBar.
+ * @param navigateToTranslation After delete, navigate to Translation screen.
+ * @param onBackClicked Back to the previous screen.
+ */
 @Composable
 fun DeleteModelScreen(
     modifier: Modifier = Modifier,
     vm: DeleteModelViewModel = koinViewModel(),
+    snackBarMessage: MutableState<String>,
+    navigateToTranslation: () -> Unit,
     onBackClicked: (() -> Unit)?,
 ) {
     val state = vm.uiState.collectAsStateWithLifecycle().value
     DeleteModelScreen(
         modifier = modifier,
         state = state.languagesState,
+        snackBarMessage = snackBarMessage,
         onCheckClicked = vm::onCheckClicked,
         onDeleteClicked = vm::onDeleteClicked,
+        navigateToTranslation = navigateToTranslation,
         onBackClicked = onBackClicked,
     )
 }
@@ -51,8 +64,10 @@ fun DeleteModelScreen(
 private fun DeleteModelScreen(
     modifier: Modifier = Modifier,
     state: List<EachLanguageState>,
+    snackBarMessage: MutableState<String>,
     onCheckClicked: (Locale) -> Unit,
-    onDeleteClicked: (List<Locale>) -> Unit,
+    onDeleteClicked: (List<Locale>, () -> Unit) -> Unit,
+    navigateToTranslation: () -> Unit,
     onBackClicked: (() -> Unit)?,
 ) {
     Scaffold(
@@ -101,6 +116,8 @@ private fun DeleteModelScreen(
             }
 
             if (showConfirmDialog.value) {
+                val snackBarResourceMessage =
+                    stringResource(id = R.string.feature_delete_models_delete_success)
                 ConfirmDialog(
                     showConfirmDialog = showConfirmDialog,
                     dialogText = stringResource(id = R.string.feature_delete_models_confirm_delete),
@@ -109,7 +126,9 @@ private fun DeleteModelScreen(
                     onConfirmClicked = {
                         onDeleteClicked(
                             state.filter { it.checked.value }.map { it.locale },
+                            navigateToTranslation,
                         )
+                        snackBarMessage.value = snackBarResourceMessage
                     },
                 )
             }
@@ -134,8 +153,10 @@ fun DeleteModelScreenPreview() {
                 downloaded = null,
             ),
         ),
+        snackBarMessage = remember { mutableStateOf("") },
         onCheckClicked = {},
-        onDeleteClicked = {},
+        onDeleteClicked = { _, _ -> },
+        navigateToTranslation = {},
         onBackClicked = {},
     )
 }

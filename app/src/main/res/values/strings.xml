@@ -32,6 +32,7 @@
     <string name="feature_delete_models_re_download_desc">(削除した場合、再度翻訳するには翻訳モデルを再ダウンロードする必要があります)</string>
     <string name="feature_delete_models_delete">削除</string>
     <string name="feature_delete_models_confirm_delete">翻訳モデルを削除しますか？</string>
+    <string name="feature_delete_models_delete_success">翻訳モデルを削除しました。</string>
     <string name="feature_delete_models_cancel">キャンセル</string>
 
     <!-- お問い合わせ画面 -->
