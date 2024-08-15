@@ -83,6 +83,7 @@ class LanguageModelDatasource(
         }
         val conditions = conditionsBuilder.build()
 
+        val notEnoughSpace = MutableStateFlow(false)
         val mutex = Mutex()
         val tasks: MutableList<Deferred<Void>> = mutableListOf()
         val failedModels = mutableListOf<Locale>()
@@ -98,33 +99,21 @@ class LanguageModelDatasource(
                         .build()
                 val translator: Translator = Translation.getClient(options)
 
-                var notEnoughSpace = false
-
                 try {
                     withContext(ioDispatcher) {
                         val deferred =
                             translator.downloadModelIfNeeded(conditions)
-                                .addOnFailureListener { ex ->
-                                    if (ex is MlKitException) {
-                                        if (ex.errorCode == MlKitException.NOT_ENOUGH_SPACE) {
-                                            notEnoughSpace = true
-                                        } else {
-                                            Timber.d(ex.errorCode.toString())
-                                            // TODO Until implement handling, make it crash to log what happened.
-                                            throw ex
-                                        }
-                                    } else {
-                                        Timber.d("ex is ${ex.javaClass.name}")
-                                        // TODO Until implement handling, make it crash to log what happened.
-                                        throw ex
-                                    }
-                                }.addOnSuccessListener {
-                                    CoroutineScope(mainDispatcher).launch {
-                                        mutex.withLock {
-                                            successDownloadedCount.value++
-                                        }
-                                    }
-
+                                .addOnFailureListener {
+                                    onDownloadFailure(
+                                        ex = it,
+                                        notEnoughSpace = notEnoughSpace,
+                                    )
+                                }
+                                .addOnSuccessListener {
+                                    onDownloadSuccess(
+                                        mutex = mutex,
+                                        successDownloadedCount = successDownloadedCount,
+                                    )
                                 }
                                 .asDeferred()
 
@@ -148,24 +137,105 @@ class LanguageModelDatasource(
                     translator.close()
                 }
 
-                if (notEnoughSpace) {
+                // TODO: Fix issue not enough space.
+                if (notEnoughSpace.value) {
                     Timber.w("Not enough space.")
                     return DownloadResult.NotEnoughSpace(failedModels)
                 }
             }
 
-        val jobs = tasks.map {
+        val jobsWithoutUserLocale = tasks.map {
             CoroutineScope(ioDispatcher).launch {
                 it.await()
             }
         }
-        jobs.joinAll()
+
+        val allJobs = jobsWithoutUserLocale.toMutableList()
+        allJobs.add(
+            CoroutineScope(ioDispatcher).launch {
+                downloadUserLocaleModel(
+                    conditions = conditions,
+                    notEnoughSpace = notEnoughSpace,
+                    mutex = mutex,
+                ).await()
+            }
+        )
+        allJobs.joinAll()
 
         return if (failedModels.isEmpty()) {
             DownloadResult.Success
         } else {
             DownloadResult.Failure(failedModels)
         }
+    }
+
+    /**
+     * Increase the number of successfully downloaded models if download is successful.
+     */
+    private fun onDownloadSuccess(
+        mutex: Mutex,
+        successDownloadedCount: MutableStateFlow<Int>,
+    ) {
+        CoroutineScope(mainDispatcher).launch {
+            mutex.withLock {
+                successDownloadedCount.value++
+            }
+        }
+    }
+
+    /**
+     * Handle download failure.
+     */
+    private fun onDownloadFailure(
+        ex: Exception,
+        notEnoughSpace: MutableStateFlow<Boolean>,
+    ) {
+        if (ex is MlKitException) {
+            if (ex.errorCode == MlKitException.NOT_ENOUGH_SPACE) {
+                notEnoughSpace.value = true
+            } else {
+                Timber.d(ex.errorCode.toString())
+                // TODO Until implement handling, make it crash to log what happened.
+                throw ex
+            }
+        } else {
+            Timber.d("ex is ${ex.javaClass.name}")
+            // TODO Until implement handling, make it crash to log what happened.
+            throw ex
+        }
+    }
+
+    /**
+     * Download user locale model.
+     */
+    private fun downloadUserLocaleModel(
+        conditions: DownloadConditions,
+        notEnoughSpace: MutableStateFlow<Boolean>,
+        mutex: Mutex,
+    ): Deferred<Void> {
+        val options =
+            TranslatorOptions.Builder()
+                .setSourceLanguage(
+                    TranslateLanguage.ENGLISH,
+                )
+                .setTargetLanguage(Locale.getDefault().toLanguageTag().substring(0, 2))
+                .build()
+        val translator: Translator = Translation.getClient(options)
+
+        return translator.downloadModelIfNeeded(conditions)
+            .addOnFailureListener {
+                onDownloadFailure(
+                    ex = it,
+                    notEnoughSpace = notEnoughSpace,
+                )
+            }
+            .addOnSuccessListener {
+                onDownloadSuccess(
+                    mutex = mutex,
+                    successDownloadedCount = MutableStateFlow(0),
+                )
+            }
+            .asDeferred()
     }
 
     /**
