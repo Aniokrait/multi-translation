@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.navigation.NavHostController
@@ -33,6 +34,7 @@ fun MTransNavHost(
     navController: NavHostController,
     snackBarMessage: MutableState<String>,
     mainViewModel: MainViewModel = koinViewModel(),
+    setKeepOnScreenCondition: (SplashScreen.KeepOnScreenCondition) -> Unit,
 ) {
     val startDestinationState: MutableState<StartDestination> =
         remember {
@@ -58,14 +60,14 @@ fun MTransNavHost(
                 navigateToTranslation = { navController.navigate(Translation) },
                 snackBarMessage = snackBarMessage,
                 onBackClicked =
-                    if (navController.previousBackStackEntry != null) {
-                        {
-                            ->
-                            navController.navigateUp()
-                        }
-                    } else {
-                        null
-                    },
+                if (navController.previousBackStackEntry != null) {
+                    {
+                        ->
+                        navController.navigateUp()
+                    }
+                } else {
+                    null
+                },
             )
 
             val context = LocalContext.current
@@ -91,6 +93,12 @@ fun MTransNavHost(
             InquiryScreen(
                 onBackClicked = navController::navigateUp,
             )
+        }
+    }
+
+    LaunchedEffect(startDestinationState.value) {
+        if (startDestinationState.value != Loading) {
+            setKeepOnScreenCondition.invoke { false }
         }
     }
 }

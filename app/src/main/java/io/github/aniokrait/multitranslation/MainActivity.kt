@@ -9,12 +9,15 @@ import io.github.aniokrait.multitranslation.ui.MTransApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { true }
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MTransApp()
+            MTransApp(
+                splashScreen::setKeepOnScreenCondition
+            )
         }
     }
 }

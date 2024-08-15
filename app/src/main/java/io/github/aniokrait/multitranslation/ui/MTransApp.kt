@@ -12,12 +12,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen
 import androidx.navigation.compose.rememberNavController
 import io.github.aniokrait.multitranslation.ui.navigation.MTransNavHost
 import io.github.aniokrait.multitranslation.ui.theme.MultiTranslationTheme
 
 @Composable
-fun MTransApp() {
+fun MTransApp(setKeepOnScreenCondition: (SplashScreen.KeepOnScreenCondition) -> Unit) {
     val navController = rememberNavController()
 
     Box(Modifier.safeDrawingPadding()) {
@@ -32,6 +33,7 @@ fun MTransApp() {
                     modifier = Modifier.padding(innerPadding),
                     navController = navController,
                     snackBarMessage = snackBarMessage,
+                    setKeepOnScreenCondition = setKeepOnScreenCondition,
                 )
 
                 LaunchedEffect(snackBarMessage.value) {
