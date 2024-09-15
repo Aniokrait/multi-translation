@@ -43,7 +43,7 @@ class LanguageModelDatasource(
             val downloadedModels = getDownloadedModels()
 
             emit(
-                LanguageNameResolver.getAllLanguagesLabel().map { locale ->
+                LanguageNameResolver.getAvailableLocales().map { locale ->
                     val isDownloaded =
                         downloadedModels.any { it.language == locale.toLanguageTag() }
                     DownloadedState(

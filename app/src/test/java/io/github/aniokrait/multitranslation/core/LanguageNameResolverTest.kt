@@ -6,20 +6,12 @@ import java.util.Locale
 
 class LanguageNameResolverTest {
     @Test
-    fun testGetAllLanguagesName() {
-        val result = LanguageNameResolver.getAllLanguagesLabel()
+    fun `Returns all available languages`() {
+        val result = LanguageNameResolver.getAvailableLocales()
 
+        assertEquals(59, result.size)
         assertEquals("アイスランド語", result[0].getDisplayLanguage(Locale.JAPANESE))
         assertEquals("アイルランド語", result[1].getDisplayLanguage(Locale.JAPANESE))
         assertEquals("日本語", result[56].getDisplayLanguage(Locale.JAPANESE))
     }
-
-//    @Test
-//    fun testGetAllLanguagesLocale() {
-//        val result = LanguageNameResolver.getAllLanguagesLocale()
-//
-//
-//        assertTrue(result.contains(Locale.ENGLISH))
-//        assertTrue(result.contains(Locale.JAPANESE))
-//    }
 }

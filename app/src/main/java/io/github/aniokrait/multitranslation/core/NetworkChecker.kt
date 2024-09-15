@@ -10,7 +10,8 @@ import android.net.NetworkCapabilities
 class NetworkChecker {
     companion object {
         /**
-         * Check if device is connected to WiFi network.
+         * Check if device is connected to Wi-Fi network.
+         *
          * @param context Application context
          * @return True if connected to Wi-Fi.
          */
@@ -24,6 +25,7 @@ class NetworkChecker {
 
         /**
          * Check if device is connected to the internet.
+         *
          * @param context Application context
          * @return True if connected to the internet.
          */

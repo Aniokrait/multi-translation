@@ -120,7 +120,7 @@ private fun TranslationModelDownloadScreen(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
-                val allLocales = LanguageNameResolver.getAllLanguagesLabel()
+                val allLocales = LanguageNameResolver.getAvailableLocales()
                 LanguageList(
                     modifier = Modifier.weight(1f),
                     locales = allLocales,

@@ -126,7 +126,7 @@ class TranslationModelDownloadViewModel(
 
     private fun initCheckState(): StateFlow<Map<Locale, MutableState<Boolean>>> {
         return MutableStateFlow(
-            LanguageNameResolver.getAllLanguagesLabel()
+            LanguageNameResolver.getAvailableLocales()
                 .associateWith { mutableStateOf(false) },
         )
     }
