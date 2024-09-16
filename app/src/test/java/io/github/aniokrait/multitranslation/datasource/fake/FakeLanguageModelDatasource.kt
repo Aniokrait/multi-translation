@@ -19,12 +19,12 @@ class FakeLanguageModelDatasource : LanguageModelRepository {
             ),
         )
 
-    override fun getDownloadedInfo(): Flow<List<DownloadedState>> =
+    override fun getDownloadedState(): Flow<List<DownloadedState>> =
         flow {
             emit(set.toList())
         }
 
-    override suspend fun getDownloadedModels(): Set<TranslateRemoteModel> {
+    override suspend fun getDownloadedRemoteModels(): Set<TranslateRemoteModel> {
         return set.map { TranslateRemoteModel.Builder(it.locale.toLanguageTag()).build() }.toSet()
     }
 

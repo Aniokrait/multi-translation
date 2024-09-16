@@ -51,7 +51,7 @@ class SlackBotInquirerAndroidTest {
     }
 
     @Test
-    fun getMetaInfo() {
+    fun Return_users_meta_info() {
         val result = slackBotInquirer.getMetaInfo()
 
         assertEquals(33, result.sdk)

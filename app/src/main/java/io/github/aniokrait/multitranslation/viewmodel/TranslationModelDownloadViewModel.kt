@@ -28,7 +28,7 @@ class TranslationModelDownloadViewModel(
 
     val uiState: StateFlow<TranslationModelDownloadUiState> =
         combine(
-            repository.getDownloadedInfo(),
+            repository.getDownloadedState(),
             checkState,
             isDownloading,
             allDownloadFailed,

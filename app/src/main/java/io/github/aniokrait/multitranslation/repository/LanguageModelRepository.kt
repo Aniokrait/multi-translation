@@ -10,12 +10,12 @@ interface LanguageModelRepository {
     /**
      * Get downloaded models info and return DownloadState flow.
      */
-    fun getDownloadedInfo(): Flow<List<DownloadedState>>
+    fun getDownloadedState(): Flow<List<DownloadedState>>
 
     /**
      * Get downloaded translation remote models.
      */
-    suspend fun getDownloadedModels(): Set<TranslateRemoteModel>
+    suspend fun getDownloadedRemoteModels(): Set<TranslateRemoteModel>
 
     /**
      * Download language translation models.

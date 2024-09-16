@@ -38,9 +38,9 @@ class LanguageModelDatasource(
     /**
      * Get downloaded models info and emit state.
      */
-    override fun getDownloadedInfo(): Flow<List<DownloadedState>> =
+    override fun getDownloadedState(): Flow<List<DownloadedState>> =
         flow {
-            val downloadedModels = getDownloadedModels()
+            val downloadedModels = getDownloadedRemoteModels()
 
             emit(
                 LanguageNameResolver.getAvailableLocales().map { locale ->
@@ -57,7 +57,7 @@ class LanguageModelDatasource(
     /**
      * Get downloaded models.
      */
-    override suspend fun getDownloadedModels(): Set<TranslateRemoteModel> {
+    override suspend fun getDownloadedRemoteModels(): Set<TranslateRemoteModel> {
         return withContext(ioDispatcher) {
             val downloadedModelsTask =
                 RemoteModelManager.getInstance()
