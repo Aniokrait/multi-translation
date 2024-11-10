@@ -79,9 +79,6 @@ private fun InquiryScreen(
             TopBar(
                 title = stringResource(id = R.string.topbar_lbl_inquiry),
                 showTrailingIcon = false,
-                onAddModelClicked = {},
-                onDeleteModelClicked = {},
-                onInquiryClicked = {},
                 onBackClicked = onBackClicked,
             )
         },

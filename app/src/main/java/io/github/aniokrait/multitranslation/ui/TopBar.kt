@@ -29,6 +29,9 @@ fun TopBar(
     onAddModelClicked: () -> Unit,
     onDeleteModelClicked: () -> Unit,
     onInquiryClicked: () -> Unit,
+    onAddModelClicked: () -> Unit = {},
+    onDeleteModelClicked: () -> Unit = {},
+    onInquiryClicked: () -> Unit = {},
     onBackClicked: (() -> Unit)? = null,
 ) {
     TopAppBar(
@@ -80,9 +83,6 @@ private fun TopBarPreview() {
     TopBar(
         title = "複数翻訳",
         showTrailingIcon = true,
-        onAddModelClicked = {},
-        onDeleteModelClicked = {},
         onBackClicked = {},
-        onInquiryClicked = {},
     )
 }
