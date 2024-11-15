@@ -57,6 +57,7 @@ fun TranslationScreen(
     onAddModelClicked: () -> Unit,
     onDeleteModelClicked: () -> Unit,
     onInquiryClicked: () -> Unit,
+    onLicencesClicked: () -> Unit,
 ) {
     val uiState = vm.uiState.collectAsStateWithLifecycle().value
     TranslationScreen(
@@ -67,6 +68,7 @@ fun TranslationScreen(
         onAddModelClicked = onAddModelClicked,
         onDeleteModelClicked = onDeleteModelClicked,
         onInquiryClicked = onInquiryClicked,
+        onLicencesClicked = onLicencesClicked,
         onSourceLanguageClick = vm::onSourceLanguageClick,
         onTranslateClick = vm::onTranslateClick,
     )
@@ -82,6 +84,7 @@ private fun TranslationScreen(
     onAddModelClicked: () -> Unit,
     onDeleteModelClicked: () -> Unit,
     onInquiryClicked: () -> Unit,
+    onLicencesClicked: () -> Unit,
     onSourceLanguageClick: (Locale) -> Unit,
     onTranslateClick: (String) -> Unit,
 ) {
@@ -93,6 +96,7 @@ private fun TranslationScreen(
                 onDeleteModelClicked = onDeleteModelClicked,
                 onAddModelClicked = onAddModelClicked,
                 onInquiryClicked = onInquiryClicked,
+                onLicencesClicked = onLicencesClicked,
             )
         },
     ) { innerPadding ->
@@ -260,5 +264,6 @@ fun TranslationScreenPreview() {
         onAddModelClicked = {},
         onDeleteModelClicked = {},
         onInquiryClicked = {},
+        onLicencesClicked = {},
     )
 }

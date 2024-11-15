@@ -1,5 +1,6 @@
 package io.github.aniokrait.multitranslation.ui.navigation
 
+import android.content.Intent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +16,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import io.github.aniokrait.multitranslation.extension.dataStore
 import io.github.aniokrait.multitranslation.ui.screen.inquiry.Inquiry
 import io.github.aniokrait.multitranslation.ui.screen.inquiry.InquiryScreen
@@ -40,6 +42,7 @@ fun MTransNavHost(
         remember {
             mutableStateOf(Loading)
         }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         startDestination(
@@ -70,7 +73,6 @@ fun MTransNavHost(
                 },
             )
 
-            val context = LocalContext.current
             LaunchedEffect(Unit) {
                 context.dataStore.edit { settings ->
                     settings[booleanPreferencesKey(IS_FIRST_LAUNCH)] = true
@@ -82,6 +84,9 @@ fun MTransNavHost(
                 onAddModelClicked = { navController.navigate(TranslationModelDownload) },
                 onDeleteModelClicked = { navController.navigate(DeleteModel) },
                 onInquiryClicked = { navController.navigate(Inquiry) },
+                onLicencesClicked = {
+                    context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+                },
             )
         }
         composable<DeleteModel> {

@@ -9,6 +9,9 @@ plugins {
     alias(libs.plugins.androidx.navigation.safeargs)
     alias(libs.plugins.gms.google.services)
     alias(libs.plugins.ktlint)
+
+    // OSS Licences
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -148,4 +151,8 @@ dependencies {
 
     // Splash screen
     implementation(libs.androidx.core.splashscreen)
+
+    // OSS Licences
+    implementation(libs.play.services.oss.licenses)
+
 }

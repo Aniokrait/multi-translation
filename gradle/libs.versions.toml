@@ -19,7 +19,9 @@ lottieCompose = "6.4.1"
 mlkit = "17.0.2"
 mockk = "1.13.11"
 navigationCompose = "2.8.0-beta05"
+ossLicensesPlugin = "0.10.6"
 playServicesAds = "23.2.0"
+playServicesOssLicenses = "17.1.0"
 splashscreen = "1.0.1"
 timber = "5.0.1"
 
@@ -57,7 +59,9 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+oss-licenses-plugin = { module = "com.google.android.gms:oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+play-services-oss-licenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "playServicesOssLicenses" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 [plugins]
