@@ -19,7 +19,7 @@ lottieCompose = "6.6.0"
 mlkit = "17.0.2"
 mockk = "1.13.13"
 navigationCompose = "2.8.4"
-playServicesAds = "23.2.0"
+playServicesAds = "23.5.0"
 splashscreen = "1.0.1"
 timber = "5.0.1"
 
