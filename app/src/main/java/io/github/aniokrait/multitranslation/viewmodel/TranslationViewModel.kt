@@ -106,7 +106,7 @@ class TranslationViewModel(
         flow {
             val isInitialized: Boolean? = savedStateHandle[INITIALIZED]
             if (isInitialized == null || isInitialized == false) {
-                val downloadedModels = repository.getDownloadedModels()
+                val downloadedModels = repository.getDownloadedRemoteModels()
 
                 emit(
                     downloadedModels.associate {

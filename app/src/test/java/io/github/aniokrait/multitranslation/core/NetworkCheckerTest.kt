@@ -37,7 +37,7 @@ import java.io.InputStream
 
 class NetworkCheckerTest {
     @Test
-    fun testReturnTrueIfDeviceIsConnectedToWifi() {
+    fun `Return true if device is connected to Wi-Fi`() {
         val context: Context = FakeContext(isWifiConnected = true)
         val result = NetworkChecker.isWifiConnected(context = context)
 
@@ -45,7 +45,23 @@ class NetworkCheckerTest {
     }
 
     @Test
-    fun testReturnTrueIfDeviceIsNotConnectedToInternet() {
+    fun `Return false if device is not connected to Wi-Fi`() {
+        val context: Context = FakeContext(isWifiConnected = false)
+        val result = NetworkChecker.isWifiConnected(context = context)
+
+        assertEquals(false, result)
+    }
+
+    @Test
+    fun `Return true if device is connected to the internet`() {
+        val context: Context = FakeContext(isNetworkConnected = true)
+        val result = NetworkChecker.isNetworkConnected(context = context)
+
+        assertEquals(true, result)
+    }
+
+    @Test
+    fun `Return false if device is not connected to the internet`() {
         val context: Context = FakeContext(isNetworkConnected = false)
         val result = NetworkChecker.isNetworkConnected(context = context)
 
@@ -53,7 +69,7 @@ class NetworkCheckerTest {
     }
 }
 
-class FakeContext(
+private class FakeContext(
     private val isWifiConnected: Boolean = true,
     private val isNetworkConnected: Boolean = true,
 ) : Context() {

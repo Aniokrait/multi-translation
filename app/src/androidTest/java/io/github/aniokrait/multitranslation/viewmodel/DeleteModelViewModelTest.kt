@@ -5,6 +5,7 @@ import com.google.mlkit.nl.translate.TranslateRemoteModel
 import io.github.aniokrait.multitranslation.datasource.LanguageModelDatasource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -45,11 +46,12 @@ class DeleteModelViewModelTest {
     private suspend fun assumeModelHasBeenDownloaded() {
         repository.downloadModel(
             targetLanguages =
-                listOf(
-                    Locale.GERMAN,
-                    Locale.CHINESE,
-                ),
+            listOf(
+                Locale.GERMAN,
+                Locale.CHINESE,
+            ),
             allowNoWifi = false,
+            successDownloadedCount = MutableStateFlow(0),
         )
     }
 }

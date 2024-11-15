@@ -4,6 +4,7 @@ import io.github.aniokrait.multitranslation.repository.HttpRequestResult
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.Parameters
 import io.ktor.http.isSuccess
 import io.ktor.http.parameters
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,24 +16,25 @@ class KtorHttpClient(
 ) : HttpClientInterface {
     override suspend fun submitForm(
         url: String,
-        formParameters: Map<String, String>,
+        formParameters: Map<String, String>?,
     ): HttpRequestResult {
         return withContext(ioDispatcher) {
             val response: HttpResponse =
                 client.submitForm(
                     url = url,
-                    formParameters =
+                    formParameters = formParameters?.let {
                         parameters {
-                            formParameters.forEach {
+                            it.forEach {
                                 append(it.key, it.value)
                             }
-                        },
+                        }
+                    } ?: Parameters.Empty,
                 )
 
-            return@withContext if (!response.status.isSuccess()) {
-                HttpRequestResult.Failure(message = "${response.status.value} : ${response.status.description}")
-            } else {
+            return@withContext if (response.status.isSuccess()) {
                 HttpRequestResult.Success
+            } else {
+                HttpRequestResult.Failure(message = "${response.status.value} : ${response.status.description}")
             }
         }
     }

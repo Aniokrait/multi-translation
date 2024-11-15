@@ -8,7 +8,7 @@ class FakeHttpClient() : HttpClientInterface {
 
     override suspend fun submitForm(
         url: String,
-        formParameters: Map<String, String>,
+        formParameters: Map<String, String>?,
     ): HttpRequestResult {
         return if (fail) {
             HttpRequestResult.Failure(message = "failed")

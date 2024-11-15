@@ -69,7 +69,7 @@ class DeleteModelViewModel(
     private fun initCheckState(): Flow<Map<Locale, MutableState<Boolean>>> =
         flow {
             val downloadedModels: Map<Locale, MutableState<Boolean>> =
-                repository.getDownloadedModels().associate {
+                repository.getDownloadedRemoteModels().associate {
                     val checked =
                         checkStateFlow.value[Locale.forLanguageTag(it.language)]?.value ?: false
                     Locale.forLanguageTag(it.language) to mutableStateOf(checked)

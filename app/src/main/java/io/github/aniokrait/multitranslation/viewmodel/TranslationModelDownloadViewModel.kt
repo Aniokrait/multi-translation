@@ -28,7 +28,7 @@ class TranslationModelDownloadViewModel(
 
     val uiState: StateFlow<TranslationModelDownloadUiState> =
         combine(
-            repository.getDownloadedInfo(),
+            repository.getDownloadedState(),
             checkState,
             isDownloading,
             allDownloadFailed,
@@ -126,7 +126,7 @@ class TranslationModelDownloadViewModel(
 
     private fun initCheckState(): StateFlow<Map<Locale, MutableState<Boolean>>> {
         return MutableStateFlow(
-            LanguageNameResolver.getAllLanguagesLabel()
+            LanguageNameResolver.getAvailableLocales()
                 .associateWith { mutableStateOf(false) },
         )
     }
