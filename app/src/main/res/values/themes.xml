@@ -3,10 +3,11 @@
 
     <style name="Theme.MultiTranslation" parent="android:Theme.Material.Light.NoActionBar" />
 
-    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+    <style name="Theme.MultiTranslation.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
-        <item name="postSplashScreenTheme">@style/Theme.AppCompat</item>
+        <item name="postSplashScreenTheme">@style/Theme.MultiTranslation</item>
     </style>
 
+    <style name="Theme.MultiTranslation.Licenses" parent="Theme.AppCompat.Light.DarkActionBar" />
 </resources>

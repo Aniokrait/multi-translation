@@ -5,6 +5,7 @@
     <string name="topbar_lbl_add_model">翻訳モデルの追加</string>
     <string name="topbar_lbl_delete_model">翻訳モデルの削除</string>
     <string name="topbar_lbl_inquiry">お問い合わせ・不具合報告</string>
+    <string name="topbar_lbl_licences">ライセンス一覧</string>
 
     <!-- 翻訳画面 -->
     <string name="feature_translation_source">翻訳元</string>

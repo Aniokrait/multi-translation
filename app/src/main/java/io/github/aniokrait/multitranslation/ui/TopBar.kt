@@ -26,9 +26,10 @@ fun TopBar(
     title: String,
     // TODO: Think about the ways to handle the increasing args
     showTrailingIcon: Boolean = true,
-    onAddModelClicked: () -> Unit,
-    onDeleteModelClicked: () -> Unit,
-    onInquiryClicked: () -> Unit,
+    onAddModelClicked: () -> Unit = {},
+    onDeleteModelClicked: () -> Unit = {},
+    onInquiryClicked: () -> Unit = {},
+    onLicencesClicked: () -> Unit = {},
     onBackClicked: (() -> Unit)? = null,
 ) {
     TopAppBar(
@@ -60,6 +61,11 @@ fun TopBar(
                             text = { Text(text = stringResource(id = R.string.topbar_lbl_inquiry)) },
                             onClick = onInquiryClicked,
                         )
+
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(id = R.string.topbar_lbl_licences)) },
+                            onClick = onLicencesClicked,
+                        )
                     }
                 }
             }
@@ -80,9 +86,6 @@ private fun TopBarPreview() {
     TopBar(
         title = "複数翻訳",
         showTrailingIcon = true,
-        onAddModelClicked = {},
-        onDeleteModelClicked = {},
         onBackClicked = {},
-        onInquiryClicked = {},
     )
 }

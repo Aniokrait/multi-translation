@@ -75,9 +75,6 @@ private fun DeleteModelScreen(
             TopBar(
                 title = stringResource(id = R.string.topbar_lbl_delete_model),
                 showTrailingIcon = false,
-                onAddModelClicked = {},
-                onDeleteModelClicked = {},
-                onInquiryClicked = {},
                 onBackClicked = onBackClicked,
             )
         },

@@ -9,16 +9,19 @@ plugins {
     alias(libs.plugins.androidx.navigation.safeargs)
     alias(libs.plugins.gms.google.services)
     alias(libs.plugins.ktlint)
+
+    // OSS Licences
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
     namespace = "io.github.aniokrait.multitranslation"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "io.github.aniokrait.multitranslation"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 5
         versionName = "1.0"
 
@@ -148,4 +151,8 @@ dependencies {
 
     // Splash screen
     implementation(libs.androidx.core.splashscreen)
+
+    // OSS Licences
+    implementation(libs.play.services.oss.licenses)
+
 }
