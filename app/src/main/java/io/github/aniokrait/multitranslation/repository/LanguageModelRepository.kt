@@ -1,0 +1,45 @@
+package io.github.aniokrait.multitranslation.repository
+
+import com.google.mlkit.nl.translate.TranslateRemoteModel
+import io.github.aniokrait.multitranslation.ui.stateholder.DownloadedState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import java.util.Locale
+
+interface LanguageModelRepository {
+    /**
+     * Get downloaded models info and return DownloadState flow.
+     */
+    fun getDownloadedState(): Flow<List<DownloadedState>>
+
+    /**
+     * Get downloaded translation remote models.
+     */
+    suspend fun getDownloadedRemoteModels(): Set<TranslateRemoteModel>
+
+    /**
+     * Download language translation models.
+     * @param targetLanguages Checked languages on selection screen.
+     * @param allowNoWifi Whether to allow download without Wi-Fi.
+     * @param successDownloadedCount Count of successfully downloaded models.
+     */
+    suspend fun downloadModel(
+        targetLanguages: List<Locale>,
+        allowNoWifi: Boolean,
+        successDownloadedCount: MutableStateFlow<Int>,
+    ): DownloadResult
+
+    /**
+     * Delete language translation models.
+     * @param targetLanguages which to delete from the user device.
+     */
+    suspend fun deleteModel(targetLanguages: List<Locale>)
+}
+
+sealed interface DownloadResult {
+    data object Success : DownloadResult
+
+    data class Failure(val failedModels: List<Locale>) : DownloadResult
+
+    data class NotEnoughSpace(val failedModels: List<Locale>) : DownloadResult
+}

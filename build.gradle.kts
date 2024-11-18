@@ -2,4 +2,19 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
+    alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.androidx.navigation.safeargs) apply false
+    alias(libs.plugins.gms.google.services) apply false
+    alias(libs.plugins.ktlint) apply false
+}
+
+buildscript {
+    repositories {
+        google()
+    }
+    dependencies {
+        classpath(libs.androidx.navigation.safe.args.gradle.plugin)
+        classpath(libs.oss.licenses.plugin)
+    }
 }

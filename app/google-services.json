@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "553547178818",
+    "project_id": "multitranslate-bd8a8",
+    "storage_bucket": "multitranslate-bd8a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553547178818:android:87d9231bb2f88986e59edb",
+        "android_client_info": {
+          "package_name": "io.github.aniokrait.multitranslation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_gtoQ1vh5X-oR7ZNcs0JYBHlslcZKYYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
