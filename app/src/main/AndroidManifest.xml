@@ -34,11 +34,11 @@
 
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/Theme.MultiTranslation.Licenses" />
+            android:theme="@style/LicensesTheme" />
 
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-            android:theme="@style/Theme.MultiTranslation.Licenses" />
+            android:theme="@style/LicensesTheme" />
     </application>
 
 </manifest>

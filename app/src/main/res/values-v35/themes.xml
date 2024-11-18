@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="LicensesTheme" parent="Theme.MultiTranslation.Licenses.V35" />
+
+    <style name="Theme.MultiTranslation.Licenses.V35" parent="Theme.MultiTranslation.Licenses">
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+    </style>
+</resources>

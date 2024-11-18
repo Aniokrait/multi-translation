@@ -9,5 +9,7 @@
         <item name="postSplashScreenTheme">@style/Theme.MultiTranslation</item>
     </style>
 
+    <style name="LicensesTheme" parent="Theme.MultiTranslation.Licenses" />
+
     <style name="Theme.MultiTranslation.Licenses" parent="Theme.AppCompat.Light.DarkActionBar" />
 </resources>
